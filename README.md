@@ -7,7 +7,7 @@
 > SOPT 28th APPJAM </b>
 >
 > 프로젝트 기간: 2021.06.26 ~ 2021.07.17
-> Release : Comming Soon..!
+>
 
 
 <img style="border: 0px solid black !important; border-radius:20px; " src="https://user-images.githubusercontent.com/63224278/123808035-58b4d800-d92b-11eb-9742-dd67600b20c8.png" width="200px" height = "200px" /> 
