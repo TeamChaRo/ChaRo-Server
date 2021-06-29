@@ -26,7 +26,8 @@
 ## 🛠 개발 환경 (Development Environment)
 
 * Development Environment  
-![TypeScript](https://img.shields.io/badge/Swift-5.0-orange.svg) ![Node.js](https://img.shields.io/badge/Platform-iOS-black.svg)
+![TypeScript](https://img.shields.io/badge/typescript-4.2.4-blue) ![Node.js](https://img.shields.io/badge/ts--node-9.1.1-yellowgreen)
+![Mongoose](https://img.shields.io/badge/Mongoose-5.12.2-brightgreen)
 
 <br>
 <br>
