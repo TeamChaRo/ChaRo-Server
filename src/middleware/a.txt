@@ -1,0 +1,2 @@
+Define middlewares.
+ex) router.get(url, ***middleware***, function(){})
