@@ -1,6 +1,7 @@
 ## 🚙 Project
 **차에서의, 차로위에서의 즐거움을 추구하는 경험 기반 드라이브 코스 공유 플랫폼**
 > **차로 ChaRo**
+>
 > Core Value : 차로의 핵심 가치는 '즐거움과 편리함'입니다. 
 >
 > SOPT 28th APPJAM </b>
@@ -53,7 +54,6 @@
     "nodemon": "^2.0.7",
     "request": "^2.88.2"
   }
-  
 ```
 - [Async & Await](https://www.npmjs.com/package/async)
 - [request(HTTP)](https://www.npmjs.com/package/request)
@@ -72,7 +72,7 @@
 
 
 ## 💃 Models
-<img width="360" alt="models" src="https://user-images.githubusercontent.com/63224278/119237107-25399d80-bb76-11eb-9ed3-77b83e97705b.png">
+<img width="360" alt="models" src="">
 
 
 <br>
@@ -123,12 +123,12 @@
 
 </div>
 </details>
- 
+<br>
 
 ## 💻 Github mangement
 
 <details>
-<summary> 서버왕을꿈꾸는 🐰토끼들의🐰  WorkFlow : Gitflow Workflow </summary>
+<summary> 🚙Charo의🚙  WorkFlow : Gitflow Workflow </summary>
 <div markdown="1">       
 
 
@@ -140,8 +140,11 @@
 
 ```
 default는 main브랜치입니다.
+
 하위에 develop브랜치를 만들어 안전하게 관리합니다.
+
 기능 개발시 → feat/번호 로 브랜치를 파서 관리합니다.
+
 * 단 feat은 자세한 기능 한 가지를 담당하며, 기능 개발이 완료되면 develop브랜치로 Pull Request를 보냅니다. 
 * 다른 팀원이 pr을 확인하고, 코드리뷰를 진행한 뒤 문제가 없으면 develop 브랜치에 병합을 합니다.
 ```
