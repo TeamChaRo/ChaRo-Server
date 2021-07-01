@@ -10,6 +10,11 @@ if (envFound.error) {
 }
 
 export default {
-  port: parseInt(process.env.PORT, 10),
-  mongoURI: process.env.MONGODB_URI,
+  username : process.env.DB_USERNAME || 'root',
+  password : process.env.DB_PASSWORD,
+  database : process.env.DB_DBNAME || 'charo',
+  host : process.env.DB_HOST,
+  port : process.env.DB_PORT || 3306,
+  socketPath: '/var/run/mysqld/mysqld.sock',
+  dialect : "mysql"
 };
