@@ -14,7 +14,7 @@ export default {
   password : process.env.DB_PASSWORD,
   database : process.env.DB_DBNAME || 'charo',
   host : process.env.DB_HOST,
-  port : process.env.DB_PORT || 3306,
+  port : process.env.DB_PORT,
   socketPath: '/var/run/mysqld/mysqld.sock',
   dialect : "mysql"
 };

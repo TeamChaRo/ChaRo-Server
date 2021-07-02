@@ -9,6 +9,7 @@ const connectDB = async () => {
       config.password,
       {
           host: config.host,
+          port : parseInt(config.port),
           dialect: 'mysql',
       }
     )
