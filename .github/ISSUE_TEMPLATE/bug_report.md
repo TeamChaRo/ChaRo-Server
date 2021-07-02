@@ -1,4 +1,3 @@
-
 ---
 name: Bug report
 about: 버그 및 수정 사항을 알려주세요.
