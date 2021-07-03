@@ -11,7 +11,7 @@ app.use(express.json());
 app.use(logger("dev"));
 
 // define route
-
+app.use("/api/image", require("./api/image"));
 
 // error handler
 app.use(function (err, req, res, next) {
