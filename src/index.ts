@@ -1,7 +1,7 @@
 import express from "express";
 import logger from "morgan";
 const app = express();
-import connectDB from "./Loaders/db";
+import connectDB from "./Loaders/connect";
 
 //connect DB
 connectDB();
