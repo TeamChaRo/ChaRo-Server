@@ -1,7 +1,7 @@
 import { Sequelize } from 'sequelize';
 import { sequelize } from "../Loaders/db"
-import Theme from "./theme";
-import Warning from "./warning";
+import Theme from "./Theme";
+import Warning from "./Warning";
 
 export const db = { 
   Sequelize,
