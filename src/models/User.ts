@@ -60,6 +60,7 @@ User.init(
         modelName: 'User',
         tableName: 'user',
         sequelize,
-        freezeTableName: true
+        freezeTableName: true,
+        timestamps:false
     }
 );

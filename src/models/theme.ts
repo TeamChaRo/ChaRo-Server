@@ -35,6 +35,7 @@ Theme.init(
         modelName: 'Theme',
         tableName: 'theme',
         sequelize,
-        freezeTableName: true
+        freezeTableName: true,
+        timestamps:false
     }
 );
