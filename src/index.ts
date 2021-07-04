@@ -1,7 +1,7 @@
 import express from "express";
 import logger from "morgan";
 const app = express();
-import connectDB from "./Loaders/db";
+import connectDB from "./Loaders/connect";
 
 //connect DB
 connectDB();
@@ -9,6 +9,10 @@ connectDB();
 
 app.use(express.json());
 app.use(logger("dev"));
+
+// define route
+//app.use("/api/auth", require("./api/auth"));
+
 
 // define route
 
