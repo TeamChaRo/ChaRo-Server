@@ -30,7 +30,9 @@
     "pakage.json": "^1.0.0",
     "request": "^2.88.2",
     "sequelize": "^6.6.4",
-    "sequelize-cli": "^6.2.0"
+    "sequelize-cli": "^6.2.0",
+    "express-validator": "^6.10.0",
+    "jsonwebtoken": "^8.5.1"
   },
   "bugs": {
     "url": "https://github.com/TeamChaRo/ChaRo-Server/issues"
