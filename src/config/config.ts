@@ -16,5 +16,7 @@ export default {
   host : process.env.DB_HOST,
   port : process.env.DB_PORT,
   socketPath: '/var/run/mysqld/mysqld.sock',
-  dialect : "mysql"
+  dialect : "mysql",
+  jwtSecret: process.env.JWT_SECRET,
+  jwtAlgorithm: process.env.JWT_ALGO,
 };
