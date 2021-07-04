@@ -11,6 +11,10 @@ app.use(express.json());
 app.use(logger("dev"));
 
 // define route
+//app.use("/api/auth", require("./api/auth"));
+
+
+// define route
 
 
 // error handler
