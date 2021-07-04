@@ -1,7 +1,8 @@
 import { Sequelize } from 'sequelize';
 import { sequelize } from "../Loaders/db"
-import Theme from "./theme";
-import Warning from "./warning";
+import Theme from "./Theme";
+import Warning from "./Warning";
+import User from "./User";
 
 export const db = { 
   Sequelize,
@@ -10,4 +11,5 @@ export const db = {
   // Tables
   Theme, 
   Warning,
+  User,
 };
