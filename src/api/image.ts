@@ -1,29 +1,56 @@
-import express, { Request, Response, Router } from "express";
+import express, { Request, Response, Router, Express } from "express";
 //import { check, validationResult } from "express-validator";
 
 const router = express.Router();
-
-const upload = require("../middleware/image");
-
-
+import upload from "../middleware/upload";
 /**
  *  @route Post api/image
  *  @desc image upload
  *  @access Public
  */
 
- /** 
-  * 이미지를 넣고 해당 URL을 바로 리턴 받 기 ?!
-  * DB에 UserID 랑 이미지를 따로 저장하기 ( 배열 마냥 ? ?!? )
-  * 결국 Id 값은 넣긴 넣어ㅑ함
-  */
 router.post(
     "/",
     upload.single('image'), // 'image' key 값으로 맞춰야함
     async(req: Request, res: Response)=>{
         try{
-            console.log("successfully uploaded", res);
-            // URL -> res.location 
+            // image path
+            let image = (req.file as Express.MulterS3.File).location;
+            console.log("successfully uploaded", image);
+
+            res.json({ "msg" : "success!"})
+        }catch(err){
+            console.error(err.message);
+            return res.status(500).send("Server error");
+        }
+    }
+)
+
+router.post(
+    "/ary",
+    upload.array('image', 2), // 'image' key 값으로 맞춰야함
+    async(req: Request, res: Response)=>{
+        try{
+            for(let file of req.files){
+                // image path
+                let image = (file as Express.MulterS3.File).location;
+                console.log(image);
+            }
+            res.json({ "msg" : "success!"})
+        }catch(err){
+            console.error(err.message);
+            return res.status(500).send("Server error");
+        }
+    }
+)
+
+router.post(
+    "/fields",
+    upload.fields([ {name:'image1'}, {name:'image2'}]), // 'image' key 값으로 맞춰야함
+    async(req: Request, res: Response)=>{
+        try{
+            let obj = JSON.parse(JSON.stringify(req.file))
+            console.log(obj) 
             res.json({ "msg" : "success!"})
         }catch(err){
             console.error(err.message);

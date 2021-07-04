@@ -21,6 +21,8 @@
   },
   "dependencies": {
     "@types/express": "^4.17.11",
+    "@types/multer": "^1.4.6",
+    "@types/multer-s3": "^2.7.9",
     "aws-sdk": "^2.938.0",
     "dotenv": "^9.0.2",
     "express": "^4.17.1",

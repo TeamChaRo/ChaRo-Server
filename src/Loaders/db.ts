@@ -19,6 +19,7 @@ const connectDB = async () => {
          console.log("connection success");
      })
      .catch((e) => {
+         sequelize.close();
          console.log('TT : ', e);
      })
   }catch(err){
