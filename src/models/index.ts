@@ -2,6 +2,7 @@ import { Sequelize } from 'sequelize';
 import { sequelize } from "../Loaders/db"
 import Theme from "./Theme";
 import Warning from "./Warning";
+<<<<<<< HEAD
 import User from "./User";
 
 import Post from "./Post";
@@ -43,6 +44,8 @@ Post.belongsToMany(Theme, { timestamps:false, through: "post_has_theme" })
 /* liked & saved Post */
 Post.belongsToMany(User, { timestamps:false, through: "liked_post" });
 Post.belongsToMany(User, { timestamps:false, through: "saved_post" });
+=======
+>>>>>>> 2
 
 export const db = { 
   Sequelize,
