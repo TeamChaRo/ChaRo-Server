@@ -2,12 +2,11 @@ import { Sequelize } from 'sequelize';
 import { sequelize } from "../Loaders/db"
 import Theme from "./Theme";
 import Warning from "./Warning";
-<<<<<<< HEAD
 import User from "./User";
-
 import Post from "./Post";
 import Course from "./Course";
 import PostHasImage from "./PostHasImage";
+
 /* User - Post */
 User.hasMany(Post, {
   foreignKey: "userId",
@@ -44,8 +43,11 @@ Post.belongsToMany(Theme, { timestamps:false, through: "post_has_theme" })
 /* liked & saved Post */
 Post.belongsToMany(User, { timestamps:false, through: "liked_post" });
 Post.belongsToMany(User, { timestamps:false, through: "saved_post" });
-=======
->>>>>>> 2
+
+/* follow - User */
+User.belongsToMany(User, { as: 'following', timestamps:false, through: "follow", foreignKey: 'follwing' });
+User.belongsToMany(User, { as: 'follower', timestamps:false, through: "follow", foreignKey: 'follower' });
+
 
 export const db = { 
   Sequelize,

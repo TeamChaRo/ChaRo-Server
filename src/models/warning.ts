@@ -36,6 +36,7 @@ Warning.init(
         modelName: 'Warning',
         tableName: 'warning',
         sequelize,
-        freezeTableName: true
+        freezeTableName: true,
+        timestamps:false
     }
 );
