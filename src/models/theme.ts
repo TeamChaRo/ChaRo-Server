@@ -5,13 +5,13 @@ import {
 import {sequelize} from "../Loaders/db"
 
 interface ThemeAttributes {
-    themeId?: number;
+    id?: number;
     themeName: string;
 };
 
 export default class Theme extends Model<ThemeAttributes> {
     //조회 후 사용 되어질 요소들의 타입명시 설정이 되어 있지 않으면 조회시 또는 조회 후 데이터 타입체크에서 오류
-    public readonly themeId!: number; 
+    public readonly id!: number; 
     public themeName!: string;
 
     public static associations: {
@@ -20,7 +20,7 @@ export default class Theme extends Model<ThemeAttributes> {
 
 Theme.init(
     {
-        themeId: {
+        id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true, //AUTO_INCREMENT로 지덩된 열은 INSERT문에서 NULL값을 지정하면 자동으로 값이 입력됨. 반드시 PK로 설정해야함.
