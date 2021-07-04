@@ -1,3 +1,0 @@
-Define api for call(routers)
-- simple!
-- main operations have to be defined in the service folder

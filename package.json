@@ -32,7 +32,8 @@
     "sequelize": "^6.6.4",
     "sequelize-cli": "^6.2.0",
     "express-validator": "^6.10.0",
-    "jsonwebtoken": "^8.5.1"
+    "jsonwebtoken": "^8.5.1",
+    "bcryptjs": "^2.4.3"
   },
   "bugs": {
     "url": "https://github.com/TeamChaRo/ChaRo-Server/issues"
