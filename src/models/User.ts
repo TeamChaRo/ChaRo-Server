@@ -21,7 +21,7 @@ export default class User extends Model<UserAttributes> {
     public email!: string;
     public nickname!: string;
     public profileImage!: string;
-    public pushAlarm!: number;
+    public pushAlarm!: boolean;
 
     public static associations: {
     };
@@ -49,10 +49,10 @@ User.init(
         },
         profileImage: {
             type: DataTypes.STRING(45),
-            allowNull: true
+            allowNull: false
         },
         pushAlarm: {
-            type: DataTypes.TINYINT,
+            type: DataTypes.BOOLEAN,
             allowNull: false
         }
     },
