@@ -52,7 +52,7 @@ User.belongsToMany(User, { as: 'follower', timestamps:false, through: "follow", 
 export const db = { 
   Sequelize,
   sequelize, 
-
+  
   // Tables
   Theme, 
   Warning,
