@@ -6,11 +6,11 @@ import connectDB from "./Loaders/connect";
 //connect DB
 connectDB();
 
-
 app.use(express.json());
 app.use(logger("dev"));
 
 // define route
+app.use("/api/auth", require("./api/auth"))
 
 
 // error handler
