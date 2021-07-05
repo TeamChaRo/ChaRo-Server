@@ -10,9 +10,7 @@ app.use(express.json());
 app.use(logger("dev"));
 
 // define route
-
-
-// define route
+app.use("/signIn", require("./api/auth"))
 
 
 // error handler

@@ -12,7 +12,7 @@ import signInController from "../controller/signInController"
 router.post(
   "/", 
   [
-    check("email", "Please include a valid email").isEmail(), //이메일 형식인지 검사
+    check("id", "id is required").exists(), 
     check("password", "Password is required").exists(),
   ],
   signInController

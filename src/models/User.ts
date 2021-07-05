@@ -36,7 +36,7 @@ User.init(
             allowNull: false
         },
         password: {
-            type: DataTypes.STRING(45),
+            type: DataTypes.STRING(100),
             allowNull: false
         },
         email: {
