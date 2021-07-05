@@ -13,6 +13,7 @@ export default async function signIn(id: string, password: string){
               },
              // attributes : ['id','nickname'], // mongoose에서 select이랑 같은 친구 dto : {id :number, nickname:string}
             });
+
           if (!user) {
             return {
               status : 400,
