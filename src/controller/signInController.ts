@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import { check, validationResult } from "express-validator";
+import { validationResult } from "express-validator";
 const router = express.Router();
 import signup from "../service/signInService"
 
@@ -7,9 +7,13 @@ import signup from "../service/signInService"
 export default async (req: Request, res: Response) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-          return res.status(400).json({ errors: errors.array() });
+          return {
+            status : 400,
+            message: errors[0].message
+          }
+          //return res.status(400).json({ errors: errors.array() });
         }
-        const { email, password } = req.body;
-        const signupService = await signup(email,password);
+        const { id, password } = req.body;
+        const signupService = await signup(id,password);
         return res.status(signupService.status).json(signupService.data);
       } 

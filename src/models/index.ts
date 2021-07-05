@@ -7,7 +7,7 @@ import User from "./User";
 export const db = { 
   Sequelize,
   sequelize, 
-
+  
   // Tables
   Theme, 
   Warning,

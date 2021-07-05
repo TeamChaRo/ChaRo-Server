@@ -20,9 +20,6 @@ export default async function signup(email, password){
                 errors: [{ msg: "Invalid Credentials" }],
               }
             }
-            // res.status(400).json({
-            //   errors: [{ msg: "Invalid Credentials" }],
-            // });
           }
           // Encrpyt password
           const isMatch = await bcrypt.compare(password, user.password);
