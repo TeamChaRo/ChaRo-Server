@@ -44,7 +44,7 @@ PostHasImage.belongsTo(Post,{
 
 /* warning & theme - Post */
 Post.belongsToMany(Warning, { timestamps:false, through: "post_has_warning" });
-Post.belongsToMany(Theme, { timestamps:false, through: "post_has_theme" })
+Warning.belongsToMany(Post, { timestamps:false, through: "post_has_warning" });
 
 /* liked & saved Post */
 Post.belongsToMany(User, { timestamps:false, through: "liked_post" });
