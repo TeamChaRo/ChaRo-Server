@@ -48,12 +48,13 @@ User.init(
             allowNull: false
         },
         profileImage: {
-            type: DataTypes.STRING(45),
-            allowNull: false
+            type: DataTypes.STRING(100),
+            defaultValue: "*"
         },
         pushAlarm: {
             type: DataTypes.BOOLEAN,
-            allowNull: false
+            allowNull: false,
+            defaultValue: false
         }
     },
     {
@@ -61,6 +62,8 @@ User.init(
         tableName: 'user',
         sequelize,
         freezeTableName: true,
-        timestamps:false
+        timestamps:false,
+        charset: 'utf8',
+        collate: 'utf8_unicode_ci'
     }
 );

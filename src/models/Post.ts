@@ -1,7 +1,6 @@
 import {
     DataTypes, 
-    Model,
-    Sequelize
+    Model
 } from 'sequelize';
 import {sequelize} from "../Loaders/db"
 
@@ -60,11 +59,11 @@ Post.init(
         },
         parkingDesc: {
             type: DataTypes.STRING(45),
-            allowNull: false
+            allowNull: true
         },
         courseDesc: {
-            type: DataTypes.STRING(45),
-            allowNull: false
+            type: DataTypes.STRING(280),
+            allowNull: true
         }
         
     },
@@ -74,5 +73,7 @@ Post.init(
         sequelize,
         freezeTableName: true,
         timestamps: true,
+        charset: 'utf8',
+        collate: 'utf8_unicode_ci'
     }
 )
