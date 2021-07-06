@@ -10,31 +10,52 @@
   <a href="https://www.instagram.com/charo_2021_official/">
       <img alt="Instagram: Charo_Official" src="https://img.shields.io/badge/charo-instagram-ff69b4" target="_blank" />
   </a>
-  차에서의, 차로위에서의 즐거움을 추구하는 경험 기반 드라이브 코스 공유 플랫폼 <br /> 
 </p>
 
-> **차로 ChaRo** <br/> Core Value : 차로의 핵심 가치는 '즐거움과 편리함'입니다. <br /><br /> SOPT 28th APPJAM  <br/> 프로젝트 기간: 2021.06.26 ~ 2021.07.17 <br/>
+> **차로 ChaRo** <br/> 차에서의, 차로위에서의 즐거움을 추구하는 경험 기반 드라이브 코스 공유 플랫폼 <br />  Core Value : 차로의 핵심 가치는 '즐거움과 편리함'입니다. <br /><br /> SOPT 28th APPJAM  <br/> 프로젝트 기간: 2021.06.26 ~ 2021.07.17 <br/>
 
 </br>
 
+## ChaRo-Server Contributors
+
+<a href="https://github.com/TeamChaRo/ChaRo-Server/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=TeamChaRo/ChaRo-Server" />
+</a>
+
+<br>
+<br>
+
 ## ✨Service IA
-<img width=100% src=https://user-images.githubusercontent.com/63224278/123808257-8b5ed080-d92b-11eb-8ac7-e2ef5286909a.png>
+<img width=50% src=https://user-images.githubusercontent.com/63224278/123808257-8b5ed080-d92b-11eb-8ac7-e2ef5286909a.png>
 
+<br>
+<br>
+
+
+## 🚙 기능별 개발여부 + 담당자
+> [ChaRo-Server 개발 일지](https://www.notion.so/_-bb545ae363334b57bee9d861ea3ba432)
+
+
+| 기능 | 개발 여부 | 담당자 |
+|:----------|:----------:|:----:|
+| 모델 설계 | ⭕️ | 오예원,황지은 |
+| DB 연결 | ⭕️ | 오예원 |
+| 이미지 업로드 | ⭕️ | 오예원 |
+| 로그인 API | ⭕️ | 황지은 |
 
 
 <br>
 <br>
+ 
 
 ## 📃 API DOC LINK
-> [ChaRo Server API 문서📜](https://www.notion.so/API-Wiki-4844e313dcf248cca8c427f06aa60c64)
+> [ChaRo-Server API Doc](https://www.notion.so/API-Wiki-ff615fc923104555b65b9b3c635e36d4)
 
 <br>
 <br>
 
 
 ## ⚙️ Dependency Module
-<details>
-<summary> 🚙 Charo-Server Dependency Module 🚙 </summary>
 <div markdown="1"> 
 
 ```
@@ -75,6 +96,206 @@
 <br>
 
 
+## 💻 Coding Convention   
+<details>
+ <summary> 🗂 폴더구조 </summary>
+ <div markdown="1">       
+
+
+---
+```markdown
+
+🗂 node_modules
+   
+🗂 src
+
+    - api 🗂
+
+    - config 🗂
+
+    - Loaders 🗂
+    
+    - middleware 🗂
+
+    - models 🗂
+
+    - service 🗂
+   
+    - controller 🗂
+   
+
+indes.ts
+   
+.env
+   
+nodemon.json
+   
+package.json
+   
+tsconfig.json
+
+```
+<br>
+ </div>
+ </details>
+ 
+
+<details>
+<summary> 🖋 네이밍 </summary>
+<div markdown="1">       
+
+
+---
+
+**Class & Contructor**
+
+- Class, Contructors는 **Pascal Case (=UpperCamelCase)**를 사용합니다.
+
+  <kbd>좋은 예</kbd>
+
+    ```typescript
+    CamelCase
+    ```
+
+  <kbd>나쁜 예</kbd>
+
+    ```typescript
+    camelCase
+    ```
+<br/>
+**함수 & 변수 & 상수**
+
+- 함수와 변수에는 **lowerCamelCase**를 사용합니다.
+
+- 함수의 경우 **동사+명사**형태로 구성합니다.
+  - ex) getUserInformation()
+
+- 글자의 길이
+  - 글자의 길이는 **20자 이내**로 제한합니다.
+  - 4단어 이상이 들어가거나, 부득이하게 20자 이상이 되는 경우에는 **팀원과의 상의**를 거쳐야 합니다.
+    
+- flag로 사용되는 변수
+  - Boolean의 경우 **조동사+flag** 종류로 구성합니다.
+  - ex) isNum, hasNum
+
+- 약칭의 사용
+  - 약어는 되도록 사용하지 않습니다.
+
+  <kbd>좋은 예</kbd>
+
+    ```typescript
+    let index;
+    let count;
+    let array;
+    let seoulToBucheon;
+    ```
+
+  <kbd>나쁜 예</kbd>
+    
+    ```typescript
+    let idx;
+    let cnt;
+    let arr;
+    let seoul2Bucheon;
+    ```
+<br>
+
+</div>
+</details>
+ 
+ 
+ 
+ <details>
+ <summary> 🏷 주석 </summary>
+ <div markdown="1">       
+ 
+ 
+ ---
+
+ - 한줄은 `//`로 적고, 그 이상은 `/** */`로 적습니다.
+ ```typescript
+ // 한줄 주석일 때
+ /**
+  * 여러줄
+  * 주석일 때
+  */
+ ```  
+ - 함수에 대한 주석
+   - backend에서 공통적으로 사용하는 함수의 경우, 모듈화를 통해 하나의 파일로 관리합니다.
+   - 하나의 파일의 시작 부분에 주석으로 상세 내용을 작성합니다.
+     - **함수의 전체 기능**에 대한 설명
+     - **함수의 파라미터**에 대한 설명 (type: ..., 역할)
+     - router 또는 api일 때에는 성공 여부도 적어줍니다.
+     - 예시 코드
+
+     ```typescript
+     /**
+      *  @route Post api/auth
+      *  @desc Authenticate user & get token(로그인)
+      *  @access Public
+      */
+     router.get(
+      
+     );
+     ```
+   
+ <br>
+
+ </div>
+ </details>
+
+
+<details>
+<summary> 📎 기타 </summary>
+<div markdown="1">       
+
+
+---
+
+- 탭 사이즈는 2로 사용합니다.
+- 한 줄의 최대 길이는 80자로 제한합니다.
+- 최대 tab depth 제한
+  - tab의 최대 depth는 4로 제한합니다.
+  - 이 이상으로 depth가 길어지면 함수를 통해 나눌 수 있도록 합니다.
+  - 그 이상으로 개선할 수 없다고 판단되는 경우, 팀원들과의 코드리뷰를 통해 개선합니다.
+  ```typescript
+     function func() {
+       //tab1
+       if() {
+         //tab2
+         array.reduce((pre, cur) => {
+           //tab3
+           if(cur == status) {
+             //tab4
+           }
+         }
+       }
+     }
+     ```
+- 괄호 사용
+  - (if, while, for)문 괄호 뒤에 한칸을 띄우고 사용합니다.
+  ```typescript
+     if (left == true) {
+	   // logic
+     }
+     ```
+  
+- 띄어쓰기
+  ```typescript
+  let a = 5;  ( = 양쪽 사이로 띄어쓰기 하기)
+  if (a == 3) {
+	  // logic
+  }
+  ```
+</div>
+</details>
+ 
+
+👉🏻 [Coding Convention 한 눈에 보기](https://github.com/TeamChaRo/ChaRo-Server/wiki/CodingConvention)  
+👉🏻 다음 [Style Guide](https://github.com/tipjs/javascript-style-guide)를 참고헀습니다.  
+  
+  
+</br>
 
 ## ✉️ Commit Messge Rules
 <details>
@@ -120,8 +341,7 @@
 </details>
 <br>
 
-## 💻 Github mangement
-
+## <img width=3% img src="https://user-images.githubusercontent.com/63224278/124635517-7ef5ed00-dec2-11eb-9a42-6d6d5cc72dce.png" /> Github mangement
 <details>
 <summary> 🚙 Charo-Server Gitflow 🚙 </summary>
 <div markdown="1">       
@@ -233,30 +453,9 @@ git push or git push origin develop
   <br>
    <br>
 
-
- 
-## 기능별 개발여부 + 담당자
-> [ChaRo Server 개발 일지📜  ](https://www.notion.so/8b15ca756bc44ea29a07a0c7eabbbdcd)
-
-
-| 기능 | 개발 여부 | 담당자 |
-|:----------|:----------:|:----:|
-|   | <img width=10px src=https://user-images.githubusercontent.com/63224278/123808035-58b4d800-d92b-11eb-9742-dd67600b20c8.png> | 오예원 |
-|   | <img width=10px src=https://user-images.githubusercontent.com/63224278/123808035-58b4d800-d92b-11eb-9742-dd67600b20c8.png> | 오예원 |
-|   | <img width=10px src=https://user-images.githubusercontent.com/63224278/123808035-58b4d800-d92b-11eb-9742-dd67600b20c8.png> | 황지은 |
-
-
-<br>
-<br>
- 
  
 
-## ChaRo Server Dev
-
-<a href="https://github.com/TeamChaRo/ChaRo-Server/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=TeamChaRo/ChaRo-Server" />
-</a>
-<br>
+## 👩🏻‍💻 ChaRo-Server Dev
 
 | 오예원 | 황지은 |
 |:---:|:---------:|
