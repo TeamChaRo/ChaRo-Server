@@ -1,4 +1,4 @@
-<img style="border: 0px solid black !important; border-radius:20px; " src="https://user-images.githubusercontent.com/63224278/124624683-0db13c80-deb8-11eb-9af2-0fb6038066d0.png" width="1500px" height = "300px" /> 
+<img style="border: 0px solid black !important; border-radius:20px; " src="https://user-images.githubusercontent.com/63224278/124624683-0db13c80-deb8-11eb-9af2-0fb6038066d0.png" width="1500px" height = "200px" /> 
 </br>
 
 
@@ -10,10 +10,10 @@
   <a href="https://www.instagram.com/charo_2021_official/">
       <img alt="Instagram: Charo_Official" src="https://img.shields.io/badge/charo-instagram-ff69b4" target="_blank" />
   </a>
+  차에서의, 차로위에서의 즐거움을 추구하는 경험 기반 드라이브 코스 공유 플랫폼 <br /> 
 </p>
 
-차에서의, 차로위에서의 즐거움을 추구하는 경험 기반 드라이브 코스 공유 플랫폼 <br /> 
-> **차로 ChaRo** <br/> <Core Value : 차로의 핵심 가치는 '즐거움과 편리함'입니다. <br /><br /> SOPT 28th APPJAM  <br/> 프로젝트 기간: 2021.06.26 ~ 2021.07.17 <br/>
+> **차로 ChaRo** <br/> Core Value : 차로의 핵심 가치는 '즐거움과 편리함'입니다. <br /><br /> SOPT 28th APPJAM  <br/> 프로젝트 기간: 2021.06.26 ~ 2021.07.17 <br/>
 
 </br>
 
@@ -256,8 +256,8 @@ git push or git push origin develop
 <a href="https://github.com/TeamChaRo/ChaRo-Server/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=TeamChaRo/ChaRo-Server" />
 </a>
+<br>
 
-</br>
 | 오예원 | 황지은 |
 |:---:|:---------:|
 | <img src="https://user-images.githubusercontent.com/63224278/119237669-f8d35080-bb78-11eb-9211-834eebd49dd1.PNG" width="200px" />  | <img src="https://user-images.githubusercontent.com/63224278/103209152-b436e680-4945-11eb-91e4-bd8622e442e2.png" width="200px" />  |
