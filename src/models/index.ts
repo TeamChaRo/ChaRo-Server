@@ -7,6 +7,9 @@ import Post from "./Post";
 import Course from "./Course";
 import PostHasImage from "./PostHasImage";
 import SearchHistory from "./SearchHistory";
+import Banner from "./Banner";
+import Custom from "./Custom";
+import Local from "./Local";
 
 /* User - Post */
 User.hasMany(Post, {
@@ -65,5 +68,8 @@ export const db = {
   User,
   SearchHistory,
   Post,
-  Course
+  Course,
+  Banner,
+  Custom,
+  Local
 };
