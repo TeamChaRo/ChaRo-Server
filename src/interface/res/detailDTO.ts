@@ -2,6 +2,7 @@ export interface detailInformationDTO{
     author: string,
     profileImage: string,
     date: string,
+    isFavorite: boolean,
     themes: [string],
     
     province: string,
