@@ -6,6 +6,7 @@ import User from "./User";
 import Post from "./Post";
 import Course from "./Course";
 import PostHasImage from "./PostHasImage";
+import PostHasTheme from "./PostHasTheme";
 import SearchHistory from "./SearchHistory";
 import Banner from "./Banner";
 import Custom from "./Custom";
@@ -45,11 +46,32 @@ PostHasImage.belongsTo(Post,{
   targetKey: "id",
 })
 
-/* warning & theme - Post */
+/* warning - Post */
 Post.belongsToMany(Warning, { timestamps:false, through: "post_has_warning" });
 Warning.belongsToMany(Post, { timestamps:false, through: "post_has_warning" });
-Post.belongsToMany(Theme, { timestamps:false, through: "post_has_theme" });
-Theme.belongsToMany(Post, { timestamps:false, through: "post_has_theme" });
+
+/* Theme - post */
+Post.hasOne(PostHasTheme,{
+  foreignKey: "postId",
+  sourceKey: "id",
+})
+PostHasTheme.belongsTo(Post,{
+  foreignKey: "postId",
+  targetKey: "id",
+})
+
+PostHasTheme.belongsTo(Theme,{
+  as: "first",
+  foreignKey: "theme1"
+})
+PostHasTheme.belongsTo(Theme,{
+  as: "second",
+  foreignKey: "theme2"
+})
+PostHasTheme.belongsTo(Theme,{
+  as: "third",
+  foreignKey: "theme3"
+})
 
 /* liked & saved Post */
 Post.belongsToMany(User, { timestamps:false, through: "liked_post" });
@@ -73,5 +95,6 @@ export const db = {
   Course,
   Banner,
   Custom,
-  Local
+  Local,
+  PostHasTheme
 };
