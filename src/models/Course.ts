@@ -5,29 +5,37 @@ import {
 import {sequelize} from "../Loaders/db";
 
 interface CourseAttributes {
-    source?: string;
-    wayPoint1?: string;
-    wayPoint2?: string;
-    longtitude1?: string;
-    latitude1?: string;
-    longtitude2?: string;
-    latitude2?: string;
-    destination?: string;
+    src?: string;
+    srcLongitude?: string;
+    srcLatitude?: string;
+    wayOne?: string;
+    wayOneLongitude?: string;
+    wayOneLatitude?: string;
+    wayTwo?: string;
+    wayTwoLongitude?: string;
+    wayTwoLatitude?: string;
+    dest?: string;
+    destLongitude?: string;
+    destLatitude?: string;
 };
 
 export default class Course extends Model<CourseAttributes> {
     //조회 후 사용 되어질 요소들의 타입명시 설정이 되어 있지 않으면 조회시 또는 조회 후 데이터 타입체크에서 오류
-    public source!: string;
+    public src!: string;
+    public srcLongitude!: string;
+    public srcLatitude!: string;
 
-    public wayPoint1!: string; 
-    public longtitude1!: string; 
-    public latitude1!: string;
+    public wayOne!: string; 
+    public wayOneLongitude!: string; 
+    public wayOneLatitude!: string;
     
-    public wayPoint2!: string; 
-    public longtitude2!: string; 
-    public latitude2!: string;
+    public wayTwo!: string; 
+    public wayTwoLongitude!: string; 
+    public wayTwoLatitude!: string;
     
-    public destination!: string;
+    public dest!: string;
+    public destLongitude!: string;
+    public destLatitude!: string;
 
     public static associations: {
     };
@@ -35,36 +43,52 @@ export default class Course extends Model<CourseAttributes> {
 
 Course.init(
     {   
-        source: {
+        src: {
             type: DataTypes.STRING(100),
             allowNull: false
         },
-        wayPoint1: {
+        srcLongitude: {
+            type: DataTypes.STRING(20),
+            allowNull: true
+        },
+        srcLatitude: {
+            type: DataTypes.STRING(20),
+            allowNull: true
+        },
+        wayOne: {
             type: DataTypes.STRING(100),
             allowNull: true
         },
-        longtitude1: {
+        wayOneLongitude: {
             type: DataTypes.STRING(20),
             allowNull: true
         },
-        latitude1: {
+        wayOneLatitude: {
             type: DataTypes.STRING(20),
             allowNull: true
         },
-        wayPoint2: {
+        wayTwo: {
             type: DataTypes.STRING(100),
             allowNull: true
         },
-        longtitude2: {
+        wayTwoLongitude: {
             type: DataTypes.STRING(20),
-            allowNull: true
+            allowNull: false
         },
-        latitude2: {
+        wayTwoLatitude: {
             type: DataTypes.STRING(20),
-            allowNull: true
+            allowNull: false
         },
-        destination: {
+        dest: {
             type: DataTypes.STRING(100),
+            allowNull: false
+        },
+        destLongitude: {
+            type: DataTypes.STRING(20),
+            allowNull: false
+        },
+        destLatitude: {
+            type: DataTypes.STRING(20),
             allowNull: false
         },
     },
