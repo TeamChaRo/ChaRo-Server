@@ -59,6 +59,8 @@ PostHasImage.init(
         tableName: 'post_has_image',
         sequelize,
         freezeTableName: true,
-        timestamps: false
+        timestamps: false,
+        charset: 'utf8',
+        collate: 'utf8_unicode_ci'
     }
 );

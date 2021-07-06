@@ -62,7 +62,7 @@ Post.init(
             allowNull: false
         },
         courseDesc: {
-            type: DataTypes.STRING(45),
+            type: DataTypes.STRING(280),
             allowNull: false
         }
         
@@ -73,5 +73,7 @@ Post.init(
         sequelize,
         freezeTableName: true,
         timestamps: true,
+        charset: 'utf8',
+        collate: 'utf8_unicode_ci'
     }
 )
