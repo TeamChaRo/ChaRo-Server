@@ -30,28 +30,28 @@ export default class PostHasImage extends Model<PHIAttributes> {
 PostHasImage.init(
     {   
         image1: {
-            type: DataTypes.STRING(80),
-            defaultValue: "*"
+            type: DataTypes.STRING(100),
+            allowNull: true
         },
         image2: {
-            type: DataTypes.STRING(80),
-            defaultValue: "*"
+            type: DataTypes.STRING(100),
+            allowNull: true
         },
         image3: {
-            type: DataTypes.STRING(80),
-            defaultValue: "*"
+            type: DataTypes.STRING(100),
+            allowNull: true
         },
         image4: {
-            type: DataTypes.STRING(80),
-            defaultValue: "*"
+            type: DataTypes.STRING(100),
+            allowNull: true
         },
         image5: {
-            type: DataTypes.STRING(80),
-            defaultValue: "*"
+            type: DataTypes.STRING(100),
+            allowNull: true
         },
         image6: {
-            type: DataTypes.STRING(80),
-            defaultValue: "*"
+            type: DataTypes.STRING(100),
+            allowNull: true
         },
     },
     {

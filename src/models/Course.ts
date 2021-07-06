@@ -36,35 +36,35 @@ export default class Course extends Model<CourseAttributes> {
 Course.init(
     {   
         source: {
-            type: DataTypes.STRING(20),
+            type: DataTypes.STRING(100),
             allowNull: false
         },
         wayPoint1: {
-            type: DataTypes.STRING(20),
-            allowNull: false
+            type: DataTypes.STRING(100),
+            allowNull: true
         },
         longtitude1: {
             type: DataTypes.STRING(20),
-            allowNull: false
+            allowNull: true
         },
         latitude1: {
             type: DataTypes.STRING(20),
-            allowNull: false
+            allowNull: true
         },
         wayPoint2: {
-            type: DataTypes.STRING(20),
-            allowNull: false
+            type: DataTypes.STRING(100),
+            allowNull: true
         },
         longtitude2: {
             type: DataTypes.STRING(20),
-            allowNull: false
+            allowNull: true
         },
         latitude2: {
             type: DataTypes.STRING(20),
-            allowNull: false
+            allowNull: true
         },
         destination: {
-            type: DataTypes.STRING(20),
+            type: DataTypes.STRING(100),
             allowNull: false
         },
     },
