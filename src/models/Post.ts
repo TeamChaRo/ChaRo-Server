@@ -1,7 +1,6 @@
 import {
     DataTypes, 
-    Model,
-    Sequelize
+    Model
 } from 'sequelize';
 import {sequelize} from "../Loaders/db"
 
