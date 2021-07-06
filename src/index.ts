@@ -10,6 +10,7 @@ app.use(express.json());
 app.use(logger("dev"));
 
 // define route
+app.use("/test", require("./api/main"));
 
 // error handler
 app.use(function (err, req, res, next) {
