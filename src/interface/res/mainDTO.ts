@@ -3,7 +3,7 @@ import briefInformationDTO from "./briefInformationDTO";
 interface bannerDTO{
     bannerTitle: string,
     bannerImage: string,
-    bannerTags: [string]
+    bannerTags: string
 }
 
 type briefCollectionDTO = briefInformationDTO[];
