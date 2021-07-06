@@ -6,15 +6,21 @@ import User from "./User";
 import Post from "./Post";
 import Course from "./Course";
 import PostHasImage from "./PostHasImage";
+import SearchHistory from "./SearchHistory";
 
 /* User - Post */
 User.hasMany(Post, {
   foreignKey: "userId",
   sourceKey: "id",
-  //onDelete: 'CASCADE',
-  //onUpdate: 'CASCADE',
 });
 Post.belongsTo(User, { foreignKey:"userId", targetKey:"id"});
+
+/* User - SearchHistory */
+User.hasMany(SearchHistory, {
+  foreignKey: "userId",
+  sourceKey: "id",
+});
+SearchHistory.belongsTo(User, { foreignKey:"userId", targetKey:"id"});
 
 /* Post - Course */
 Post.hasOne(Course, {
@@ -38,7 +44,7 @@ PostHasImage.belongsTo(Post,{
 
 /* warning & theme - Post */
 Post.belongsToMany(Warning, { timestamps:false, through: "post_has_warning" });
-Post.belongsToMany(Theme, { timestamps:false, through: "post_has_theme" })
+Warning.belongsToMany(Post, { timestamps:false, through: "post_has_warning" });
 
 /* liked & saved Post */
 Post.belongsToMany(User, { timestamps:false, through: "liked_post" });
@@ -57,6 +63,7 @@ export const db = {
   Theme, 
   Warning,
   User,
+  SearchHistory,
   Post,
   Course
 };
