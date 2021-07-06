@@ -36,7 +36,7 @@ export default async function signup(email, password){
           // Return jsonwebtoken
           const payload = {
             user: {
-              id: user.userId,
+              id: user.id,
             },
           };
           jwt.sign(
