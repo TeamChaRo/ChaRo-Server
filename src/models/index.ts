@@ -52,11 +52,11 @@ Warning.belongsToMany(Post, { timestamps:false, through: "post_has_warning" });
 
 /* Theme - post */
 Post.hasOne(PostHasTheme,{
-  foreignKey: "id",
+  foreignKey: "postId",
   sourceKey: "id",
 })
 PostHasTheme.belongsTo(Post,{
-  foreignKey: "id",
+  foreignKey: "postId",
   targetKey: "id",
 })
 
