@@ -1,27 +1,24 @@
-import { Sequelize } from 'sequelize';
+import { sequelize } from "../Loaders/db";
+import { db } from "../models";
 import config from '../config/config';
 
 const connectDB = async () => {
   try{
-    const sequelize = new Sequelize(
-      config.database,
-      config.username,
-      config.password,
-      {
-          host: config.host,
-          port : parseInt(config.port),
-          dialect: 'mysql',
-      }
-    )
-      
     await sequelize.authenticate()
      .then(async () => {
          console.log("connection success");
      })
      .catch((e) => {
-         sequelize.close();
          console.log('TT : ', e);
      })
+    
+     
+    const options = {
+      force: config.env === 'db_test' ? true : false
+    }
+    
+    db.sequelize.sync(options).then(() => console.log("Table created"));
+
   }catch(err){
     console.error(err.message);
     process.exit(1);
