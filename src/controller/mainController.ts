@@ -23,7 +23,7 @@ var mainData: mainDTO = {
         title: '',
         tags: [''],
         image: '',
-        isFavorite: true
+        isFavorite: false
     }],
 }
 
@@ -44,19 +44,27 @@ export default async(req: Request, res: Response) => {
 
     localStandard().then ( local => {
         localTitle = local.localTitle
+        mainData.localTitle = localTitle
         localMain(id, local.localCity).then(function(res) {
             localInfo = res
+            console.log("로그로그",localInfo)
             
+            //상위 네개만! -> 좋아요순으로 노출..!?
             for (let key in localInfo) {
-                let titleValue = localInfo[key]['title'];
-                let favoriteValue =  localInfo[key]['isFavorite']
-                mainData.local[key].title = titleValue
-                
-                // favoriteValue가 null값을 가진다면 false로 값 변경
+                let titleValue:string = localInfo[key]['title'];
+                let favoriteValue = localInfo[key]['isFavorite']
                 if (favoriteValue == null) {
                     favoriteValue = false
                 } 
-                mainData.local[key].isFavorite = favoriteValue
+                else {
+                    favoriteValue = true
+                }
+                mainData.local[key] = {
+                    "title": titleValue,
+                    "tags": [""],
+                    "image": "",
+                    "isFavorite": favoriteValue
+                }
             }
         });    
     });
