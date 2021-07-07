@@ -9,6 +9,10 @@ if (envFound.error) {
 }
 
 export default {
+  env : process.env.NODE_ENV || 'development',
+  /* login */
+  jwtSecret: process.env.JWT_SECRET,
+  jwtAlgorithm: process.env.JWT_ALGO,
   /**
    * MySql
    */
