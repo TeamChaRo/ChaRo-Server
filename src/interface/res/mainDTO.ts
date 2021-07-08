@@ -13,8 +13,8 @@ export interface mainDTO {
     banner: bannerCollectionDTO,
     todayCharoDrive: briefCollectionDTO,
     trendDrive: briefCollectionDTO,
-    seasonTitle: string,
-    seasonDrive: briefCollectionDTO,
+    customThemeTitle: string,
+    customThemeDrive: briefCollectionDTO,
     localTitle: string,
     localDrive : briefCollectionDTO
 }
