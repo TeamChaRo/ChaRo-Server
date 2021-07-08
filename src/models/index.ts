@@ -89,4 +89,5 @@ export const db = {
   Local,
   PostHasTheme,
   PostHasWarning,
+  PostHasImage
 };
