@@ -10,8 +10,10 @@ type briefCollectionDTO = briefInformationDTO[];
 
 export interface mainDTO {
     banner: bannerDTO,
-    localTitle: string,
-    local : briefCollectionDTO,
+    todayCharoDrive: briefCollectionDTO,
+    trendDrive: briefCollectionDTO,
     seasonTitle: string,
-    season: briefCollectionDTO
+    seasonDrive: briefCollectionDTO,
+    localTitle: string,
+    localDrive : briefCollectionDTO
 }
