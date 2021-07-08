@@ -4,7 +4,6 @@ import express, { Request, Response } from "express";
 import { ArrayDataType, QueryTypes} from 'sequelize';
 import { mainDTO } from '../interface/res/mainDTO'
 import { request } from "express";
-import Theme from "../models/Theme";
 
 /* TO 지은, 정말 쿼리문 or 시퀄라이즈 이용해서 게시글 모든 정보를 얻어올 수 있을거야 이걸 DTO import 해서 맞춰서 data에 리턴 시키면 될듯! */
 var mainLocalData: object
@@ -110,86 +109,24 @@ function makeMainLocalData(data: object) {
         "image": "",
         "isFavorite": favoriteValue
     }
-
-      console.log("mainData.local", mainData)
+      //게시물 태그추출을 위한 postIdArray 
       tagIdArray.push(data[key]['id'])
-      console.log("tagArray", tagIdArray)
   }
   mainLocalData = mainData.localDrive
 }
 
 async function getThemeData(postId:object) {
 
-  console.log("djdjdj", postId)
-
-  var themeArray = []
-
   for (let id in postId) {
-    console.log("idid",postId[id])
 
   const query = `SELECT post_has_theme.theme1
   FROM post_has_theme
   WHERE post_has_theme.postId = :postId`  
 
   const ret = await sequelize.query(query,{ replacements:{postId:postId[id]}, type: QueryTypes.SELECT });           
-  console.log("ret",ret)
-  console.log("테마추출", ret[0]['theme1'])
-  //convertThemeToString(ret[id])
 
   Object.assign(mainLocalData[id],{ 'tags' : [localCity,ret[0]['theme1'], '']})
-  console.log("mainLocalData",mainLocalData)
   }
-}
-
-//태그 추출을 위한 string convert 함수
-function convertThemeToString(themeId: number) {
-  //var themeName: string
-  if (themeId == 1) {
-    themeName = '산'
-  }
-  else if (themeId == 2) {
-    themeName = '바다'
-  }
-  else if (themeId == 3) {
-    themeName = '호수'
-  }
-  else if (themeId == 4) {
-    themeName = '강'
-  }
-  else if (themeId == 5) {
-    themeName = '봄'
-  }
-  else if (themeId == 6) {
-    themeName = '여름'
-  }
-  else if (themeId == 7) {
-    themeName = '가을'
-  }
-  else if (themeId == 8) {
-    themeName = '겨울'
-  }
-  else if (themeId == 9) {
-    themeName = '해안도로'
-  }
-  else if (themeId == 10) {
-    themeName = '벚꽃'
-  }
-  else if (themeId == 11) {
-    themeName = '단풍'
-  }
-  else if (themeId == 12) {
-    themeName = '여유'
-  }
-  else if (themeId == 13) {
-    themeName = '스피드'
-  }
-  else if (themeId == 14) {
-    themeName = '야경'
-  }
-  else {
-    themeName = '도심'
-  }
-  return themeName
 }
 
 export default async function getMain(id: string){
@@ -210,9 +147,7 @@ export default async function getMain(id: string){
     makeMainLocalData(res);
   })
   
-    console.log("tagArray111", tagIdArray)
-    await getThemeData(tagIdArray);
-  
+  await getThemeData(tagIdArray);
     
   return {
       data: mainData
