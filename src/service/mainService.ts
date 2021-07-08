@@ -11,8 +11,8 @@ var mainLocalData: object
 var localTitle: string
 var localCity: string
 var themeName: string
-
 var tagIdArray = [];
+
 export var mainData: mainDTO = {
   banner: [{
       bannerImage: "",
@@ -32,14 +32,14 @@ export var mainData: mainDTO = {
       isFavorite: true
   }],
   seasonTitle: '',
-  season: [{
+  seasonDrive: [{
       title: '',
       tags: [],
       image: '',
       isFavorite: true
   }],
   localTitle: '',
-  local: [{
+  localDrive: [{
       title: '',
       tags: [],
       image: '',
@@ -92,9 +92,9 @@ export async function themeStandard(){
   return { standardTheme, standardTitle }
 }
 
-
 function makeMainLocalData(data: object) {
   for (let key in data) {
+    console.log("key",key)
       let titleValue:string = data[key]['title'];
       let favoriteValue = data[key]['isFavorite'];
       
@@ -105,15 +105,17 @@ function makeMainLocalData(data: object) {
           favoriteValue = true
       }
 
-      mainLocalData = mainData.local[key] = {
-          "title": titleValue,
-          "image": "",
-          "isFavorite": favoriteValue
-      }
+      mainData.localDrive[key] = {
+        "title": titleValue,
+        "image": "",
+        "isFavorite": favoriteValue
+    }
 
-      tagIdArray.push({id : data[key]['id']})
+      console.log("mainData.local", mainData)
+      tagIdArray.push(data[key]['id'])
       console.log("tagArray", tagIdArray)
   }
+  mainLocalData = mainData.localDrive
 }
 
 async function getThemeData(postId:object) {
@@ -123,22 +125,19 @@ async function getThemeData(postId:object) {
   var themeArray = []
 
   for (let id in postId) {
-    console.log("idid",postId[id].id)
+    console.log("idid",postId[id])
 
-    const query = `SELECT post_has_theme.theme1
+  const query = `SELECT post_has_theme.theme1
   FROM post_has_theme
   WHERE post_has_theme.postId = :postId`  
 
-  const ret = await sequelize.query(query,{ replacements:{postId:postId[id].id}, type: QueryTypes.SELECT });           
+  const ret = await sequelize.query(query,{ replacements:{postId:postId[id]}, type: QueryTypes.SELECT });           
   console.log("ret",ret)
-  convertThemeToString(ret[id].id)
+  console.log("테마추출", ret[0]['theme1'])
+  //convertThemeToString(ret[id])
 
-  console.log('mainLocalData', mainLocalData)
-
-  Object.assign(mainLocalData,{ 'tags' : [localCity,themeName, '']})
+  Object.assign(mainLocalData[id],{ 'tags' : [localCity,ret[0]['theme1'], '']})
   console.log("mainLocalData",mainLocalData)
-  mainData.local[id] = mainLocalData
-  themeArray.push(ret)
   }
 }
 
