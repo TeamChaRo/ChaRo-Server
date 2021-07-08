@@ -14,11 +14,23 @@ var themeName: string
 
 var tagIdArray = [];
 export var mainData: mainDTO = {
-  banner: {
+  banner: [{
       bannerImage: "",
       bannerTags: "",
       bannerTitle: ""
-  },
+  }],
+  todayCharoDrive: [{
+    title: '',
+    tags: [],
+    image: '',
+    isFavorite: true
+  }],
+  trendDrive: [{
+     title: '',
+      tags: [],
+      image: '',
+      isFavorite: true
+  }],
   seasonTitle: '',
   season: [{
       title: '',
