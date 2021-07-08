@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import { validationResult } from "express-validator";
-import { themeMain, themeStandard } from "../service/mainService";
+//import { themeMain, themeStandard } from "../service/mainService";
 import getMain from "../service/mainService"
 
 export default async(req: Request, res: Response) => {
@@ -19,11 +19,11 @@ export default async(req: Request, res: Response) => {
     //     localMain(id, local.localCity)
     // });
 
-    themeStandard().then ( theme => {
-        themeMain(id, theme.standardTheme).then( res => {
-           // responseFunc()
-        });
-    })
+    // themeStandard().then ( theme => {
+    //     themeMain(id, theme.standardTheme).then( res => {
+    //        // responseFunc()
+    //     });
+ //   })
 
     const getMainService = await getMain(id);
 

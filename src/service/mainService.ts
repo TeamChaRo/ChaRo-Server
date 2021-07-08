@@ -7,9 +7,11 @@ import { request } from "express";
 
 /* TO 지은, 정말 쿼리문 or 시퀄라이즈 이용해서 게시글 모든 정보를 얻어올 수 있을거야 이걸 DTO import 해서 맞춰서 data에 리턴 시키면 될듯! */
 var mainLocalData: object
+var mainSeasonData: object
 var localTitle: string
 var localCity: string
-var themeName: string
+var seasonTitle: string
+var seasonTheme: string
 var tagIdArray = [];
 
 export var mainData: mainDTO = {
@@ -63,7 +65,7 @@ export async function localMain(userId: string, city: string){
   return localDataReturn
 }
 
-export async function themeMain(userId: string, theme: number){
+export async function seasonMain(userId: string, theme: string){
 
   // P 가 post 객체나 마찬가지 -> 얘를 SELECT 옆에서 파싱하면 된다. / isFavorite이 null일 때만 하트X 
   const query = `SELECT P.id, P.userId, liked_post.postId as isFavorite
@@ -76,7 +78,7 @@ export async function themeMain(userId: string, theme: number){
   console.log("테마",ret);
 }
 
-export async function themeStandard(){
+export async function seasonStandard(){
   
   const t = await 
   sequelize.transaction();
@@ -91,7 +93,7 @@ export async function themeStandard(){
   return { standardTheme, standardTitle }
 }
 
-function makeMainLocalData(data: object) {
+async function makeMainLocalData(data: object) {
   for (let key in data) {
     console.log("key",key)
       let titleValue:string = data[key]['title'];
@@ -113,6 +115,44 @@ function makeMainLocalData(data: object) {
       tagIdArray.push(data[key]['id'])
   }
   mainLocalData = mainData.localDrive
+
+  console.log("tagIdArray", tagIdArray)
+  
+  for (let id in tagIdArray) {
+
+    const query = `SELECT post_has_theme.theme1
+    FROM post_has_theme
+    WHERE post_has_theme.postId = :postId`  
+  
+    const ret = await sequelize.query(query,{ replacements:{postId:tagIdArray[id]}, type: QueryTypes.SELECT });           
+    console.log("return", ret)
+    console.log("id", id)
+    Object.assign(mainLocalData[id],{ 'tags' : [localCity,ret[0]['theme1'], '']})
+    }
+}
+
+function makeMainSeasonData(data: object) {
+  for (let key in data) {
+    console.log("key",key)
+      let titleValue:string = data[key]['title'];
+      let favoriteValue = data[key]['isFavorite'];
+      
+      if (favoriteValue == null) {
+          favoriteValue = false
+      } 
+      else {
+          favoriteValue = true
+      }
+
+      mainData.seasonDrive[key] = {
+        "title": titleValue,
+        "image": "",
+        "isFavorite": favoriteValue
+    }
+      //게시물 태그추출을 위한 postIdArray 
+      tagIdArray.push(data[key]['id'])
+  }
+  mainSeasonData = mainData.seasonDrive
 }
 
 async function getThemeData(postId:object) {
@@ -133,12 +173,22 @@ export default async function getMain(id: string){
 
   const t = await
   sequelize.transaction();
+  
+  const seasonStandardQuery = `SELECT * FROM custom WHERE custom.customTheme = '여름'` 
+  const seasonStandardRet = await sequelize.query(seasonStandardQuery, { transaction: t, type: QueryTypes.SELECT }); 
 
   const localStandardQuery = `SELECT * FROM local WHERE local.localCity = '부산'` 
   const localStandardRet = await sequelize.query(localStandardQuery, { transaction: t, type: QueryTypes.SELECT }); 
+
   
+  seasonTheme = await seasonStandardRet[0]['customTheme']
+  seasonTitle = await seasonStandardRet[0]['customTitle']
+
   localCity = await localStandardRet[0]['localCity']
   localTitle = await localStandardRet[0]['localTitle']
+
+  
+  mainData.seasonTitle = seasonTitle
   mainData.localTitle = localTitle
 
 
@@ -146,8 +196,12 @@ export default async function getMain(id: string){
   await localMain(id, localCity).then( res => {
     makeMainLocalData(res);
   })
+
+  await seasonMain(id, seasonTheme).then( res => {
+
+  })
   
-  await getThemeData(tagIdArray);
+  //await getThemeData(tagIdArray);
     
   return {
       data: mainData
