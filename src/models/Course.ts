@@ -73,11 +73,11 @@ Course.init(
         },
         wayTwoLongitude: {
             type: DataTypes.STRING(20),
-            allowNull: false
+            allowNull: true
         },
         wayTwoLatitude: {
             type: DataTypes.STRING(20),
-            allowNull: false
+            allowNull: true
         },
         dest: {
             type: DataTypes.STRING(100),
