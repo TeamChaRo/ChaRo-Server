@@ -6,24 +6,19 @@ import {sequelize} from "../Loaders/db"
 
 interface PostAttributes {
     id?: number;
-    //userId?: string;
-    //date?: Date; //timestamp :true 옵션 믿어보기
     title?: string;
     province?: string;
-    city?: string;
+    region?: string;
     isParking?: boolean;
     parkingDesc?: string;
     courseDesc?: string;
 };
 
 export default class Post extends Model<PostAttributes> {
-    //조회 후 사용 되어질 요소들의 타입명시 설정이 되어 있지 않으면 조회시 또는 조회 후 데이터 타입체크에서 오류
     public id!: number;
-    //public userId!: string;
-    //public date!: Date;
     public title!: string;
     public province!: string;
-    public city!: string;
+    public region!: string;
     public isParking!: boolean;
     public parkingDesc!: string;
     public courseDesc!: string;
@@ -48,7 +43,7 @@ Post.init(
             type: DataTypes.STRING(45),
             allowNull: false
         },
-        city: {
+        region: {
             type: DataTypes.STRING(45),
             allowNull: false
         },

@@ -2,7 +2,7 @@ export default interface postDTO{
     title?: string;
     userId?: string;
     province?: string;
-    city?: string;
+    region?: string;
     isParking?: boolean;
     parkingDesc?: string;
     courseDesc?: string;
