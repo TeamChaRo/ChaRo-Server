@@ -6,21 +6,21 @@ interface locationDTO{
 
 type locationCollectionDTO = locationDTO[];
 
-export interface writePostDTO{
+export default interface requestDTO{
     title: string,
     userId: string,
     
-    courseImage: [string] // 파일객체인데
+    courseImage: string[], // 파일객체인데
 
     province: string,
-    city: string,
+    region: string,
 
-    theme: [string],
-    warning: [string],
+    theme: string[],
+    warning: boolean[],
 
     isParking: boolean,
     parkingDesc: string,
 
     courseDesc: string,
-    location: locationCollectionDTO
+    course: locationCollectionDTO
 }
