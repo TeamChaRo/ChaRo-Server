@@ -7,9 +7,10 @@ interface bannerDTO{
 }
 
 type briefCollectionDTO = briefInformationDTO[];
+type bannerCollectionDTO = bannerDTO[];
 
 export interface mainDTO {
-    banner: bannerDTO,
+    banner: bannerCollectionDTO,
     todayCharoDrive: briefCollectionDTO,
     trendDrive: briefCollectionDTO,
     seasonTitle: string,
