@@ -4,14 +4,14 @@ import {
 } from 'sequelize';
 import {sequelize} from "../Loaders/db"
 
-interface CustomAttributes {
-    customTitle?: string,
+interface CustomThemeAttributes {
+    customThemeTitle?: string,
     customTheme?: string,
 };
 
-export default class Custom extends Model<CustomAttributes> {
+export default class Custom extends Model<CustomThemeAttributes> {
 
-    public customTitle!: string;
+    public customThemeTitle!: string;
     public customTheme!: string;
 
     public static associations: {
@@ -21,7 +21,7 @@ export default class Custom extends Model<CustomAttributes> {
 //모델 생성
 Custom.init(
     {
-        customTitle: {
+        customThemeTitle: {
             type: DataTypes.STRING(20),
             allowNull: false
         },
@@ -31,8 +31,8 @@ Custom.init(
         }
     },
     {
-        modelName: 'Custom',
-        tableName: 'custom',
+        modelName: 'CustomTheme',
+        tableName: 'custom_theme',
         sequelize,
         freezeTableName: true,
         timestamps:false,
