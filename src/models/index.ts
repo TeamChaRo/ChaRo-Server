@@ -10,6 +10,7 @@ import Banner from "./Banner";
 import CustomTheme from "./CustomTheme";
 import Local from "./Local";
 
+import PostHasTags from "./PostHasTags";
 import PostHasWarning from "./PostHasWarning";
 /* User - Post */
 User.hasMany(Post, {
@@ -65,6 +66,15 @@ PostHasWarning.belongsTo(Post,{
   targetKey: "id",
 })
 
+/* tags - post */
+Post.hasOne(PostHasTags,{
+  foreignKey: "postId",
+  sourceKey: "id",
+})
+PostHasTags.belongsTo(Post,{
+  foreignKey: "postId",
+  targetKey: "id",
+})
 
 /* liked & saved Post */
 Post.belongsToMany(User, { timestamps:false, through: "liked_post" });
@@ -89,5 +99,6 @@ export const db = {
   Local,
   PostHasTheme,
   PostHasWarning,
-  PostHasImage
+  PostHasImage,
+  PostHasTags,
 };
