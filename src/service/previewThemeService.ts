@@ -4,14 +4,31 @@ import { QueryTypes } from 'sequelize';
 import briefInformationDTO from "../interface/res/briefInformationDTO";
 import previewDTO from "../interface/res/previewDTO";
 
+const themeMap = {
+    spring: "봄",
+    summer: "여름",
+    fall: "가을",
+    winter: "겨울",
+    mountain: "산",
+    sea: "바다",
+    lake: "호수",
+    river: "강",
+    oceanRoad: "해안도로",
+    blossom: "벚꽃",
+    maple: "단풍",
+    relax: "여유",
+    speed: "스피드",
+    nightView: "야경",
+    cityView: "도심"
+}
 export default async function previewThemeService(theme: string){
     console.log("previewService")
-
+    const themeName = themeMap[theme];
     const query = `select count(liked_post.PostId) as favoriteCount, P.postId, count(P.postId) as postCount
                     FROM (SELECT postId FROM post_has_theme WHERE themeName= :theme) AS P
                     LEFT OUTER JOIN liked_post ON(P.postId = liked_post.PostId)
                     GROUP BY P.postId ORDER BY favoriteCount DESC`;
-    const result = await db.sequelize.query(query,{ replacements:{theme:theme},type: QueryTypes.SELECT });
+    const result = await db.sequelize.query(query,{ replacements:{theme:themeName},type: QueryTypes.SELECT });
     
     let brief: briefInformationDTO[] = []
     const preview: previewDTO = {
@@ -21,8 +38,7 @@ export default async function previewThemeService(theme: string){
     try{
         for(let idx in result){
                 const postId = result[idx]['postId'];
-                console.log("ret",result[idx], postId);
-                
+
                 const tempBrief: briefInformationDTO = {
                     title: "",
                     image: "",
@@ -49,7 +65,7 @@ export default async function previewThemeService(theme: string){
                         .then((ret) => {
                             tempBrief.title = ret["title"];
                             tempBrief.tags.push(ret["region"]);
-                            tempBrief.tags.push(theme);
+                            tempBrief.tags.push(themeName);
 
                             resolve("success");
                         })
