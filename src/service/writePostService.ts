@@ -15,6 +15,7 @@ const warningMap = {
 
 export default async function writePostService( postEntity: writePostDTO ){
     
+
     const image: imageDTO = {
         image1: postEntity.courseImage[0]
     }
@@ -70,8 +71,9 @@ export default async function writePostService( postEntity: writePostDTO ){
         }
     }
 
+    /*
     const theme: themeDTO = {
-        theme1: postEntity.theme[0]
+        theme: postEntity.theme[0]
     }
 
     const themeSize = postEntity.theme.length;
@@ -79,8 +81,8 @@ export default async function writePostService( postEntity: writePostDTO ){
         theme.theme2 = postEntity.theme[1];
         if(themeSize > 2) theme.theme3 = postEntity.theme[2];
     }
+    */
 
-    
     const t = await db.sequelize.transaction();
     try{
         let postId: number;
@@ -88,8 +90,6 @@ export default async function writePostService( postEntity: writePostDTO ){
         .then(data =>{     
             postId = data["id"];
         })
-        
-        console.log("PPP",postId);
 
         //Course
         course.postId = postId;
@@ -102,17 +102,31 @@ export default async function writePostService( postEntity: writePostDTO ){
         
 
         //PostHasTheme
+        postEntity.theme.forEach( async (value, index) => {
+            const theme:themeDTO = {
+                postId: postId,
+                themeName: value
+            }
+            await db.PostHasTheme.create(theme, {transaction: t});
+        })
+        
+        /*
         theme.postId = postId;
         await db.PostHasTheme.create(theme, {transaction:t});
+        */
 
         //PostHasWarning
-        let warningText: string[] = [];
         postEntity.warning.forEach( async (value, index) => {
             if(value){
-                warningText.push(warningMap[index]);
+                const warning: warningDTO = {
+                    postId: postId,
+                    warningName: warningMap[index];
+                }
+                await db.PostHasTheme.create(warning, {transaction: t});
             }
         });
 
+        /*
         let warningSize = warningText.length;
         const warning: warningDTO = {
             postId: postId
@@ -131,7 +145,7 @@ export default async function writePostService( postEntity: writePostDTO ){
             }
         }
         await db.PostHasWarning.create(warning, {transaction:t});
-    
+        */
         await t.commit();
 
         console.log("successfully update")
