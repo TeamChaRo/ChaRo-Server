@@ -1,0 +1,103 @@
+import { db } from "../models";
+import { QueryTypes } from 'sequelize';
+
+import briefInformationDTO from "../interface/res/briefInformationDTO";
+import previewDTO from "../interface/res/previewDTO";
+
+export default async function previewThemeService(theme: string){
+    console.log("previewService")
+
+    const query = `select count(liked_post.PostId) as favoriteCount, P.postId, count(P.postId) as postCount
+                    FROM (SELECT postId FROM post_has_theme WHERE themeName= :theme) AS P
+                    LEFT OUTER JOIN liked_post ON(P.postId = liked_post.PostId)
+                    GROUP BY P.postId ORDER BY favoriteCount DESC`;
+    const result = await db.sequelize.query(query,{ replacements:{theme:theme},type: QueryTypes.SELECT });
+    
+    let brief: briefInformationDTO[] = []
+    const preview: previewDTO = {
+        totalCourse: result.length,
+        drive: brief
+    };
+    try{
+        for(let idx in result){
+                const postId = result[idx]['postId'];
+                console.log("ret",result[idx], postId);
+                
+                const tempBrief: briefInformationDTO = {
+                    title: "",
+                    image: "",
+                    isFavorite: true,
+                    tags: [],
+                };
+            
+                // post_has_image 
+                const promise1 = new Promise( async (resolve, reject) => {
+                    db.PostHasImage.findOne({ where: { postId: postId }, raw: true })
+                        .then((ret) => {
+                            tempBrief.image = ret["image1"];
+                            resolve("success");    
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                            reject(err);
+                        });
+                })
+
+                // post_has_warning
+                const promise2 = new Promise( async (resolve, reject) => {
+                    db.Post.findOne({ where: { id: postId }, raw: true })
+                        .then((ret) => {
+                            tempBrief.title = ret["title"];
+                            tempBrief.tags.push(ret["region"]);
+                            tempBrief.tags.push(theme);
+
+                            resolve("success");
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                            reject(err);
+                        });
+                })
+
+                // liked_post
+                const promise3 = new Promise((resolve, reject) => {
+                    db.PostHasWarning.findOne({ where: { postId: postId }, raw: true })
+                        .then((ret) => {
+                            if(ret){
+                                tempBrief.tags.push(ret["warningName"]);
+                            }
+                            resolve("success");
+                        })
+                        .catch((err)=>{
+                            reject(err);
+                        });
+                })
+                
+                await Promise.all([promise1, promise2, promise3]) 
+                    .then(() => {
+                        brief.push(tempBrief);
+                    })
+                    .catch(err => {
+                        throw err;
+                    })
+        }
+        
+        return {
+            status: 200,
+            data:{
+                msg : "successfully load preview based on theme",
+                data : preview
+            }
+            
+        }
+    }catch(err){
+        console.log(err);
+        return {
+            status: 502,
+            data:{
+                msg : "DB preview loading error"
+            }
+        }
+    } 
+    
+}
