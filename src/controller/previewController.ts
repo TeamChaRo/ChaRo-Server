@@ -1,13 +1,18 @@
 import { Request, Response } from "express";
-import previewService from "../service/previewService";
+import previewThemeService from "../service/previewThemeService";
 export default async(req: Request, res: Response) => {
     try{
         console.log("preview Ctrl", req.params);
-        await previewService();
-        return res.status(200).json({
-            success: true,
-            msg: "성공~"
-        })
+
+        let ret:any;
+        
+        //theme preview
+        if(req.params.identifier == "1"){
+            ret = await previewThemeService(req.query.value as string);
+        }
+        
+        return res.status(ret.status).json(ret.data);
+
     }catch(err){
         console.log(err);
         return res.status(500).json({
