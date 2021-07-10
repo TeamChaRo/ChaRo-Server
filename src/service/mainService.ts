@@ -57,31 +57,6 @@ export var mainData: mainDTO = {
   }],
 }
 
-export async function localMain(userId: string, city: string){
-  const localDataQuery = `SELECT P.id, P.userId, P.title, liked_post.postId as isFavorite
-                FROM (SELECT * FROM post WHERE post.city= :city) AS P
-                LEFT OUTER JOIN liked_post ON( 
-                liked_post.userId = :userId 
-                AND P.id = liked_post.postId)`  
-
-  const localDataReturn = await sequelize.query(localDataQuery,{ replacements:{userId:userId, city:city},type: QueryTypes.SELECT });           
-  localCity = city
-  return localDataReturn
-}
-
-
-export async function customThemeMain(userId: string, theme: string){
-
-  const customThemeDataQuery = `SELECT P.id, P.userId, P.title, liked_post.postId as isFavorite
-                FROM (SELECT * FROM post INNER JOIN post_has_theme WHERE post.id = post_has_theme.postId AND post_has_theme.theme1= :theme) AS P
-                LEFT OUTER JOIN liked_post ON( 
-                liked_post.userId = :userId 
-                AND P.id = liked_post.postId)` 
-
-  const customThemeDataReturn = await sequelize.query(customThemeDataQuery, { replacements:{userId:userId, theme:theme},type: QueryTypes.SELECT }); 
-  return customThemeDataReturn
-}
-
 // 배너 데이터 가져오는 함수
 async function getBannerData() {
 
@@ -101,10 +76,11 @@ async function getBannerData() {
       "bannerTags": bannerValue
     }
   }
+
 }
 
 
-// 차로의 오늘 추천 드라이브 
+// 차로의 오늘 추천 드라이브 -> 일단 사용자가 저장한 게시물로만 가져왔음! 추후에 수정예정
 async function todayCharoMain(userId: string){
 
   const todayCharoDataQuery = `SELECT PostId FROM saved_post WHERE saved_post.userId = :userId`  
@@ -142,9 +118,22 @@ async function todayCharoMain(userId: string){
   mainCharoDriveData = mainData.todayCharoDrive
 }
 
-// 지역 데이터중 title, isFavorite 맵핑하는 함수
-function makeMainLocalData(data: object) {
-  localPIArray = []
+
+// 요즘뜨는 드라이브 데이터 추출함수
+async function trendMain(){
+
+  const trendQuery = `SELECT count(liked_post.PostId) as favoriteCount, P.id, P.userId, P.title, liked_post.postId as isFavorite 
+  FROM (SELECT * FROM post) AS P
+  LEFT OUTER JOIN liked_post ON(
+  P.id = liked_post.postId) GROUP BY P.id ORDER BY favoriteCount DESC LIMIT 4`
+
+  const trendDataReturn = await sequelize.query(trendQuery,{ type: QueryTypes.SELECT });  
+  return trendDataReturn 
+}
+
+// 요즘뜨는 데이터중 title, isFavorite 맵핑하는 함수
+function makeMainTrendData(data: object) {
+  trendPIArray = []
   for (let key in data) {
       let titleValue:string = data[key]['title'];
       let favoriteValue = data[key]['isFavorite'];
@@ -156,18 +145,30 @@ function makeMainLocalData(data: object) {
           favoriteValue = true
       }
 
-      mainData.localDrive[key] = {
+      mainData.trendDrive[key] = {
         "title": titleValue,
         "isFavorite": favoriteValue
     }
       //게시물 태그추출을 위한 postIdArray 
-      localPIArray.push(data[key]['id'])
+      trendPIArray.push(data[key]['id'])
   }
-  mainLocalData = mainData.localDrive
+  mainTrendDriveData = mainData.trendDrive
+}
+
+// 테마(ex:여름) 기반 데이터 추출함수
+export async function customThemeMain(theme: string){
+  const customThemeDataQuery = `SELECT count(liked_post.PostId) as favoriteCount, P.id, P.userId, P.title, liked_post.postId as isFavorite
+                      FROM (SELECT * FROM post INNER JOIN post_has_theme WHERE post.id = post_has_theme.postId AND post_has_theme.theme1= :theme) AS P
+                      LEFT OUTER JOIN liked_post ON( 
+                      P.id = liked_post.postId) GROUP BY P.id ORDER BY favoriteCount DESC LIMIT 4` 
+
+  const customThemeDataReturn = await sequelize.query(customThemeDataQuery, { replacements:{ theme:theme },type: QueryTypes.SELECT }); 
+  return customThemeDataReturn
 }
 
 // 테마 데이터중 title, isFavorite 맵핑하는 함수
 async function makeMainCustomThemeData(data: object) {
+  console.log("테마테마", data)
   customThemePIArray = []
   for (let key in data) {
 
@@ -191,43 +192,42 @@ async function makeMainCustomThemeData(data: object) {
   maincustomThemeData = mainData.customThemeDrive
 }
 
-async function trendMain(userId: string){
 
-  const trendDataQuery = `SELECT PostId, COUNT(*) as Count from liked_post GROUP BY PostId having COUNT(*) > 0`  
+// 지역기반 데이터 추출함수
+export async function localMain(city: string){
 
-  const trendDataReturn = await sequelize.query(trendDataQuery,{ type: QueryTypes.SELECT });           
+  const localDataQuery = `SELECT count(liked_post.PostId) as favoriteCount, P.id, P.userId, P.title, liked_post.postId as isFavorite
+                FROM (SELECT * FROM post WHERE post.city= :city) AS P
+                LEFT OUTER JOIN liked_post ON(
+                P.id = liked_post.postId) GROUP BY P.id ORDER BY favoriteCount DESC LIMIT 4`  
 
-  //liked_post 좋아요개수 많은순으로 정렬 후 리턴
-  var result;
-  result = trendDataReturn.sort(function (a, b) {
-    return b['Count'] - a['Count'];
-  });
-  
-  trendPIArray = []
-  for (let i in result) {
-    const trendPostQuery = `SELECT P.id, P.userId, P.title, liked_post.postId as isFavorite
-                FROM (SELECT * FROM post WHERE post.id = :postId) AS P
-                LEFT OUTER JOIN liked_post ON( 
-                liked_post.userId = :userId 
-                AND P.id = liked_post.postId)`
+  const localDataReturn = await sequelize.query(localDataQuery,{ replacements:{city:city},type: QueryTypes.SELECT });           
+  return localDataReturn
+}
 
-    const trendPostReturn = await sequelize.query(trendPostQuery,{ replacements:{userId:userId, postId: result[i]['PostId']},type: QueryTypes.SELECT });
-    let titleValue:string = trendPostReturn[0]['title'];
-    let favoriteValue:boolean = trendPostReturn[0]['isFavorite'];
-    if (favoriteValue == null) {
-        favoriteValue = false
-    } 
-    else {
-        favoriteValue = true
+
+// 지역 데이터중 title, isFavorite 맵핑하는 함수
+function makeMainLocalData(data: object) {
+  localPIArray = []
+  for (let key in data) {
+      let titleValue:string = data[key]['title'];
+      let favoriteValue = data[key]['isFavorite'];
+      
+      if (favoriteValue == null) {
+          favoriteValue = false
+      } 
+      else {
+          favoriteValue = true
+      }
+
+      mainData.localDrive[key] = {
+        "title": titleValue,
+        "isFavorite": favoriteValue
     }
-    mainData.trendDrive[i] = {
-      "title": titleValue,
-      "isFavorite": favoriteValue
-    }
-    //게시물 태그추출을 위한 postIdArray 
-    trendPIArray.push(trendPostReturn[0]['id'])
+      //게시물 태그추출을 위한 postIdArray 
+      localPIArray.push(data[key]['id'])
   }
-  mainTrendDriveData = mainData.trendDrive
+  mainLocalData = mainData.localDrive
 }
 
 
@@ -336,14 +336,16 @@ export default async function getMain(id: string){
   mainData.localTitle = localTitle
 
   await todayCharoMain(id);
-  await trendMain(id);
 
-  await customThemeMain(id, customTheme).then( res => {
+  await trendMain().then(res => {
+    makeMainTrendData(res);
+  })
+
+  await customThemeMain(customTheme).then( res => {
     makeMainCustomThemeData(res);
   })
 
-  // P 가 post 객체나 마찬가지 -> 얘를 SELECT 옆에서 파싱하면 된다. / isFavorite이 null일 때만 하트X 
-  await localMain(id, localCity).then( res => {
+  await localMain(localCity).then( res => {
     makeMainLocalData(res);
   })
 
