@@ -6,9 +6,12 @@ export default async(req: Request, res: Response) => {
 
         let ret:any;
         
+        const identifier: string = req.params.identifier;
+        const userId: string = req.params.userId;
+        const value: string= req.query.value as string
         //theme preview
-        if(req.params.identifier == "1"){
-            ret = await previewThemeService(req.query.value as string);
+        if(identifier == "1"){
+            ret = await previewThemeService(value, userId);
         }
         
         return res.status(ret.status).json(ret.data);
