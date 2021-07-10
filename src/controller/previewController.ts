@@ -16,7 +16,7 @@ export default async(req: Request, res: Response) => {
         if(identifier == "0"){ // these days preview
             ret = await previewTodayService(userId);
             console.log("theseDays preview")
-        }else if(identifier == "1"){ //theme preview
+        }else if(identifier == "1"){ //theme & custom theme preview 
             ret = await previewThemeService(value, userId);
         }else if(identifier == "2"){ // local preview
             ret = await previewLocalService("111", userId);

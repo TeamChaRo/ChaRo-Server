@@ -8,7 +8,7 @@ import previewMap from "./previewMap.json";
 export default async function previewThemeService(theme: string, userId: string){
 
     const themeName = previewMap.theme[theme];
-    const query = `select count(liked_post.PostId) as favoriteCount, P.postId
+    const query = `select P.postId, count(liked_post.PostId) as favoriteCount
                     FROM (SELECT postId FROM post_has_theme WHERE themeName= :theme) AS P
                     LEFT OUTER JOIN liked_post ON(P.postId = liked_post.PostId)
                     GROUP BY P.postId ORDER BY favoriteCount DESC`;
