@@ -9,7 +9,7 @@ export default async function previewThemeService(local: string, userId: string)
     const query = `select count(liked_post.PostId) as favoriteCount, P.id as postId, P.title
                     FROM (SELECT id, title FROM post WHERE region= :region) AS P
                     LEFT OUTER JOIN liked_post ON(P.id = liked_post.PostId)
-                    GROUP BY P.id ORDER BY favoriteCount DESC`;
+                    GROUP BY P.id ORDER BY favoriteCount DESC LIMIT 20`;
     
     const result = await db.sequelize.query(query,{ replacements:{region:local},type: QueryTypes.SELECT });
 

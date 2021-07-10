@@ -11,7 +11,7 @@ export default async function previewThemeService(theme: string, userId: string)
     const query = `select P.postId, count(liked_post.PostId) as favoriteCount
                     FROM (SELECT postId FROM post_has_theme WHERE themeName= :theme) AS P
                     LEFT OUTER JOIN liked_post ON(P.postId = liked_post.PostId)
-                    GROUP BY P.postId ORDER BY favoriteCount DESC`;
+                    GROUP BY P.postId ORDER BY favoriteCount DESC LIMIT 20`;
 
     const result = await db.sequelize.query(query,{ replacements:{theme:themeName},type: QueryTypes.SELECT });
     
