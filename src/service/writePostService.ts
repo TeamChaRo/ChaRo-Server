@@ -5,6 +5,7 @@ import courseDTO from "../interface/req/courseDTO";
 import warningDTO from "../interface/req/warningDTO";
 import themeDTO from "../interface/req/themeDTO";
 import imageDTO from "../interface/req/imageDTO";
+import tagDTO from "../interface/req/tagDTO";
 
 const warningMap = {
     0: "고속도로",
@@ -79,40 +80,67 @@ export default async function writePostService( postEntity: writePostDTO ){
             postId = data["id"];
         })
 
-        //Course
-        course.postId = postId;
-        await db.Course.create(course, {transaction:t});
-        console.log(postId);
-        /*
-        //Image
-        image.postId = postId;
-        await db.PostHasImage.create(image, {transaction:t});
-        */
+        const tags: tagDTO = {
+            postId: postId,
+            region: postEntity.region,
+            theme: "",
+        };
 
-        //PostHasTheme
-        for(let index in postEntity.theme){
-            console.log("@@@@",postEntity.theme[index]);
-            const theme:themeDTO = {
-                postId: postId,
-                themeName: postEntity.theme[index]
-            };
-            console.log(theme);
-            await db.PostHasTheme.create(theme, {transaction: t});
+        const coursePromise = new Promise( async (resolve, reject) => {
+            //Course
+            course.postId = postId;
+            await db.Course.create(course, {transaction:t});
+            resolve("success");
+        });
         
-        }
+
+        const imagePromise = new Promise( async (resolve, reject) => {
+            /*
+            //Image
+            image.postId = postId;
+            await db.PostHasImage.create(image, {transaction:t});
+            */
+            resolve("success");
+        });
         
-        //PostHasWarning
-        for(let index in postEntity.warning){
-            if(postEntity.warning[index]){
-                const warning: warningDTO = {
+
+        const themePromise = new Promise( async (resolve, reject) => {
+            //PostHasTheme
+            for(let index in postEntity.theme){
+                if(index == "0") tags.theme = postEntity.theme[index];
+                const theme:themeDTO = {
                     postId: postId,
-                    warningName: warningMap[index]
-                }
-                await db.PostHasWarning.create(warning, {transaction: t});
+                    themeName: postEntity.theme[index]
+                };
+                await db.PostHasTheme.create(theme, {transaction: t});
             }
-        }
- 
-        await t.commit();
+            resolve("success");
+        });
+        
+        const warningPromise = new Promise( async (resolve, reject) => {
+            //PostHasWarning
+            for(let index in postEntity.warning){
+                if(postEntity.warning[index]){
+                    if(index == "0") tags.warning = warningMap[index];
+                    const warning: warningDTO = {
+                        postId: postId,
+                        warningName: warningMap[index]
+                    }
+                    await db.PostHasWarning.create(warning, {transaction: t});
+                }
+            }
+            resolve("success");
+        });
+
+        const tagPromise = new Promise( async (resolve, reject) => {
+            //PostHasTags
+            await db.PostHasTags.create(tags, {transaction: t});
+            resolve("success");
+        });
+        
+        await Promise.all([coursePromise, imagePromise, themePromise, warningPromise, tagPromise]) 
+                .then( async () => { await t.commit(); })
+                .catch(err => { throw err; })
 
         return {
             status: 200,
