@@ -15,7 +15,7 @@ export default async function previewThemeService(local: string, userId: string)
                     LEFT OUTER JOIN liked_post ON(P.id = liked_post.PostId)
                     GROUP BY P.id ORDER BY favoriteCount DESC LIMIT 20`;
     
-    const result = await db.sequelize.query(query,{ replacements:{region:local},type: QueryTypes.SELECT });
+    const result = await db.sequelize.query(query,{ replacements:{region:regionName},type: QueryTypes.SELECT });
 
     let brief: briefInformationDTO[] = []
 
