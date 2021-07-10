@@ -26,23 +26,23 @@ export default async(req: Request, res: Response) => {
 
       if (!user) {
         res.status(400).json({
-          status: false,
-          message: "미등록된 유저입니다"
+          success: false,
+          msg: "미등록된 유저입니다"
         });
       }
       else {
         const getMainService = await getMain(id);
         res.status(200).json({
-          status: true,
-          message: "메인뷰 조회 성공",
+          success: true,
+          msg: "메인뷰 조회 성공",
           data: getMainService.data
         });
       }
     } 
     catch {
       res.status(500).json({
-        status: false,
-        message: "Server Error"
+        success: false,
+        msg: "서버 내부 오류"
       });
     }
 }
