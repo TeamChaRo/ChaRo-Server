@@ -120,7 +120,7 @@ export default async function writePostService( postEntity: writePostDTO ){
             if(value){
                 const warning: warningDTO = {
                     postId: postId,
-                    warningName: warningMap[index];
+                    warningName: warningMap[index]
                 }
                 await db.PostHasTheme.create(warning, {transaction: t});
             }
