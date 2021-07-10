@@ -30,7 +30,7 @@ export default async(req: Request, res: Response) => {
         });
       }
       else {
-        const getMainService = await mainService(id, "여름", "111");
+        const getMainService = await mainService(id, "여름", "부산");
         res.status(getMainService.status).json(getMainService.data);
       }
     } 

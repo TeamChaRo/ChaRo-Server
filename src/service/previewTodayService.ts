@@ -5,6 +5,8 @@ import previewDTO from "../interface/res/previewDTO";
 
 import previewMap from "./previewMap.json";
 
+import { makeTrendBriefCollection } from "./briefCollectionService";
+
 export default async function previewTodayService(userId: string){
     //count(PostId) as favoriteCount, PostId   ~ ORDER BY favoriteCount DESC`
     const query = `select P.id as postId, count(liked_post.PostId) as favoriteCount
@@ -22,6 +24,9 @@ export default async function previewTodayService(userId: string){
     };
     
     try{
+        await makeTrendBriefCollection(result, brief, userId);
+        console.log(brief);
+        /* test 필요
         for(let idx in result){
             const postId = result[idx]['postId'];
 
@@ -50,7 +55,6 @@ export default async function previewTodayService(userId: string){
             });
 
             const promise2 = new Promise( async (resolve, reject) => {
-                console.log("posIIDI", postId);
                 
                 const query = "select * from liked_post where PostId = :postId and UserId = :userId";
                 const ret = await db.sequelize.query(query,{ replacements:{postId:postId, userId:userId},type: QueryTypes.SELECT });
@@ -63,6 +67,7 @@ export default async function previewTodayService(userId: string){
                 .then(() => { brief.push(tempBrief); })
                 .catch(err => { throw err; })
         }
+        */
 
         return {
             status: 200,
