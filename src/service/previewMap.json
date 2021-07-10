@@ -1,0 +1,19 @@
+{
+    "theme" : {
+        "spring": "봄",
+        "summer": "여름",
+        "fall": "가을",
+        "winter": "겨울",
+        "mountain": "산",
+        "sea": "바다",
+        "lake": "호수",
+        "river": "강",
+        "oceanRoad": "해안도로",
+        "blossom": "벚꽃",
+        "maple": "단풍",
+        "relax": "여유",
+        "speed": "스피드",
+        "nightView": "야경",
+        "cityView": "도심"
+    }
+}

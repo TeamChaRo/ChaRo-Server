@@ -1,29 +1,13 @@
 import { db } from "../models";
 import { QueryTypes } from 'sequelize';
-
 import briefInformationDTO from "../interface/res/briefInformationDTO";
 import previewDTO from "../interface/res/previewDTO";
 
-const themeMap = {
-    spring: "봄",
-    summer: "여름",
-    fall: "가을",
-    winter: "겨울",
-    mountain: "산",
-    sea: "바다",
-    lake: "호수",
-    river: "강",
-    oceanRoad: "해안도로",
-    blossom: "벚꽃",
-    maple: "단풍",
-    relax: "여유",
-    speed: "스피드",
-    nightView: "야경",
-    cityView: "도심"
-}
+import previewMap from "./previewMap.json";
+
 export default async function previewThemeService(theme: string, userId: string){
 
-    const themeName = themeMap[theme];
+    const themeName = previewMap.theme[theme];
     const query = `select count(liked_post.PostId) as favoriteCount, P.postId, count(P.postId) as postCount
                     FROM (SELECT postId FROM post_has_theme WHERE themeName= :theme) AS P
                     LEFT OUTER JOIN liked_post ON(P.postId = liked_post.PostId)
