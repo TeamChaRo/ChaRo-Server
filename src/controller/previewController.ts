@@ -19,7 +19,7 @@ export default async(req: Request, res: Response) => {
         }else if(identifier == "1"){ //theme & custom theme preview 
             ret = await previewThemeService(value, userId);
         }else if(identifier == "2"){ // local preview
-            ret = await previewLocalService("111", userId);
+            ret = await previewLocalService(value, userId);
         }
         
         return res.status(ret.status).json(ret.data);

@@ -4,7 +4,11 @@ import { QueryTypes } from 'sequelize';
 import briefInformationDTO from "../interface/res/briefInformationDTO";
 import previewDTO from "../interface/res/previewDTO";
 
+import previewMap from "./previewMap.json";
+
 export default async function previewThemeService(local: string, userId: string){
+
+    const regionName = previewMap.region[local];
 
     const query = `select count(liked_post.PostId) as favoriteCount, P.id as postId, P.title
                     FROM (SELECT id, title FROM post WHERE region= :region) AS P
