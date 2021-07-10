@@ -67,7 +67,8 @@ export default async function previewTodayService(userId: string){
         return {
             status: 200,
             data:{
-                msg : "successfully load preview based on local city",
+                success : true,
+                msg : "successfully load preview based on Today's Charo",
                 data : preview
             }
         }
@@ -77,6 +78,7 @@ export default async function previewTodayService(userId: string){
         return {
             status: 502,
             data:{
+                success : false,
                 msg : "DB preview loading error"
             }
         }
