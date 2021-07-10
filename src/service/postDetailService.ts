@@ -134,7 +134,16 @@ export default async function postDetailService(userId: string, postId: string){
                 resolve("success");
             });
 
-            await Promise.all([themePromise, warningPromise]) 
+             //좋아요 여부 추출
+            const isFavoritePromise = new Promise( async (resolve, reject) => {
+                const isFavoriteQuery = `select * from liked_post where PostId = :postId and UserId = :userId`;
+                const isFavoriteRet = await db.sequelize.query(isFavoriteQuery,{ replacements:{userId: userId, postId:postId},type: QueryTypes.SELECT });
+                if(isFavoriteRet.length > 0) tempDetailData.isFavorite = true
+                resolve("success");
+            });
+
+
+            await Promise.all([themePromise, warningPromise, isFavoritePromise]) 
                 .then(() => { postDetailData.push(tempDetailData) })
                 .catch(err => { throw err; })
         
