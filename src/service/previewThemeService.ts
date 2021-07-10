@@ -8,14 +8,15 @@ import previewMap from "./previewMap.json";
 export default async function previewThemeService(theme: string, userId: string){
 
     const themeName = previewMap.theme[theme];
-    const query = `select count(liked_post.PostId) as favoriteCount, P.postId, count(P.postId) as postCount
+    const query = `select count(liked_post.PostId) as favoriteCount, P.postId
                     FROM (SELECT postId FROM post_has_theme WHERE themeName= :theme) AS P
                     LEFT OUTER JOIN liked_post ON(P.postId = liked_post.PostId)
                     GROUP BY P.postId ORDER BY favoriteCount DESC`;
 
     const result = await db.sequelize.query(query,{ replacements:{theme:themeName},type: QueryTypes.SELECT });
-
+    
     let brief: briefInformationDTO[] = []
+
     const preview: previewDTO = {
         totalCourse: result.length,
         drive: brief
@@ -30,7 +31,7 @@ export default async function previewThemeService(theme: string, userId: string)
                     isFavorite: false,
                     tags: [],
                 };
-                
+  
                 const promise1 = new Promise( async (resolve, reject) => {
                     const result = await db.Post.findOne({
                         include:[
@@ -60,23 +61,15 @@ export default async function previewThemeService(theme: string, userId: string)
                 });
                 
                 const promise2 = new Promise( async (resolve, reject) => {
-                    console.log("!@#1321312", userId, postId)
                     const query = "select * from liked_post where PostId = :postId and UserId = :userId";
                     const ret = await db.sequelize.query(query,{ replacements:{postId:postId, userId:userId},type: QueryTypes.SELECT });
-                    if(ret.length > 0){
-                        tempBrief.isFavorite = true;
-                    }
+                    if(ret.length > 0) tempBrief.isFavorite = true;
                     resolve("success");
                 });
 
                 await Promise.all([promise1, promise2]) 
-                    .then(() => {
-                        console.log("promise end")
-                        brief.push(tempBrief);
-                    })
-                    .catch(err => {
-                        throw err;
-                    })
+                .then(() => { brief.push(tempBrief); })
+                .catch(err => { throw err; })
         }
         
         return {
@@ -85,8 +78,8 @@ export default async function previewThemeService(theme: string, userId: string)
                 msg : "successfully load preview based on theme",
                 data : preview
             }
-            
         }
+        
     }catch(err){
         console.log(err);
         return {
