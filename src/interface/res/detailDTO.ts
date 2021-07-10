@@ -1,9 +1,14 @@
 export interface detailInformationDTO{
+    title: string,
     author: string,
     profileImage: string,
-    date: string,
+    postingYear: string,
+    postingMonth: string,
+    postingDay: string,
+    likesCount: number,
     isFavorite: boolean,
-    themes: [string],
+    isStored: boolean,
+    themes: string[],
     
     province: string,
     city: string,
@@ -14,10 +19,11 @@ export interface detailInformationDTO{
     courseDesc: string,
 
     source: string,
-    wayPoint: [string],
-    longtitude: [string],
-    latitude: [string],
+    wayPoint: string[],
+    longtitude: string[],
+    latitude: string[],
     destination: string,
 
-    image: [string]
+    images: string[],
+    warnings: string[]
 }
