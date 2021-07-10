@@ -55,6 +55,7 @@ export default async function mainService(userId: string, theme: string, region:
                 const postId = result[idx]['postId'];
     
                 const tempBrief: briefInformationDTO = {
+                    postId:postId,
                     title: result[idx]['title'],
                     image: "",
                     isFavorite: false,
@@ -103,55 +104,11 @@ export default async function mainService(userId: string, theme: string, region:
                 
             const result = await db.sequelize.query(query,{ type: QueryTypes.SELECT, nest : true});
             await makeTrendBriefCollection(result, trend, userId);
-
-            /*
-            for(let idx in result){
-                const postId = result[idx]['postId'];
-    
-                const tempBrief: briefInformationDTO = {
-                    title: result[idx]['title'],
-                    image: "",
-                    isFavorite: false,
-                    tags: [],
-                };
-                
-                const promise1 = new Promise( async (resolve, reject) => {
-                    const query = `SELECT * 
-                                    FROM post_has_image INNER JOIN post_has_tags 
-                                    WHERE post_has_image.postId=:postId and
-                                    post_has_image.postId = post_has_tags.postId `;
-                    const result = await db.sequelize.query(query,{ replacements:{postId:postId},type: QueryTypes.SELECT, nest:true });
-    
-                    tempBrief.image = result[0]["image1"];
-                    tempBrief.tags.push(result[0]["region"]);
-                    tempBrief.tags.push(result[0]["theme"]);
-    
-                    const warningTag = result[0]["warning"];
-                    if(warningTag) tempBrief.tags.push(warningTag);
-    
-                    resolve("success");
-                });
-    
-                const promise2 = new Promise( async (resolve, reject) => {
-                    
-                    const query = "select * from liked_post where PostId = :postId and UserId = :userId";
-                    const ret = await db.sequelize.query(query,{ replacements:{postId:postId, userId:userId},type: QueryTypes.SELECT, nest:true });
-                    if(ret.length > 0) tempBrief.isFavorite = true;
-                    
-                    resolve("success");
-                });
-    
-                await Promise.all([promise1, promise2]) 
-                    .then(() => { trend.push(tempBrief); })
-                    .catch(err => { throw err; })
-            }
-            */
             resolve("success");
         })
 
         // theme 기준
         const themePromise = new Promise( async (resolve, reject) => {
-
             const customTitle = await db.CustomTheme.findOne({where: {customTheme:theme}, attributes:['customThemeTitle'], raw: true, nest : true} );
             main.customThemeTitle = customTitle['customThemeTitle'];
 
@@ -162,58 +119,7 @@ export default async function mainService(userId: string, theme: string, region:
 
                     const result = await db.sequelize.query(query,{ replacements:{theme:theme},type: QueryTypes.SELECT, nest:true });
                     await makeThemeBriefCollection(result, custom, userId);
-                    /* test 필요
-                    for(let idx in result){
-                        const postId = result[idx]['postId'];
-        
-                        const tempBrief: briefInformationDTO = {
-                            title: "",
-                            image: "",
-                            isFavorite: false,
-                            tags: [],
-                        };
-          
-                        const promise1 = new Promise( async (resolve, reject) => {
-                            const result = await db.Post.findOne({
-                                include:[
-                                    {
-                                        model: db.PostHasImage,
-                                        attributes:['image1']
-                                    },
-                                    {
-                                        model: db.PostHasTags,
-                                        attributes:['region', 'theme', 'warning']
-                                    }
-                                ],
-                                where: { id: postId }, 
-                                attributes: ['title'],
-                                raw: true,
-                                nest: true
-                            })
-        
-                            tempBrief.title = result['title'];
-                            tempBrief.image = result['PostHasImage']['image1'];
-                            tempBrief.tags.push(result['PostHasTag']['region']);
-                            tempBrief.tags.push(result['PostHasTag']['theme']);
-                            
-                            const warningTag = result["PostHasTag.warning"];
-                            if(warningTag) tempBrief.tags.push(warningTag);
-        
-                            resolve("success");  
-                        });
-                        
-                        const promise2 = new Promise( async (resolve, reject) => {
-                            const query = "select * from liked_post where PostId = :postId and UserId = :userId";
-                            const ret = await db.sequelize.query(query,{ replacements:{postId:postId, userId:userId},type: QueryTypes.SELECT, nest: true });
-                            if(ret.length > 0) tempBrief.isFavorite = true;
-                            resolve("success");
-                        });
-        
-                        await Promise.all([promise1, promise2]) 
-                        .then(() => { custom.push(tempBrief); })
-                        .catch(err => { throw err; })
-                }
-                */
+
             resolve("success");
         });
 
@@ -230,48 +136,6 @@ export default async function mainService(userId: string, theme: string, region:
             
             const result = await db.sequelize.query(query,{ replacements:{region:region},type: QueryTypes.SELECT });
             await makeLocalBriefCollection(result, local, userId);
-            /*
-            for(let idx in result){
-                const postId = result[idx]['postId'];
-    
-                const tempBrief: briefInformationDTO = {
-                    title: result[idx]['title'],
-                    image: "",
-                    isFavorite: false,
-                    tags: [],
-                };
-                
-                const promise1 = new Promise( async (resolve, reject) => {
-                    const query = `SELECT * 
-                                    FROM post_has_image INNER JOIN post_has_tags 
-                                    WHERE post_has_image.postId=:postId and
-                                    post_has_image.postId = post_has_tags.postId`;
-                    const result = await db.sequelize.query(query,{ replacements:{postId:postId},type: QueryTypes.SELECT });
-    
-                    tempBrief.image = result[0]["image1"];
-                    tempBrief.tags.push(result[0]["region"]);
-                    tempBrief.tags.push(result[0]["theme"]);
-    
-                    const warningTag = result[0]["warning"];
-                    if(warningTag) tempBrief.tags.push(warningTag);
-    
-                    resolve("success");
-                });
-    
-                const promise2 = new Promise( async (resolve, reject) => {
-
-                    const query = "select * from liked_post where PostId = :postId and UserId = :userId";
-                    const ret = await db.sequelize.query(query,{ replacements:{postId:postId, userId:userId},type: QueryTypes.SELECT });
-                    if(ret.length > 0) tempBrief.isFavorite = true;
-                    
-                    resolve("success");
-                });
-    
-                await Promise.all([promise1, promise2]) 
-                    .then(() => { local.push(tempBrief); })
-                    .catch(err => { throw err; })
-            }
-            */
     
             resolve("success");
         });
@@ -279,10 +143,10 @@ export default async function mainService(userId: string, theme: string, region:
         await Promise.all([bannerPromise, todayPromise, trendPromise, themePromise, localPromise]) 
                 .catch(err => { throw err; })
 
-        
         return {
             status: 200,
             data:{
+                success: true,
                 msg : "successfully load main view data",
                 data : main
             }
@@ -293,6 +157,7 @@ export default async function mainService(userId: string, theme: string, region:
         return {
             status: 502,
             data:{
+                success: false,
                 msg : "DB main view loading error"
             }
         }
