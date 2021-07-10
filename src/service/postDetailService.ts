@@ -134,7 +134,7 @@ export default async function postDetailService(userId: string, postId: string){
                 resolve("success");
             });
 
-             //좋아요 여부 추출
+            //좋아요 여부 추출
             const isFavoritePromise = new Promise( async (resolve, reject) => {
                 const isFavoriteQuery = `select * from liked_post where PostId = :postId and UserId = :userId`;
                 const isFavoriteRet = await db.sequelize.query(isFavoriteQuery,{ replacements:{userId: userId, postId:postId},type: QueryTypes.SELECT });
@@ -142,11 +142,17 @@ export default async function postDetailService(userId: string, postId: string){
                 resolve("success");
             });
 
+            //저장 여부 추출
+            const isStoredPromise = new Promise( async (resolve, reject) => {
+                const isStoredQuery = `select * from saved_post where PostId = :postId and UserId = :userId`;
+                const isStoredRet = await db.sequelize.query(isStoredQuery,{ replacements:{userId: userId, postId:postId},type: QueryTypes.SELECT });
+                if(isStoredRet.length > 0) tempDetailData.isStored = true
+                resolve("success");
+            });
 
-            await Promise.all([themePromise, warningPromise, isFavoritePromise]) 
+            await Promise.all([themePromise, warningPromise, isFavoritePromise, isStoredPromise]) 
                 .then(() => { postDetailData.push(tempDetailData) })
                 .catch(err => { throw err; })
-        
 
         return {
             status: 200,
