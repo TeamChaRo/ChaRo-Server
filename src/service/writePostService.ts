@@ -15,7 +15,7 @@ const warningMap = {
 
 export default async function writePostService( postEntity: writePostDTO ){
     
-
+    /*
     const image: imageDTO = {
         image1: postEntity.courseImage[0]
     }
@@ -34,7 +34,7 @@ export default async function writePostService( postEntity: writePostDTO ){
             }
         }
     }
-    
+    */
     // post table
     const post: postDTO = {
         title: postEntity.title,
@@ -71,18 +71,6 @@ export default async function writePostService( postEntity: writePostDTO ){
         }
     }
 
-    /*
-    const theme: themeDTO = {
-        theme: postEntity.theme[0]
-    }
-
-    const themeSize = postEntity.theme.length;
-    if(themeSize > 1){
-        theme.theme2 = postEntity.theme[1];
-        if(themeSize > 2) theme.theme3 = postEntity.theme[2];
-    }
-    */
-
     const t = await db.sequelize.transaction();
     try{
         let postId: number;
@@ -94,62 +82,38 @@ export default async function writePostService( postEntity: writePostDTO ){
         //Course
         course.postId = postId;
         await db.Course.create(course, {transaction:t});
-        
-        
+        console.log(postId);
+        /*
         //Image
         image.postId = postId;
         await db.PostHasImage.create(image, {transaction:t});
-        
-
-        //PostHasTheme
-        postEntity.theme.forEach( async (value, index) => {
-            const theme:themeDTO = {
-                postId: postId,
-                themeName: value
-            }
-            await db.PostHasTheme.create(theme, {transaction: t});
-        })
-        
-        /*
-        theme.postId = postId;
-        await db.PostHasTheme.create(theme, {transaction:t});
         */
 
+        //PostHasTheme
+        for(let index in postEntity.theme){
+            console.log("@@@@",postEntity.theme[index]);
+            const theme:themeDTO = {
+                postId: postId,
+                themeName: postEntity.theme[index]
+            };
+            console.log(theme);
+            await db.PostHasTheme.create(theme, {transaction: t});
+        
+        }
+        
         //PostHasWarning
-        postEntity.warning.forEach( async (value, index) => {
-            if(value){
+        for(let index in postEntity.warning){
+            if(postEntity.warning[index]){
                 const warning: warningDTO = {
                     postId: postId,
                     warningName: warningMap[index]
                 }
-                await db.PostHasTheme.create(warning, {transaction: t});
-            }
-        });
-
-        /*
-        let warningSize = warningText.length;
-        const warning: warningDTO = {
-            postId: postId
-        };
-        if(warningSize > 0){
-            warning.warning1 = warningText[0];
-
-            if(warningSize > 1){
-                warning.warning2 = warningText[1];
-
-                if(warningSize > 2){
-                    warning.warning3 = warningText[2];
-                    
-                    if(warningSize > 3) warning.warning4 = warningText[3];
-                }
+                await db.PostHasWarning.create(warning, {transaction: t});
             }
         }
-        await db.PostHasWarning.create(warning, {transaction:t});
-        */
+ 
         await t.commit();
 
-        console.log("successfully update")
-        
         return {
             status: 200,
             data: {

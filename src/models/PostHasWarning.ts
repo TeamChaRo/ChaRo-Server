@@ -25,7 +25,8 @@ PostHasWarning.init(
         },
         warningName: {
             type: DataTypes.STRING(10),
-            allowNull: true
+            primaryKey: true,
+            allowNull: false
         }
     },
     {
