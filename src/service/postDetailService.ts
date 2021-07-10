@@ -4,7 +4,7 @@ import { detailInformationDTO } from '../interface/res/detailDTO';
 import { DatePipe } from '@angular/common';
 import { integer } from "aws-sdk/clients/cloudfront";
 
-export default async function postDetailService(postId: string){
+export default async function postDetailService(userId: string, postId: string){
 
     const warningMap = {
         0: "고속도로",
@@ -133,6 +133,7 @@ export default async function postDetailService(postId: string){
                 }
                 resolve("success");
             });
+
             await Promise.all([themePromise, warningPromise]) 
                 .then(() => { postDetailData.push(tempDetailData) })
                 .catch(err => { throw err; })
