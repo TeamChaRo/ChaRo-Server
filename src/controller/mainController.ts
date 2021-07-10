@@ -1,8 +1,7 @@
 import express, { Request, Response } from "express";
 import { validationResult } from "express-validator";
-//import { themeMain, themeStandard } from "../service/mainService";
-import User from "../models/User"
-import getMain from "../service/mainService"
+import User from "../models/User";
+import mainService from "../service/mainService";
 
 export default async(req: Request, res: Response) => {
 
@@ -31,12 +30,8 @@ export default async(req: Request, res: Response) => {
         });
       }
       else {
-        const getMainService = await getMain(id);
-        res.status(200).json({
-          success: true,
-          msg: "메인뷰 조회 성공",
-          data: getMainService.data
-        });
+        const getMainService = await mainService(id, "여름", "111");
+        res.status(getMainService.status).json(getMainService.data);
       }
     } 
     catch {
