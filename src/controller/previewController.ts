@@ -5,8 +5,7 @@ import previewLocalService from "../service/previewLocalService";
 
 export default async(req: Request, res: Response) => {
     try{
-        console.log("preview Ctrl", req.params);
-
+        
         let ret:any;
         
         const identifier: string = req.params.identifier;
