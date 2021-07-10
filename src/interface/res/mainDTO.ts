@@ -1,15 +1,10 @@
 import briefInformationDTO from "./briefInformationDTO";
-
-interface bannerDTO{
-    bannerTitle: string,
-    bannerImage: string,
-    bannerTags: string
-}
+import bannerDTO from "./bannerDTO";
 
 type briefCollectionDTO = briefInformationDTO[];
 type bannerCollectionDTO = bannerDTO[];
 
-export interface mainDTO {
+export default interface mainDTO {
     banner: bannerCollectionDTO,
     todayCharoDrive: briefCollectionDTO,
     trendDrive: briefCollectionDTO,

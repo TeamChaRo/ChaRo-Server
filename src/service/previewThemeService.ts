@@ -75,6 +75,7 @@ export default async function previewThemeService(theme: string, userId: string)
         return {
             status: 200,
             data:{
+                success : true,
                 msg : "successfully load preview based on theme",
                 data : preview
             }
@@ -85,6 +86,7 @@ export default async function previewThemeService(theme: string, userId: string)
         return {
             status: 502,
             data:{
+                success : false,
                 msg : "DB preview loading error"
             }
         }
