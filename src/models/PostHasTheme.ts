@@ -25,7 +25,8 @@ PostHasTheme.init(
         },
         themeName: {
             type: DataTypes.STRING(10),
-            allowNull: true
+            primaryKey: true,
+            allowNull: false
         },
         
     },
