@@ -6,8 +6,10 @@ export default async(req: Request, res: Response) => {
 
     console.log("시작")
     
-    const { postId } = req.params;
-    console.log("postId,", postId)
+    const userId = req.params.userId;
+    const postId = req.params.postId;
+
+    console.log("userId,", userId)
 
     try {
         let post = await Post.findOne({ 
@@ -23,7 +25,7 @@ export default async(req: Request, res: Response) => {
             });
         }
         else {
-            let getPostDetailService = await postDetailService(postId);
+            let getPostDetailService = await postDetailService(userId, postId);
             return res.status(getPostDetailService.status).json(getPostDetailService.data);
         }
     } 
