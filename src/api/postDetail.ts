@@ -9,7 +9,7 @@ import { postDetailController }  from "../controller";
  */
 
 router.get(
-    "/:postId",
+    "/:userId/:postId",
     postDetailController
 )
 
