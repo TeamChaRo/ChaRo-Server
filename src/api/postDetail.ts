@@ -3,7 +3,7 @@ const router = express.Router();
 import { postDetailController }  from "../controller";
 
 /**
- *  @route Get /:postId?value
+ *  @route Get /:postId
  *  @desc return data when click Post
  *  @access Public
  */
