@@ -5,6 +5,8 @@ import previewDTO from "../interface/res/previewDTO";
 
 import previewMap from "./previewMap.json";
 
+import { makeThemeBriefCollection } from "./briefCollectionService";
+
 export default async function previewThemeService(theme: string, userId: string){
 
     const themeName = previewMap.theme[theme];
@@ -22,6 +24,9 @@ export default async function previewThemeService(theme: string, userId: string)
         drive: brief
     };
     try{
+        await makeThemeBriefCollection(result, brief, userId);
+        //console.log()
+        /*
         for(let idx in result){
                 const postId = result[idx]['postId'];
 
@@ -46,13 +51,15 @@ export default async function previewThemeService(theme: string, userId: string)
                         ],
                         where: { id: postId }, 
                         attributes: ['title'],
-                        raw: true
+                        raw: true,
+                        nest : true
                     })
 
                     tempBrief.title = result['title'];
-                    tempBrief.image = result['PostHasImage.image1'];
-                    tempBrief.tags.push(result['PostHasTag.region']);
-                    tempBrief.tags.push(result["PostHasTag.theme"]);
+                    tempBrief.title = result['title'];
+                    tempBrief.image = result['PostHasImage']['image1'];
+                    tempBrief.tags.push(result['PostHasTag']['region']);
+                    tempBrief.tags.push(result['PostHasTag']['theme']);
                     
                     const warningTag = result["PostHasTag.warning"];
                     if(warningTag) tempBrief.tags.push(warningTag);
@@ -71,10 +78,12 @@ export default async function previewThemeService(theme: string, userId: string)
                 .then(() => { brief.push(tempBrief); })
                 .catch(err => { throw err; })
         }
-        
+        */
+
         return {
             status: 200,
             data:{
+                success : true,
                 msg : "successfully load preview based on theme",
                 data : preview
             }
@@ -85,6 +94,7 @@ export default async function previewThemeService(theme: string, userId: string)
         return {
             status: 502,
             data:{
+                success : false,
                 msg : "DB preview loading error"
             }
         }

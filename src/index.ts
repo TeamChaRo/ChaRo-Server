@@ -10,6 +10,7 @@ app.use(express.json());
 app.use(logger("dev"));
 
 // define route
+app.use("/getMain", require("./api/main"));
 app.use("/writePost", require("./api/writePost"));
 app.use("/preview", require("./api/preview"));
 app.use("/postDetail", require("./api/postDetail"))
