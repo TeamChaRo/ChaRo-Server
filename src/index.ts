@@ -11,7 +11,8 @@ app.use(logger("dev"));
 
 // define route
 app.use("/getMain", require("./api/main"));
-
+app.use("/writePost", require("./api/writePost"));
+app.use("/preview", require("./api/preview"));
 // error handler
 app.use(function (err, req, res, next) {
     // set locals, only providing error in development

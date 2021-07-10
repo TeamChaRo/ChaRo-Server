@@ -1,5 +1,6 @@
-import mainController from "./mainController";
-
+import writePostController from "./writePostController";
+import previewController from "./previewController";
 export {
-    mainController
+    writePostController,
+    previewController
 }

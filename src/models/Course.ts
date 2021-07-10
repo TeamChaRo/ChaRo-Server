@@ -5,6 +5,7 @@ import {
 import {sequelize} from "../Loaders/db";
 
 interface CourseAttributes {
+    postId?: number;
     src?: string;
     srcLongitude?: string;
     srcLatitude?: string;
@@ -20,7 +21,7 @@ interface CourseAttributes {
 };
 
 export default class Course extends Model<CourseAttributes> {
-    //조회 후 사용 되어질 요소들의 타입명시 설정이 되어 있지 않으면 조회시 또는 조회 후 데이터 타입체크에서 오류
+    public postId!: number;
     public src!: string;
     public srcLongitude!: string;
     public srcLatitude!: string;
@@ -43,6 +44,10 @@ export default class Course extends Model<CourseAttributes> {
 
 Course.init(
     {   
+        postId: {
+            type: DataTypes.INTEGER,
+            primaryKey: true
+        },
         src: {
             type: DataTypes.STRING(100),
             allowNull: false
@@ -73,11 +78,11 @@ Course.init(
         },
         wayTwoLongitude: {
             type: DataTypes.STRING(20),
-            allowNull: false
+            allowNull: true
         },
         wayTwoLatitude: {
             type: DataTypes.STRING(20),
-            allowNull: false
+            allowNull: true
         },
         dest: {
             type: DataTypes.STRING(100),

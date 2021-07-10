@@ -4,34 +4,33 @@ import {
 } from 'sequelize';
 import {sequelize} from "../Loaders/db";
 
-interface PHTAttributes {
+interface PHWAttributes {
     postId?: number;
-    themeName?: string;
+    warningName?: string;
 };
 
-export default class PostHasTheme extends Model<PHTAttributes> {
-    public postId!: number;
-    public themeName!: string;
+export default class PostHasWarning extends Model<PHWAttributes> {
+    public postId!: Number;
+    public warningName!: string;
+
     public static associations: {
     };
 }
 
-
-PostHasTheme.init(
+PostHasWarning.init(
     {   
         postId : {
             type: DataTypes.INTEGER,
             primaryKey: true,
         },
-        themeName: {
+        warningName: {
             type: DataTypes.STRING(10),
             allowNull: true
-        },
-        
+        }
     },
     {
-        modelName: 'PostHasTheme',
-        tableName: 'post_has_theme',
+        modelName: 'PostHasWarning',
+        tableName: 'post_has_warning',
         sequelize,
         freezeTableName: true,
         timestamps: true,
