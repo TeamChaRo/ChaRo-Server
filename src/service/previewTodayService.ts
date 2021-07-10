@@ -7,7 +7,7 @@ import previewMap from "./previewMap.json";
 
 export default async function previewTodayService(userId: string){
     //count(PostId) as favoriteCount, PostId   ~ ORDER BY favoriteCount DESC`
-    const query = `select P.id as postId, count(liked_post.PostId) as favoriteCount
+    const query = `select P.id as postId, P.title as title, count(liked_post.PostId) as favoriteCount
                     FROM (SELECT id, title FROM post) AS P
                     LEFT OUTER JOIN liked_post ON(P.id = liked_post.PostId)
                     GROUP BY P.id ORDER BY favoriteCount DESC LIMIT 20`;
