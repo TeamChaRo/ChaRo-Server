@@ -7,6 +7,7 @@ export async function makeLocalBriefCollection(result:object[], briefCollection:
         const postId = result[idx]['postId'];
 
         const tempBrief: briefInformationDTO = {
+            postId:postId,
             title: result[idx]['title'],
             image: "",
             isFavorite: false,
@@ -50,6 +51,7 @@ export async function makeTrendBriefCollection(result:object[], briefCollection:
         const postId = result[idx]['postId'];
 
         const tempBrief: briefInformationDTO = {
+            postId:postId,
             title: result[idx]['title'],
             image: "",
             isFavorite: false,
@@ -92,6 +94,7 @@ export async function makeThemeBriefCollection(result:object[], briefCollection:
     for(let idx in result){
         const postId = result[idx]['postId'];
         const tempBrief: briefInformationDTO = {
+            postId:postId,
             title: "",
             image: "",
             isFavorite: false,
