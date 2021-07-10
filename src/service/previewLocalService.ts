@@ -6,6 +6,8 @@ import previewDTO from "../interface/res/previewDTO";
 
 import previewMap from "./previewMap.json";
 
+import { makeLocalBriefCollection } from "./briefCollectionService";
+
 export default async function previewThemeService(local: string, userId: string){
 
     const regionName = previewMap.region[local];
@@ -15,7 +17,7 @@ export default async function previewThemeService(local: string, userId: string)
                     LEFT OUTER JOIN liked_post ON(P.id = liked_post.PostId)
                     GROUP BY P.id ORDER BY favoriteCount DESC LIMIT 20`;
     
-    const result = await db.sequelize.query(query,{ replacements:{region:local},type: QueryTypes.SELECT });
+    const result = await db.sequelize.query(query,{ replacements:{region:regionName},type: QueryTypes.SELECT });
 
     let brief: briefInformationDTO[] = []
 
@@ -25,6 +27,8 @@ export default async function previewThemeService(local: string, userId: string)
     };
 
     try{
+        await makeLocalBriefCollection(result, brief, userId);
+        /* 테스트
         for(let idx in result){
             const postId = result[idx]['postId'];
 
@@ -53,7 +57,6 @@ export default async function previewThemeService(local: string, userId: string)
             });
 
             const promise2 = new Promise( async (resolve, reject) => {
-                console.log("posIIDI", postId);
                 
                 const query = "select * from liked_post where PostId = :postId and UserId = :userId";
                 const ret = await db.sequelize.query(query,{ replacements:{postId:postId, userId:userId},type: QueryTypes.SELECT });
@@ -66,7 +69,7 @@ export default async function previewThemeService(local: string, userId: string)
                 .then(() => { brief.push(tempBrief); })
                 .catch(err => { throw err; })
         }
-
+        */
         return {
             status: 200,
             data:{

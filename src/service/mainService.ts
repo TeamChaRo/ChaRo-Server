@@ -5,6 +5,8 @@ import mainDTO from '../interface/res/mainDTO';
 import bannerDTO from "../interface/res/bannerDTO";
 import briefInformationDTO from "../interface/res/briefInformationDTO";
 
+import { makeThemeBriefCollection, makeTrendBriefCollection, makeLocalBriefCollection } from "./briefCollectionService";
+
 export default async function mainService(userId: string, theme: string, region: string){
     try{
 
@@ -100,7 +102,9 @@ export default async function mainService(userId: string, theme: string, region:
                     GROUP BY P.id ORDER BY favoriteCount DESC LIMIT 4`;
                 
             const result = await db.sequelize.query(query,{ type: QueryTypes.SELECT, nest : true});
+            await makeTrendBriefCollection(result, trend, userId);
 
+            /*
             for(let idx in result){
                 const postId = result[idx]['postId'];
     
@@ -141,6 +145,7 @@ export default async function mainService(userId: string, theme: string, region:
                     .then(() => { trend.push(tempBrief); })
                     .catch(err => { throw err; })
             }
+            */
             resolve("success");
         })
 
@@ -156,7 +161,8 @@ export default async function mainService(userId: string, theme: string, region:
                     GROUP BY P.postId ORDER BY favoriteCount DESC LIMIT 4`;
 
                     const result = await db.sequelize.query(query,{ replacements:{theme:theme},type: QueryTypes.SELECT, nest:true });
-
+                    await makeThemeBriefCollection(result, custom, userId);
+                    /* test 필요
                     for(let idx in result){
                         const postId = result[idx]['postId'];
         
@@ -207,13 +213,14 @@ export default async function mainService(userId: string, theme: string, region:
                         .then(() => { custom.push(tempBrief); })
                         .catch(err => { throw err; })
                 }
+                */
             resolve("success");
         });
 
         // local city
         const localPromise = new Promise( async (resolve, reject) => {
             
-            const localTitle = await db.Local.findOne({where: {localCity:region}, raw:true, attributes:['localTitle']} );
+            const localTitle = await db.Local.findOne({where: {localCity:region}, raw:true, attributes:['localTitle'], nest: true} );
             main.localTitle = localTitle['localTitle'];
 
             const query = `select count(liked_post.PostId) as favoriteCount, P.id as postId, P.title
@@ -222,7 +229,8 @@ export default async function mainService(userId: string, theme: string, region:
                     GROUP BY P.id ORDER BY favoriteCount DESC LIMIT 4`;
             
             const result = await db.sequelize.query(query,{ replacements:{region:region},type: QueryTypes.SELECT });
-
+            await makeLocalBriefCollection(result, local, userId);
+            /*
             for(let idx in result){
                 const postId = result[idx]['postId'];
     
@@ -263,6 +271,7 @@ export default async function mainService(userId: string, theme: string, region:
                     .then(() => { local.push(tempBrief); })
                     .catch(err => { throw err; })
             }
+            */
     
             resolve("success");
         });
