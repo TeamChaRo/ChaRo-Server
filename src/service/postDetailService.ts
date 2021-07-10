@@ -102,7 +102,7 @@ export default async function postDetailService(userId: string, postId: string){
             tempDetailData.wayPoint = [result[0]["wayOne"], result[0]["wayTwo"]];
             tempDetailData.longtitude = [result[0]["srcLongitude"], result[0]["wayOneLongitude"], result[0]["wayTwoLongitude"], result[0]["destLongitude"]];
             tempDetailData.latitude = [result[0]["srcLatitude"], result[0]["wayOneLatitude"], result[0]["wayTwoLatitude"], result[0]["destLatitude"]];
-            
+        
 
             //테마 추출
             const themePromise = new Promise( async (resolve, reject) => {
@@ -112,7 +112,9 @@ export default async function postDetailService(userId: string, postId: string){
                 ORDER BY post_has_theme.createdAt ASC`;
 
                 const themeRet = await db.sequelize.query(themeQuery,{ replacements:{postId:postId},type: QueryTypes.SELECT });
-                tempDetailData.themes = [themeRet[0]["themeName"], themeRet[1]["themeName"], themeRet[2]["themeName"]]
+                for (let idx in themeRet) {
+                    tempDetailData.themes.push(themeRet[idx]["themeName"])
+                }
 
                 resolve("success");
             });
