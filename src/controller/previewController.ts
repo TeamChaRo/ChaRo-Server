@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import previewTodayService from "../service/previewTodayService";
 import previewThemeService from "../service/previewThemeService";
 import previewLocalService from "../service/previewLocalService";
 
@@ -13,6 +14,7 @@ export default async(req: Request, res: Response) => {
         const value: string= req.query.value as string
         
         if(identifier == "0"){ // these days preview
+            ret = await previewTodayService(userId);
             console.log("theseDays preview")
         }else if(identifier == "1"){ //theme preview
             ret = await previewThemeService(value, userId);
