@@ -13,7 +13,7 @@ export async function trendService(userId: string){
                     LEFT OUTER JOIN liked_post ON(P.id = liked_post.PostId and liked_post.UserId = :userId)
                     INNER JOIN post_has_image as I
                     INNER JOIN post_has_tags as T 
-                    ON(T.postId = I.postId and T.postId = P.id) LIMIT 20`;
+                    ON(T.postId = I.postId and T.postId = P.id) ORDER BY P.id DESC LIMIT 20`;
     
     const result = await db.sequelize.query(query,{ replacements:{userId:userId},type: QueryTypes.SELECT });
 
@@ -55,7 +55,7 @@ export async function themeService(theme: string, userId: string){
                     LEFT OUTER JOIN liked_post ON(P.id = liked_post.PostId and liked_post.UserId = :userId)
                     INNER JOIN post_has_image as I
                     INNER JOIN post_has_tags as T 
-                    ON(T.postId = I.postId and T.postId = P.id) LIMIT 20`;
+                    ON(T.postId = I.postId and T.postId = P.id) ORDER BY P.id LIMIT 20`;
                     
     const result = await db.sequelize.query(query,{ replacements:{userId:userId, theme:themeName},type: QueryTypes.SELECT });
 
@@ -96,7 +96,7 @@ export async function localService(local: string, userId: string){
                     LEFT OUTER JOIN liked_post ON(P.id = liked_post.PostId and liked_post.UserId = :userId)
                     INNER JOIN post_has_image as I
                     INNER JOIN post_has_tags as T 
-                    ON(T.postId = I.postId and T.postId = P.id) LIMIT 20`;
+                    ON(T.postId = I.postId and T.postId = P.id) ORDER BY P.id LIMIT 20`;
                     
     const result = await db.sequelize.query(query,{ replacements:{userId:userId, region:regionName},type: QueryTypes.SELECT });
     
