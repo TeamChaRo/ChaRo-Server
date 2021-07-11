@@ -7,7 +7,7 @@ import previewMap from "./previewMap.json";
 
 import { makeThemeBriefCollection, makeLocalBriefCollection, makeTrendBriefCollection } from "./briefCollectionService";
 
-export async function likeLocalService(local: string, userId: string){
+export async function localService(local: string, userId: string){
 
     const regionName = previewMap.region[local];
 
@@ -48,7 +48,7 @@ export async function likeLocalService(local: string, userId: string){
     }
 }
 
-export async function likeThemeService(theme: string, userId: string){
+export async function themeService(theme: string, userId: string){
 
     const themeName = previewMap.theme[theme];
     const query = `select P.postId, count(liked_post.PostId) as favoriteCount
@@ -88,7 +88,7 @@ export async function likeThemeService(theme: string, userId: string){
     
 }
 
-export async function likeTodayService(userId: string){
+export async function todayService(userId: string){
 
     const query = `select P.id as postId, count(liked_post.PostId) as favoriteCount
                     FROM (SELECT id, title FROM post) AS P
