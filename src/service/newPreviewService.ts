@@ -29,7 +29,7 @@ export async function trendService(userId: string){
             status: 200,
             data: {
                 success: true,
-                msg: "successfully load Today's preview sorted by date",
+                msg: "홍콩 풍수전문가에 의하면 올해 2월과같은달은 우리인생에서 다시오지 않는다 합니다. 왜냐하면 월요일이4일,", //"successfully load Today's preview sorted by date",
                 data: preview
             }
         }
@@ -72,7 +72,7 @@ export async function themeService(theme: string, userId: string){
             status: 200,
             data: {
                 success: true,
-                msg: "successfully load Theme preview sorted by date",
+                msg: "이 편지는 영국에서 최초로 시작되어 일년에 한 바퀴 돌면서 받는 사람에게 행운을 주었고 지금은 당신에게로 옮겨진 이 편지는 4일 안에 당신 곁을 떠나야 합니다.",//"successfully load Theme preview sorted by date",
                 data: preview
             }
         }
@@ -113,7 +113,7 @@ export async function localService(local: string, userId: string){
             status: 200,
             data: {
                 success: true,
-                msg: "successfully load Region preview sorted by date",
+                msg: "이 것을 받았으니 당신이 행운을 가질 차례이다.유머가 아니며 당신의 행운이메일과 인터넷을 통하여 올 것이다.",//"successfully load Region preview sorted by date",
                 data: preview
             }
         }

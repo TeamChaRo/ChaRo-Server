@@ -31,7 +31,7 @@ export async function localService(local: string, userId: string){
             status: 200,
             data:{
                 success : true,
-                msg : "successfully load preview based on local city",
+                msg : "96시간 4일 안에 보내시오.그의 비서에게 20통을 만들라고 지시했다. 카를로스는 같은 메세지를 받았으나 ",//"successfully load preview based on local city",
                 data : preview
             }
         }
@@ -70,7 +70,7 @@ export async function themeService(theme: string, userId: string){
             status: 200,
             data:{
                 success : true,
-                msg : "successfully load preview based on theme",
+                msg : "1967년 브루노는 이 메세지를 받았으나단지 웃어버린 후 버렸다. 몇일 후 그의 아들이", //"successfully load preview based on theme",
                 data : preview
             }
         }
@@ -110,7 +110,7 @@ export async function trendService(userId: string){
             status: 200,
             data:{
                 success : true,
-                msg : "successfully load preview based on Today's Charo",
+                msg : "사람을 화나게 하는 방법은 크게 두가지가 있습니다.첫째는 말을 하다가 마는 것이고 둘째는 ... 더보기",//"successfully load preview based on Today's Charo",
                 data : preview
             }
         }
