@@ -11,7 +11,8 @@ interface UserAttributes {
     email: string;
     nickname: string;
     profileImage: string;
-    pushAlarm: number;
+    marketingPush: boolean;
+    marketingEmail: boolean;
 };
 
 export default class User extends Model<UserAttributes> {
@@ -21,7 +22,8 @@ export default class User extends Model<UserAttributes> {
     public email!: string;
     public nickname!: string;
     public profileImage!: string;
-    public pushAlarm!: boolean;
+    public marketingPush!: boolean;
+    public marketingEmail!: boolean;
 
     public static associations: {
     };
@@ -36,7 +38,7 @@ User.init(
             allowNull: false
         },
         password: {
-            type: DataTypes.STRING(45),
+            type: DataTypes.STRING(100),
             allowNull: false
         },
         email: {
@@ -48,12 +50,18 @@ User.init(
             allowNull: false
         },
         profileImage: {
-            type: DataTypes.STRING(45),
-            allowNull: false
+            type: DataTypes.STRING(100),
+            defaultValue: "*"
         },
-        pushAlarm: {
+        marketingPush: {
             type: DataTypes.BOOLEAN,
-            allowNull: false
+            allowNull: false,
+            defaultValue: false
+        },
+        marketingEmail: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false
         }
     },
     {
@@ -61,6 +69,8 @@ User.init(
         tableName: 'user',
         sequelize,
         freezeTableName: true,
-        timestamps:false
+        timestamps:false,
+        charset: 'utf8',
+        collate: 'utf8_unicode_ci'
     }
 );

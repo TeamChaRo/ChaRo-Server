@@ -1,44 +1,80 @@
 import { Sequelize } from 'sequelize';
 import { sequelize } from "../Loaders/db"
-import Theme from "./Theme";
-import Warning from "./Warning";
 import User from "./User";
 import Post from "./Post";
 import Course from "./Course";
 import PostHasImage from "./PostHasImage";
+import PostHasTheme from "./PostHasTheme";
+import SearchHistory from "./SearchHistory";
+import Banner from "./Banner";
+import CustomTheme from "./CustomTheme";
+import Local from "./Local";
 
+import PostHasTags from "./PostHasTags";
+import PostHasWarning from "./PostHasWarning";
 /* User - Post */
 User.hasMany(Post, {
   foreignKey: "userId",
   sourceKey: "id",
-  //onDelete: 'CASCADE',
-  //onUpdate: 'CASCADE',
 });
 Post.belongsTo(User, { foreignKey:"userId", targetKey:"id"});
 
+/* User - SearchHistory */
+User.hasMany(SearchHistory, {
+  foreignKey: "userId",
+  sourceKey: "id",
+});
+SearchHistory.belongsTo(User, { foreignKey:"userId", targetKey:"id"});
+
 /* Post - Course */
 Post.hasOne(Course, {
-  foreignKey: "id",
+  foreignKey: "postId",
   sourceKey: "id",
 })
 Course.belongsTo(Post, {
-  foreignKey: "id",
+  foreignKey: "postId",
   targetKey: "id",
 })
 
 /* Post - image */
 Post.hasOne(PostHasImage,{
-  foreignKey: "id",
+  foreignKey: "postId",
   sourceKey: "id",
 })
 PostHasImage.belongsTo(Post,{
-  foreignKey: "id",
+  foreignKey: "postId",
   targetKey: "id",
 })
 
-/* warning & theme - Post */
-Post.belongsToMany(Warning, { timestamps:false, through: "post_has_warning" });
-Post.belongsToMany(Theme, { timestamps:false, through: "post_has_theme" })
+/* Theme - post */
+Post.hasOne(PostHasTheme,{
+  foreignKey: "postId",
+  sourceKey: "id",
+})
+PostHasTheme.belongsTo(Post,{
+  foreignKey: "postId",
+  targetKey: "id",
+})
+
+/* warning - post */
+Post.hasOne(PostHasWarning,{
+  foreignKey: "postId",
+  sourceKey: "id",
+})
+PostHasWarning.belongsTo(Post,{
+  foreignKey: "postId",
+  targetKey: "id",
+})
+
+/* tags - post */
+Post.hasOne(PostHasTags,{
+  foreignKey: "postId",
+  sourceKey: "id",
+})
+PostHasTags.belongsTo(Post,{
+  foreignKey: "postId",
+  targetKey: "id",
+})
 
 /* liked & saved Post */
 Post.belongsToMany(User, { timestamps:false, through: "liked_post" });
@@ -54,9 +90,15 @@ export const db = {
   sequelize, 
   
   // Tables
-  Theme, 
-  Warning,
   User,
+  SearchHistory,
   Post,
-  Course
+  Course,
+  Banner,
+  CustomTheme,
+  Local,
+  PostHasTheme,
+  PostHasWarning,
+  PostHasImage,
+  PostHasTags,
 };

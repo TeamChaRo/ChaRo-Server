@@ -1,5 +1,11 @@
-import userController from './userController'
+import writePostController from "./writePostController";
+import previewController from "./previewController";
+import postDetailController from "./postDetailController";
+import mainController from "./mainController";
 
 export {
-    userController
+    writePostController,
+    previewController,
+    postDetailController,
+    mainController,
 }

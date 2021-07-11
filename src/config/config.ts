@@ -1,6 +1,4 @@
-import dotenv from "dotenv";
-
-
+import dotenv = require("dotenv");
 
 const envFound = dotenv.config();
 if (envFound.error) {
@@ -10,13 +8,24 @@ if (envFound.error) {
 
 export default {
   env : process.env.NODE_ENV || 'development',
+  /* login */
+  jwtSecret: process.env.JWT_SECRET,
+  jwtAlgorithm: process.env.JWT_ALGO,
+  /**
+   * MySql
+   */
   username : process.env.DB_USERNAME || 'root',
   password : process.env.DB_PASSWORD,
-  database : process.env.DB_DBNAME || 'charo_test',
+  database : process.env.DB_NAME,
   host : process.env.DB_HOST,
   port : process.env.DB_PORT,
   socketPath: '/var/run/mysqld/mysqld.sock',
   dialect : "mysql",
-  jwtSecret: process.env.JWT_SECRET,
-  jwtAlgorithm: process.env.JWT_ALGO,
+
+  /**
+   * S3
+   */
+  accessKeyId: process.env.ACCESS_KEY_ID,
+  secretAccessKey: process.env.SECRET_ACCESS_KEY,
+  region: process.env.REGION
 };

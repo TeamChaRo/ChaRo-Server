@@ -1,4 +1,5 @@
-import express from "express";
+import express = require('express');
+import { Request, Response, NextFunction } from "express";
 import logger from "morgan";
 const app = express();
 import connectDB from "./Loaders/connect";
@@ -10,13 +11,13 @@ app.use(express.json());
 app.use(logger("dev"));
 
 // define route
-
-
-// define route
-
+app.use("/getMain", require("./api/main"));
+app.use("/writePost", require("./api/writePost"));
+app.use("/preview", require("./api/preview"));
+app.use("/postDetail", require("./api/postDetail"))
 
 // error handler
-app.use(function (err, req, res, next) {
+app.use(function (err: any, req: Request, res: Response, next: NextFunction) {
     // set locals, only providing error in development
     res.locals.message = err.message;
     res.locals.error = req.app.get("env") === "production" ? err : {};
