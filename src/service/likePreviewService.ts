@@ -117,13 +117,7 @@ export async function trendService(userId: string){
 
     }catch(err){
         console.log(err);
-        return {
-            status: 502,
-            data:{
-                success : false,
-                msg : "DB preview loading error"
-            }
-        }
+        
     }
 
 }

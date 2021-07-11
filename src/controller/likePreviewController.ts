@@ -12,7 +12,6 @@ export default async(req: Request, res: Response) => {
         
         if(identifier == "0"){ // these days preview
             ret = await trendService(userId);
-            console.log("theseDays preview")
         }else if(identifier == "1"){ //theme & custom theme preview 
             ret = await themeService(value, userId);
         }else if(identifier == "2"){ // local preview
