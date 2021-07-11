@@ -25,5 +25,5 @@ export interface detailInformationDTO{
     destination: string,
 
     images: string[],
-    warnings: string[]
+    warnings: boolean[]
 }

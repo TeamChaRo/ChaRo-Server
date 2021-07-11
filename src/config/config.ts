@@ -1,6 +1,4 @@
-import dotenv from "dotenv";
-
-
+import dotenv = require("dotenv");
 
 const envFound = dotenv.config();
 if (envFound.error) {
