@@ -1,8 +1,7 @@
-import mapSearchDTO from "./mapSearchDTO";
-
-type mapSearchCollectionDTO = mapSearchDTO[];
-
 export default interface searchHistoryDTO{
-    userId: string;
-    searchHistory: mapSearchDTO;
+    userId: string,
+    title: string,
+    address: string,
+    latitude: string,
+    longitude: string
 }
