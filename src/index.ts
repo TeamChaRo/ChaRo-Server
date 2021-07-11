@@ -1,4 +1,5 @@
-import express, { Request, Response, NextFunction } from "express";
+import express = require('express');
+import { Request, Response, NextFunction } from "express";
 import logger from "morgan";
 const app = express();
 import connectDB from "./Loaders/connect";
