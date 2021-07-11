@@ -88,7 +88,7 @@ export async function themeService(theme: string, userId: string){
     
 }
 
-export async function todayService(userId: string){
+export async function trendService(userId: string){
 
     const query = `select P.id as postId, count(liked_post.PostId) as favoriteCount
                     FROM (SELECT id, title FROM post) AS P
