@@ -11,7 +11,8 @@ interface UserAttributes {
     email: string;
     nickname: string;
     profileImage: string;
-    pushAlarm: number;
+    marketingPush: boolean;
+    marketingEmail: boolean;
 };
 
 export default class User extends Model<UserAttributes> {
@@ -21,7 +22,8 @@ export default class User extends Model<UserAttributes> {
     public email!: string;
     public nickname!: string;
     public profileImage!: string;
-    public pushAlarm!: boolean;
+    public marketingPush!: boolean;
+    public marketingEmail!: boolean;
 
     public static associations: {
     };
@@ -51,7 +53,12 @@ User.init(
             type: DataTypes.STRING(100),
             defaultValue: "*"
         },
-        pushAlarm: {
+        marketingPush: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false
+        },
+        marketingEmail: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
             defaultValue: false
