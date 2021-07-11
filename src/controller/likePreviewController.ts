@@ -1,8 +1,6 @@
 import { Request, Response } from "express";
-import previewTodayService from "../service/previewTodayService";
-import previewThemeService from "../service/previewThemeService";
-import previewLocalService from "../service/previewLocalService";
 
+import { localService, themeService, trendService } from "../service/likePreviewService"
 export default async(req: Request, res: Response) => {
     try{
         
@@ -13,12 +11,11 @@ export default async(req: Request, res: Response) => {
         const value: string= req.query.value as string
         
         if(identifier == "0"){ // these days preview
-            ret = await previewTodayService(userId);
-            console.log("theseDays preview")
+            ret = await trendService(userId);
         }else if(identifier == "1"){ //theme & custom theme preview 
-            ret = await previewThemeService(value, userId);
+            ret = await themeService(value, userId);
         }else if(identifier == "2"){ // local preview
-            ret = await previewLocalService(value, userId);
+            ret = await localService(value, userId);
         }
         
         return res.status(ret.status).json(ret.data);
