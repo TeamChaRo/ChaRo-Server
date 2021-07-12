@@ -7,11 +7,16 @@ likeSearchController
 */
 export async function likeSearchController(req: Request, res: Response) {
     try {
-        let searchEntity: searchDTO = {
-            region: req.body.region,
-            theme: req.body.theme,
-            warning: req.body.warning
-        };
+
+        const { region, theme, warning } = req.body
+
+        // body값에 아무 값도 들어오지 않았을 때 에러 체크
+        if (region == null && theme == null && warning == null)  {
+            res.status(404).json({
+                success: false,
+                msg: "최소 한가지의 검색 조건을 설정해주세요!",
+            });
+        }
 
     } catch {
       res.status(500).json({
