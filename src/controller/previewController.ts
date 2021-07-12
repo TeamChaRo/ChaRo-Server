@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import previewTodayService from "../service/previewTodayService";
-import previewThemeService from "../service/previewThemeService";
-import previewLocalService from "../service/previewLocalService";
 
-export default async(req: Request, res: Response) => {
+import { newTrendService, newThemeService, newLocalService } from "../service/newPreviewService";
+import { likeLocalService, likeThemeService, likeTrendService } from "../service/likePreviewService"
+export async function newPreviewController(req: Request, res: Response){
+
     try{
         
         let ret:any;
@@ -13,12 +13,39 @@ export default async(req: Request, res: Response) => {
         const value: string= req.query.value as string
         
         if(identifier == "0"){ // these days preview
-            ret = await previewTodayService(userId);
-            console.log("theseDays preview")
+            ret = await newTrendService(userId);
         }else if(identifier == "1"){ //theme & custom theme preview 
-            ret = await previewThemeService(value, userId);
+            ret = await newThemeService(value, userId);
         }else if(identifier == "2"){ // local preview
-            ret = await previewLocalService(value, userId);
+            ret = await newLocalService(value, userId);
+        }
+        
+        return res.status(ret.status).json(ret.data);
+
+    }catch(err){
+        console.log(err);
+        return res.status(500).json({
+            success: false,
+            msg: "Server Error"
+        })
+    }
+}
+
+export async function likePreviewController(req: Request, res: Response){
+    try{
+        
+        let ret:any;
+        
+        const identifier: string = req.params.identifier;
+        const userId: string = req.params.userId;
+        const value: string= req.query.value as string
+        
+        if(identifier == "0"){ // these days preview
+            ret = await likeTrendService(userId);
+        }else if(identifier == "1"){ //theme & custom theme preview 
+            ret = await likeThemeService(value, userId);
+        }else if(identifier == "2"){ // local preview
+            ret = await likeLocalService(value, userId);
         }
         
         return res.status(ret.status).json(ret.data);
