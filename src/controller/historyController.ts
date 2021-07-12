@@ -1,10 +1,18 @@
 import express, { Request, Response } from "express";
 
+import { loadHistoryService } from "../service/searchHistoryService";
 import { saveHistoryService } from "../service/searchHistoryService";
 
 import searchHistoryDTO from "../interface/req/searchHistoryDTO";
 
-export default async(req: Request, res: Response) => {
+export async function loadHistoryController(req: Request, res: Response){
+    const userId = req.body.userId;
+
+    const result = await loadHistoryService(userId);
+    res.status(result.status).json(result.data);
+}
+ 
+export async function saveHistoryController(req: Request, res: Response){
 
     const userId = req.body.userId;
     const history = req.body.searchHistory;
