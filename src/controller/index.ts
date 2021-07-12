@@ -1,11 +1,12 @@
 import writePostController from "./writePostController";
-import previewController from "./previewController";
 import postDetailController from "./postDetailController";
 import mainController from "./mainController";
+import { newPreviewController, likePreviewController } from "./previewController";
 
 export {
     writePostController,
-    previewController,
+    likePreviewController,
+    newPreviewController,
     postDetailController,
     mainController,
 }

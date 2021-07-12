@@ -143,3 +143,29 @@ export async function makeThemeBriefCollection(result:object[], briefCollection:
         .catch(err => { throw err; })
     }
 }
+
+export async function makeBriefCollection(result:object[], briefCollection: briefInformationDTO[]){
+    for( let idx in result ){
+        const postId = result[idx]['id'];
+
+        const tempBrief: briefInformationDTO = {
+            postId: postId,
+            title: result[idx]['title'],
+            image: result[idx]['image1'],
+            isFavorite: false,
+            tags: [],
+        };
+
+        //tags
+        tempBrief.tags.push(result[idx]['region']);
+        tempBrief.tags.push(result[idx]['theme']);
+        const warningTag = result[idx]["warning"];
+        if(warningTag) tempBrief.tags.push(warningTag);
+
+        // isFavorite
+        const isFavorite = result[idx]["isFavorite"];
+        if(isFavorite) tempBrief.isFavorite = true;
+
+        briefCollection.push(tempBrief);
+    }
+}
