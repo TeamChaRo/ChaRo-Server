@@ -17,6 +17,7 @@ app.use("/preview", require("./api/preview"));
 app.use("/postDetail", require("./api/postDetail"))
 app.use("/sign", require("./api/sign"))
 app.use("/searchHistory", require("./api/searchHistory"))
+app.use("/post", require("./api/post"));
 
 // error handler
 app.use(function (err: any, req: Request, res: Response, next: NextFunction) {
