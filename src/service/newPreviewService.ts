@@ -7,7 +7,7 @@ import previewMap from "./previewMap.json";
 
 import { makeBriefCollection} from "./briefCollectionService";
 
-export async function trendService(userId: string){
+export async function newTrendService(userId: string){
     const query = `select P.id, P.title, T.region, T.theme, T.warning, I.image1, liked_post.PostId as isFavorite
                     FROM (SELECT id, title FROM post) AS P
                     LEFT OUTER JOIN liked_post ON(P.id = liked_post.PostId and liked_post.UserId = :userId)
@@ -46,7 +46,7 @@ export async function trendService(userId: string){
     }
 }
 
-export async function themeService(theme: string, userId: string){
+export async function newThemeService(theme: string, userId: string){
 
     const themeName = previewMap.theme[theme];
     const query = `select P.id, P.title, T.region, T.theme, T.warning, I.image1,liked_post.PostId as isFavorite
@@ -89,7 +89,7 @@ export async function themeService(theme: string, userId: string){
     }
 }
 
-export async function localService(local: string, userId: string){
+export async function newLocalService(local: string, userId: string){
     const regionName = previewMap.region[local];
     const query = `select P.id, P.title, T.region, T.theme, T.warning, I.image1,liked_post.PostId as isFavorite
                     FROM (SELECT id, title FROM post WHERE region= :region) AS P
