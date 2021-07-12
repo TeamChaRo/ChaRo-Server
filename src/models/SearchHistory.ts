@@ -6,16 +6,19 @@ import {sequelize} from "../Loaders/db"
 
 interface SHAttributes {
     userId?: string;
-    keyword?: string;
-    longtitude?: string;
+    title?: string;
+    address?: string;
     latitude?: string;
+    longitude?: string;
 };
 
 export default class SearchHistory extends Model<SHAttributes> {
     public userId!: string;
-    public keyword!: string;
-    public longtitude!: string;
-    public latitude!: boolean;
+    public title!: string;
+    public address!: string;
+    public latitude!: string;
+    public longitude!: string;
+    
     public static associations: {
     };
 }
@@ -27,15 +30,19 @@ SearchHistory.init(
             primaryKey: true,
             allowNull: false
         },
-        keyword: {
-            type: DataTypes.STRING(30),
-            allowNull: false
-        },
-        longtitude: {
+        title: {
             type: DataTypes.STRING(20),
             allowNull: false
         },
+        address: {
+            type: DataTypes.STRING(100),
+            allowNull: false
+        },
         latitude: {
+            type: DataTypes.STRING(20),
+            allowNull: false
+        },
+        longitude: {
             type: DataTypes.STRING(20),
             allowNull: false
         },
