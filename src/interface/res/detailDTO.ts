@@ -1,6 +1,7 @@
 export interface detailInformationDTO{
     title: string,
     author: string,
+    isAuthor: boolean,
     profileImage: string,
     postingYear: string,
     postingMonth: string,
