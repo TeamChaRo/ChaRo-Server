@@ -2,10 +2,10 @@ import express, { Request, Response } from "express";
 import searchDTO from "../interface/req/searchDTO";
 
 /*
-searchByLikesController
+likeSearchController
 - 좋아요순 검색하기 controller
 */
-export async function searchByLikesController(req: Request, res: Response) {
+export async function likeSearchController(req: Request, res: Response) {
     try {
         let searchEntity: searchDTO = {
             region: req.body.region,
