@@ -2,7 +2,6 @@ import { db } from "../models";
 import { QueryTypes } from 'sequelize';
 import { detailInformationDTO } from '../interface/res/detailDTO';
 import { DatePipe } from '@angular/common';
-import { integer } from "aws-sdk/clients/cloudfront";
 
 export default async function postDetailService(userId: string, postId: string){
 
@@ -13,7 +12,7 @@ export default async function postDetailService(userId: string, postId: string){
         3: "사람많음"
     }
 
-    const query = `select P.id, P.title, P.province, P.region, P.isParking, P.parkingDesc, P.courseDesc, P.createdAt, course.src, course.srcLongitude, course.srcLatitude, course.wayOne, course.wayOneLongitude, course.wayOneLatitude, course.wayTwo, course.wayTwoLongitude, course.wayTwoLatitude, course.dest, course.destLongitude, course.destLatitude, count(liked_post.PostId) as likesCount, user.nickname, user.profileImage, post_has_image.image1, post_has_image.image2, post_has_image.image3, post_has_image.image4, post_has_image.image5, post_has_image.image6
+    const query = `select P.id, P.title, P.province, P.region, P.isParking, P.parkingDesc, P.courseDesc, P.createdAt, course.src, course.srcLongitude, course.srcLatitude, course.wayOne, course.wayOneLongitude, course.wayOneLatitude, course.wayTwo, course.wayTwoLongitude, course.wayTwoLatitude, course.dest, course.destLongitude, course.destLatitude, count(liked_post.PostId) as likesCount, user.id as userId, user.nickname, user.profileImage, post_has_image.image1, post_has_image.image2, post_has_image.image3, post_has_image.image4, post_has_image.image5, post_has_image.image6
     from post as P
     left outer join liked_post on (P.id = liked_post.PostId)
     left outer join course on (P.id = course.postId)
@@ -29,6 +28,7 @@ export default async function postDetailService(userId: string, postId: string){
             const tempDetailData: detailInformationDTO = {
                 title: '',
                 author: '',
+                isAuthor: false,
                 profileImage: '',
                 postingYear: '',
                 postingMonth: '',
@@ -51,6 +51,10 @@ export default async function postDetailService(userId: string, postId: string){
                 courseDesc: '',
             };
 
+            if (userId == result[0]['userId']) {
+                tempDetailData.isAuthor = true;
+            } 
+
             tempDetailData.title = result[0]["title"];
             tempDetailData.author = result[0]["nickname"];
             tempDetailData.profileImage = result[0]["profileImage"];
@@ -60,6 +64,7 @@ export default async function postDetailService(userId: string, postId: string){
             tempDetailData.source = result[0]["src"];
             tempDetailData.destination = result[0]["dest"];
             tempDetailData.courseDesc = result[0]["courseDesc"];
+
 
             if (result[0]["wayOne"] == null) {
                 result[0]["wayOne"] = ""
