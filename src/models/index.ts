@@ -81,7 +81,7 @@ Post.belongsToMany(User, { timestamps:false, through: "liked_post" });
 Post.belongsToMany(User, { timestamps:false, through: "saved_post" });
 
 /* follow - User */
-User.belongsToMany(User, { as: 'following', timestamps:false, through: "follow", foreignKey: 'follwing' });
+User.belongsToMany(User, { as: 'following', timestamps:false, through: "follow", foreignKey: 'followed' });
 User.belongsToMany(User, { as: 'follower', timestamps:false, through: "follow", foreignKey: 'follower' });
 
 
