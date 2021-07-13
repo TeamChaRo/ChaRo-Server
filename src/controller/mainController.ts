@@ -13,7 +13,6 @@ export default async(req: Request, res: Response) => {
       }
     }
     const { id } = req.params;
-    console.log("id,", id)
 
     try {
       let user = await User.findOne({ 

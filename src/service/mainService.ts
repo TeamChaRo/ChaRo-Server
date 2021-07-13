@@ -26,7 +26,8 @@ export default async function mainService(userId: string, theme: string, region:
             localDrive: local
         }
 
-        // banner
+        
+        /*
         const bannerPromise = new Promise( async (resolve, reject) => {
             
             const ret = await db.Banner.findAll({limit:4, raw: true, nest : true});
@@ -41,6 +42,8 @@ export default async function mainService(userId: string, theme: string, region:
             }
             resolve("success");
         })
+        */
+
         
         //today-> 추천알고리즘 들어가는데.
         const todayPromise = new Promise( async (resolve, reject) => {
@@ -51,6 +54,8 @@ export default async function mainService(userId: string, theme: string, region:
                 
             const result = await db.sequelize.query(query,{ type: QueryTypes.SELECT, nest : true});
 
+            await makeLocalBriefCollection(result, today, userId);
+            /*
             for(let idx in result){
                 const postId = result[idx]['postId'];
     
@@ -91,10 +96,26 @@ export default async function mainService(userId: string, theme: string, region:
                 await Promise.all([promise1, promise2]) 
                     .then(() => { today.push(tempBrief); })
                     .catch(err => { throw err; })
-            }
+            }*/
             resolve("success");
+            
         })
+        
 
+        // banner
+        const bannerPromise = db.Banner.findAll({limit:4, raw: true, nest : true});
+
+        const trendQuery = `select P.id as postId, P.title as title, count(liked_post.PostId) as favoriteCount
+                    FROM (SELECT id, title FROM post) AS P
+                    LEFT OUTER JOIN liked_post ON(P.id = liked_post.PostId)
+                    GROUP BY P.id ORDER BY favoriteCount DESC LIMIT 4`;
+
+        const trendPromise = db.sequelize.query(trendQuery,{ type: QueryTypes.SELECT, raw:true, nest : true});
+        /*
+        const themePromise = db.CustomTheme.findOne({where: {customTheme:theme}, attributes:['customThemeTitle'], raw: true, nest : true} );
+        */
+
+        /*
         // trend service => 우선 똑같이하는걸로
         const trendPromise = new Promise( async (resolve, reject) => {
             const query = `select P.id as postId, P.title as title, count(liked_post.PostId) as favoriteCount
@@ -105,8 +126,8 @@ export default async function mainService(userId: string, theme: string, region:
             const result = await db.sequelize.query(query,{ type: QueryTypes.SELECT, nest : true});
             await makeTrendBriefCollection(result, trend, userId);
             resolve("success");
-        })
-
+        })*/
+        
         // theme 기준
         const themePromise = new Promise( async (resolve, reject) => {
             const customTitle = await db.CustomTheme.findOne({where: {customTheme:theme}, attributes:['customThemeTitle'], raw: true, nest : true} );
@@ -122,7 +143,7 @@ export default async function mainService(userId: string, theme: string, region:
 
             resolve("success");
         });
-
+        
         // local city
         const localPromise = new Promise( async (resolve, reject) => {
             
@@ -135,13 +156,31 @@ export default async function mainService(userId: string, theme: string, region:
                     GROUP BY P.id ORDER BY favoriteCount DESC LIMIT 4`;
             
             const result = await db.sequelize.query(query,{ replacements:{region:region},type: QueryTypes.SELECT });
+
             await makeLocalBriefCollection(result, local, userId);
     
             resolve("success");
         });
         
-        await Promise.all([bannerPromise, todayPromise, trendPromise, themePromise, localPromise]) 
-                .catch(err => { throw err; })
+        await Promise.all([bannerPromise, todayPromise, trendPromise, themePromise, localPromise])
+            .then( async (response) => {
+
+                const bannerResult:any= response[0];
+
+                for(let idx in bannerResult){
+                    const tempBanner: bannerDTO = {
+                        bannerTitle: bannerResult[idx]["bannerTitle"],
+                        bannerImage: bannerResult[idx]["bannerImage"],
+                        bannerTag: bannerResult[idx]["bannerTag"]
+                    }
+                    banner.push(tempBanner);
+                }
+                
+                const trendResult:any = response[2];
+                await makeTrendBriefCollection(trendResult, trend, userId);
+
+            })
+            .catch(err => { throw err; })
 
         return {
             status: 200,
