@@ -26,24 +26,51 @@ export default async function mainService(userId: string, theme: string, region:
             localDrive: local
         }
 
-        
-        /*
-        const bannerPromise = new Promise( async (resolve, reject) => {
-            
-            const ret = await db.Banner.findAll({limit:4, raw: true, nest : true});
+        // banner
+        const bannerPromise = db.Banner.findAll({limit:4, raw: true, nest : true});
 
-            for(let idx in ret){
-                const tempBanner: bannerDTO = {
-                    bannerTitle: ret[idx]["bannerTitle"],
-                    bannerImage: ret[idx]["bannerImage"],
-                    bannerTag: ret[idx]["bannerTag"]
-                }
-                banner.push(tempBanner);
-            }
+        const trendQuery = `select P.id as postId, P.title as title, count(liked_post.PostId) as favoriteCount
+                    FROM (SELECT id, title FROM post) AS P
+                    LEFT OUTER JOIN liked_post ON(P.id = liked_post.PostId)
+                    GROUP BY P.id ORDER BY favoriteCount DESC LIMIT 4`;
+
+        const trendPromise = db.sequelize.query(trendQuery,{ type: QueryTypes.SELECT, raw:true, nest : true});
+
+        // theme 기준
+        const themePromise = new Promise( async (resolve, reject) => {
+            const customTitle = await db.CustomTheme.findOne({where: {customTheme:theme}, attributes:['customThemeTitle'], raw: true, nest : true} );
+            main.customThemeTitle = customTitle['customThemeTitle'];
+
+            const query = `select P.postId, count(liked_post.PostId) as favoriteCount
+                    FROM (SELECT postId FROM post_has_theme WHERE themeName= :theme) AS P
+                    LEFT OUTER JOIN liked_post ON(P.postId = liked_post.PostId)
+                    GROUP BY P.postId ORDER BY favoriteCount DESC LIMIT 4`;
+
+                    const result = await db.sequelize.query(query,{ replacements:{theme:theme},type: QueryTypes.SELECT, nest:true });
+                    await makeThemeBriefCollection(result, custom, userId);
+
             resolve("success");
-        })
-        */
+        });
+        
+        // local city
+        const localPromise = new Promise( async (resolve, reject) => {
+            
+            const localTitle = await db.Local.findOne({where: {localCity:region}, raw:true, attributes:['localTitle'], nest: true} );
+            main.localTitle = localTitle['localTitle'];
 
+            const query = `select count(liked_post.PostId) as favoriteCount, P.id as postId, P.title
+                    FROM (SELECT id, title FROM post WHERE region= :region) AS P
+                    LEFT OUTER JOIN liked_post ON(P.id = liked_post.PostId)
+                    GROUP BY P.id ORDER BY favoriteCount DESC LIMIT 4`;
+            
+            const result = await db.sequelize.query(query,{ replacements:{region:region},type: QueryTypes.SELECT });
+
+            await makeLocalBriefCollection(result, local, userId);
+    
+            resolve("success");
+        });
+
+              
         
         //today-> 추천알고리즘 들어가는데.
         const todayPromise = new Promise( async (resolve, reject) => {
@@ -55,7 +82,7 @@ export default async function mainService(userId: string, theme: string, region:
             const result = await db.sequelize.query(query,{ type: QueryTypes.SELECT, nest : true});
 
             await makeLocalBriefCollection(result, today, userId);
-            /*
+            
             for(let idx in result){
                 const postId = result[idx]['postId'];
     
@@ -96,71 +123,12 @@ export default async function mainService(userId: string, theme: string, region:
                 await Promise.all([promise1, promise2]) 
                     .then(() => { today.push(tempBrief); })
                     .catch(err => { throw err; })
-            }*/
+            }
             resolve("success");
             
         })
         
 
-        // banner
-        const bannerPromise = db.Banner.findAll({limit:4, raw: true, nest : true});
-
-        const trendQuery = `select P.id as postId, P.title as title, count(liked_post.PostId) as favoriteCount
-                    FROM (SELECT id, title FROM post) AS P
-                    LEFT OUTER JOIN liked_post ON(P.id = liked_post.PostId)
-                    GROUP BY P.id ORDER BY favoriteCount DESC LIMIT 4`;
-
-        const trendPromise = db.sequelize.query(trendQuery,{ type: QueryTypes.SELECT, raw:true, nest : true});
-        /*
-        const themePromise = db.CustomTheme.findOne({where: {customTheme:theme}, attributes:['customThemeTitle'], raw: true, nest : true} );
-        */
-
-        /*
-        // trend service => 우선 똑같이하는걸로
-        const trendPromise = new Promise( async (resolve, reject) => {
-            const query = `select P.id as postId, P.title as title, count(liked_post.PostId) as favoriteCount
-                    FROM (SELECT id, title FROM post) AS P
-                    LEFT OUTER JOIN liked_post ON(P.id = liked_post.PostId)
-                    GROUP BY P.id ORDER BY favoriteCount DESC LIMIT 4`;
-                
-            const result = await db.sequelize.query(query,{ type: QueryTypes.SELECT, nest : true});
-            await makeTrendBriefCollection(result, trend, userId);
-            resolve("success");
-        })*/
-        
-        // theme 기준
-        const themePromise = new Promise( async (resolve, reject) => {
-            const customTitle = await db.CustomTheme.findOne({where: {customTheme:theme}, attributes:['customThemeTitle'], raw: true, nest : true} );
-            main.customThemeTitle = customTitle['customThemeTitle'];
-
-            const query = `select P.postId, count(liked_post.PostId) as favoriteCount
-                    FROM (SELECT postId FROM post_has_theme WHERE themeName= :theme) AS P
-                    LEFT OUTER JOIN liked_post ON(P.postId = liked_post.PostId)
-                    GROUP BY P.postId ORDER BY favoriteCount DESC LIMIT 4`;
-
-                    const result = await db.sequelize.query(query,{ replacements:{theme:theme},type: QueryTypes.SELECT, nest:true });
-                    await makeThemeBriefCollection(result, custom, userId);
-
-            resolve("success");
-        });
-        
-        // local city
-        const localPromise = new Promise( async (resolve, reject) => {
-            
-            const localTitle = await db.Local.findOne({where: {localCity:region}, raw:true, attributes:['localTitle'], nest: true} );
-            main.localTitle = localTitle['localTitle'];
-
-            const query = `select count(liked_post.PostId) as favoriteCount, P.id as postId, P.title
-                    FROM (SELECT id, title FROM post WHERE region= :region) AS P
-                    LEFT OUTER JOIN liked_post ON(P.id = liked_post.PostId)
-                    GROUP BY P.id ORDER BY favoriteCount DESC LIMIT 4`;
-            
-            const result = await db.sequelize.query(query,{ replacements:{region:region},type: QueryTypes.SELECT });
-
-            await makeLocalBriefCollection(result, local, userId);
-    
-            resolve("success");
-        });
         
         await Promise.all([bannerPromise, todayPromise, trendPromise, themePromise, localPromise])
             .then( async (response) => {
