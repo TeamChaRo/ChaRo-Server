@@ -43,31 +43,8 @@ export async function likeSearchController(req: Request, res: Response) {
             });
         }
 
-        if ((searchEntity.region.length != 0) && (searchEntity.theme) && (!searchEntity.warning)) {
-            console.log("지역+테마")
-        }
-        else if ((searchEntity.region.length != 0) && (!searchEntity.theme) && (searchEntity.warning)) {
-            console.log("지역+주의사항")
-        }
-        else if ((searchEntity.region.length == 0) && (searchEntity.theme) && (searchEntity.warning)) {
-            console.log("테마+주의사항")
-        }
-        else if ((searchEntity.region.length != 0) && (!searchEntity.theme) && (!searchEntity.warning)) {
-            console.log("지역만")
-        }
-        else if ((searchEntity.region.length == 0) && (searchEntity.theme) && (!searchEntity.warning)) {
-            console.log("테마만")
-        }
-        else if ((searchEntity.region.length == 0) && (!searchEntity.theme) && (searchEntity.warning)) {
-            console.log("주의사항만")
-        }
-        else {
-            console.log(searchEntity)
-            console.log("지역+테마+주의사항")
-            const likeSearchReturn = await rtwSearchService(searchEntity, userId);
-            return res.status(likeSearchReturn.status).json(likeSearchReturn.data);
-        }
-
+        const likeSearchReturn = await rtwSearchService(searchEntity, userId);
+        return res.status(likeSearchReturn.status).json(likeSearchReturn.data);
     } 
     catch {
         return res.status(500).json({
