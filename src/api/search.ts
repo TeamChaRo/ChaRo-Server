@@ -1,15 +1,25 @@
 import express from "express";
-import { likeSearchController } from "../controller/searchController";
+import { likeSearchController, newSearchController } from "../controller/searchController";
 const router = express.Router();
 
 /**
  *  @route Post /search/like
- *  @desc 좋아요순 검색하기
+ *  @desc 인기순 검색하기
  *  @access Public
  */
 router.post(
     "/like",
     likeSearchController
+);
+
+/**
+ *  @route Post /search/new
+ *  @desc 최신순 검색하기
+ *  @access Public
+ */
+router.post(
+    "/new",
+    newSearchController
 );
 
 module.exports = router;
