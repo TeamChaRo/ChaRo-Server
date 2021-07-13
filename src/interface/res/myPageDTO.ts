@@ -6,6 +6,7 @@ export interface myPageUser{
 }
 
 export interface myPagePreview{
+    postId: number,
     title: string,
     image: string,
     tags: string[],
