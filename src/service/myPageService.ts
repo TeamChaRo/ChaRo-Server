@@ -4,7 +4,7 @@ import { QueryTypes } from 'sequelize';
 import { myPageDTO, myPagePreview, myPageUser } from "../interface/res/myPageDTO";
 
 
-export default async (userId: string) => {
+export async function likeService(userId: string){
     try{
         let user: myPageUser = {
             nickname: "",

@@ -1,11 +1,11 @@
 import express, { Request, Response } from "express";
 
-import myPageService from "../service/myPageService";
+import { likeService } from "../service/myPageService";
 
 export default async(req: Request, res: Response) => {
     
     const userId = req.params.id;
 
-    const ret = await myPageService(userId);
+    const ret = await likeService(userId);
     res.status(ret.status).json(ret.data);
 }

@@ -4,13 +4,13 @@ const router = express.Router();
 import  { myPageController } from "../controller";
 
 /**
- *  @route GET /myPage/:id
+ *  @route GET /myPage/like/:id
  *  @desc get myPage information
  *  @access Public
  */
 
 router.get(
-    "/:id",
+    "/like/:id",
     myPageController
 )
 
