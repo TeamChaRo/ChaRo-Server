@@ -10,21 +10,60 @@ export async function rtwSearchService(searchDTO: searchDTO, userId: string){
     var searchRet: object[]
 
     if ((searchDTO.region.length != 0) && (searchDTO.theme) && (!searchDTO.warning)) {
+        //지역 + 테마 파싱하는 쿼리 
+        const regionThemeQuery = `SELECT count(liked_post.PostId) as favoriteCount, P.id as postId, P.title
+        FROM (SELECT id, title FROM post WHERE region = :region) AS P
+        LEFT OUTER JOIN liked_post ON(P.id = liked_post.PostId)
+        WHERE P.id IN (
+        SELECT P.id
+        FROM post_has_theme
+        WHERE post_has_theme.postId = P.id AND post_has_theme.themeName = :theme)
+        GROUP BY P.id ORDER BY favoriteCount DESC LIMIT 20`;
+
+        searchRet = await db.sequelize.query(regionThemeQuery,{ replacements:{ region: searchDTO.region, theme: searchDTO.theme },type: QueryTypes.SELECT });
+        console.log(searchRet)
         console.log("지역+테마")
     }
     else if ((searchDTO.region.length != 0) && (!searchDTO.theme) && (searchDTO.warning)) {
         console.log("지역+주의사항")
+        //지역 + 주의사항 파싱하는 쿼리 
+        const regionWarningQuery = `SELECT count(liked_post.PostId) as favoriteCount, P.id as postId, P.title
+        FROM (SELECT id, title FROM post WHERE region = :region) AS P
+        LEFT OUTER JOIN liked_post ON(P.id = liked_post.PostId)
+        WHERE P.id IN (
+        SELECT P.id
+        FROM post_has_warning
+        WHERE post_has_warning.warningName = :warning AND post_has_warning.postId = P.id)
+        GROUP BY P.id ORDER BY favoriteCount DESC LIMIT 20`;
+
+        searchRet = await db.sequelize.query(regionWarningQuery,{ replacements:{ region: searchDTO.region, warning: searchDTO.warning },type: QueryTypes.SELECT });
+        console.log(searchRet)
+        console.log("지역+주의사항")
     }
     else if ((searchDTO.region.length == 0) && (searchDTO.theme) && (searchDTO.warning)) {
+        //테마 + 주의사항 파싱하는 쿼리 
+        
         console.log("테마+주의사항")
     }
     else if ((searchDTO.region.length != 0) && (!searchDTO.theme) && (!searchDTO.warning)) {
+        //지역만 파싱하는 쿼리
+        const regionQuery = `SELECT count(liked_post.PostId) as favoriteCount, P.id as postId, P.title
+        FROM (SELECT id, title FROM post WHERE region = :region) AS P
+        LEFT OUTER JOIN liked_post ON(P.id = liked_post.PostId)
+        GROUP BY P.id ORDER BY favoriteCount DESC LIMIT 20`;
+
+        searchRet = await db.sequelize.query(regionQuery,{ replacements:{ region: searchDTO.region },type: QueryTypes.SELECT });
+        console.log(searchRet)
         console.log("지역만")
     }
     else if ((searchDTO.region.length == 0) && (searchDTO.theme) && (!searchDTO.warning)) {
+        //테마만 파싱하는 쿼리
+        
         console.log("테마만")
     }
     else if ((searchDTO.region.length == 0) && (!searchDTO.theme) && (searchDTO.warning)) {
+        //주의사항만 파싱하는 쿼리
+        
         console.log("주의사항만")
     }
     else {
