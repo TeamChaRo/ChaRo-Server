@@ -4,7 +4,7 @@ import mainController from "./mainController";
 import { newPreviewController, likePreviewController } from "./previewController";
 import { saveHistoryController, loadHistoryController } from "./historyController";
 import { likePostController, savePostController } from "./postController";
-import myPageController from "./myPageController";
+import { likeMyPageController, newMyPageController}from "./myPageController";
 export {
     writePostController,
     likePreviewController,
@@ -15,5 +15,6 @@ export {
     mainController,
     likePostController,
     savePostController,
-    myPageController
+    likeMyPageController,
+    newMyPageController
 }
