@@ -25,7 +25,6 @@ export async function likeSearchController(req: Request, res: Response) {
         });
       }
 
-
         let searchEntity: searchDTO = {
             region: req.body.region,
             theme: req.body.theme,
@@ -63,15 +62,17 @@ export async function likeSearchController(req: Request, res: Response) {
             console.log("주의사항만")
         }
         else {
+            console.log(searchEntity)
             console.log("지역+테마+주의사항")
             const likeSearchReturn = await rtwSearchService(searchEntity, userId);
             return res.status(likeSearchReturn.status).json(likeSearchReturn.data);
         }
 
-    } catch {
+    } 
+    catch {
         return res.status(500).json({
-        success: false,
-        msg: "서버 내부 오류",
-      });
+            success: false, 
+            msg: "서버 내부 오류",
+        });
     }
-  }
+}
