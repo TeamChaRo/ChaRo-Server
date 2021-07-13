@@ -1,13 +1,13 @@
 
 import express, { Request, Response } from "express";
 const router = express.Router();
-import { rtwSearchService } from "../service/likeSearchService";
+import { searchService } from "../service/likeSearchService";
 import searchDTO from "../interface/req/searchDTO";
 import User from "../models/User";
 
 /*
 likeSearchController
-- 좋아요순 검색하기 controller
+- 인기순 검색하기 controller
 */
 export async function likeSearchController(req: Request, res: Response) {
     try {
@@ -30,10 +30,6 @@ export async function likeSearchController(req: Request, res: Response) {
             theme: req.body.theme,
             warning: req.body.warning,
         };
-
-        console.log(!searchEntity.theme)
-        console.log(searchEntity.region.length == 0)
-        console.log(!searchEntity.warning)
         
         // body값에 아무 값도 들어오지 않았을 때 에러 체크
         if (searchEntity.region.length == 0 && (!searchEntity.theme) && (!searchEntity.warning))  {
@@ -43,7 +39,7 @@ export async function likeSearchController(req: Request, res: Response) {
             });
         }
 
-        const likeSearchReturn = await rtwSearchService(searchEntity, userId);
+        const likeSearchReturn = await searchService(searchEntity, userId);
         return res.status(likeSearchReturn.status).json(likeSearchReturn.data);
     } 
     catch {
