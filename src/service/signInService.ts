@@ -59,7 +59,7 @@ export default async function signIn(id: string, password: string){
       }
     }
   } catch (err) {
-    console.error(err.message);
+    console.error("123", err.message);
     return {
       status: 500,
       data: {
