@@ -24,7 +24,7 @@ export async function newTrendService(userId: string){
         drive: brief
     };
     try{
-        makeBriefCollection(result, brief);
+        await makeBriefCollection(result, brief);
         return {
             status: 200,
             data: {
