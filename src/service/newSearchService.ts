@@ -81,7 +81,7 @@ export async function newSearchService(searchDTO: searchDTO, userId: string){
     }
     else {
         //검색어가 3개일 때 쿼리 
-        console.log("ㅇㅇㅇㅇㅇ")
+
         const rtwSearchQuery = `SELECT count(liked_post.PostId) as favoriteCount, P.id as postId, P.title
         FROM (SELECT id, title FROM post WHERE region = :region) AS P
         LEFT OUTER JOIN liked_post ON(P.id = liked_post.PostId)
