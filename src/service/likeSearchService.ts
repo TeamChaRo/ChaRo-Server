@@ -6,7 +6,7 @@ import { makeLocalBriefCollection } from "./briefCollectionService"
 import previewDTO from "../interface/res/previewDTO";
 
 //인기순 검색 서비스
-export async function searchService(searchDTO: searchDTO, userId: string){
+export async function likeSearchService(searchDTO: searchDTO, userId: string){
     var searchRet: object[]
 
     if ((searchDTO.region.length != 0) && (searchDTO.theme) && (!searchDTO.warning)) {
