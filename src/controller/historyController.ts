@@ -6,7 +6,7 @@ import { saveHistoryService } from "../service/searchHistoryService";
 import searchHistoryDTO from "../interface/req/searchHistoryDTO";
 
 export async function loadHistoryController(req: Request, res: Response){
-    const userId = req.body.userId;
+    const userId = req.params.userId;
 
     const result = await loadHistoryService(userId);
     res.status(result.status).json(result.data);
