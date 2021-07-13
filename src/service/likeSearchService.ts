@@ -1,9 +1,9 @@
 import { db } from "../models";
 import { QueryTypes } from 'sequelize';
 import briefInformationDTO from "../interface/res/briefInformationDTO";
-import searchInfoDTO from "../interface/res/searchInfoDTO";
 import searchDTO from "../interface/req/searchDTO";
 import { makeLocalBriefCollection } from "./briefCollectionService"
+import previewDTO from "../interface/res/previewDTO";
 
 //검색어가 3개모두일 때 서비스
 export async function rtwSearchService(searchDTO: searchDTO, userId: string){
@@ -18,13 +18,12 @@ export async function rtwSearchService(searchDTO: searchDTO, userId: string){
         WHERE post_has_theme.postId = P.id AND post_has_theme.themeName = :theme AND post_has_warning.warningName = :warning and post_has_warning.postId = P.id
         )
         GROUP BY P.id ORDER BY favoriteCount DESC LIMIT 20`;
-    const rtwSearchRet = await db.sequelize.query(rtwSearchQuery,{ replacements:{ region: searchDTO.region[1], theme: searchDTO.theme, warning: searchDTO.warning },type: QueryTypes.SELECT });
+    const rtwSearchRet = await db.sequelize.query(rtwSearchQuery,{ replacements:{ region: searchDTO.region, theme: searchDTO.theme, warning: searchDTO.warning },type: QueryTypes.SELECT });
         
         
     let brief: briefInformationDTO[] = []
 
-    const searchInfo: searchInfoDTO = {
-        selectedFilter: [searchDTO.region[0], searchDTO.region[1], searchDTO.theme, searchDTO.warning], 
+    const searchInfo: previewDTO = {
         totalCourse: rtwSearchRet.length,
         drive: brief
     };
