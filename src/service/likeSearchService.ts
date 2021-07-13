@@ -5,8 +5,8 @@ import searchDTO from "../interface/req/searchDTO";
 import { makeLocalBriefCollection } from "./briefCollectionService"
 import previewDTO from "../interface/res/previewDTO";
 
-//검색어가 3개일 때 서비스
-export async function rtwSearchService(searchDTO: searchDTO, userId: string){
+//인기순 검색 서비스
+export async function searchService(searchDTO: searchDTO, userId: string){
     var searchRet: object[]
 
     if ((searchDTO.region.length != 0) && (searchDTO.theme) && (!searchDTO.warning)) {
@@ -21,11 +21,8 @@ export async function rtwSearchService(searchDTO: searchDTO, userId: string){
         GROUP BY P.id ORDER BY favoriteCount DESC LIMIT 20`;
 
         searchRet = await db.sequelize.query(regionThemeQuery,{ replacements:{ region: searchDTO.region, theme: searchDTO.theme },type: QueryTypes.SELECT });
-        console.log(searchRet)
-        console.log("지역+테마")
     }
     else if ((searchDTO.region.length != 0) && (!searchDTO.theme) && (searchDTO.warning)) {
-        console.log("지역+주의사항")
         //지역 + 주의사항 파싱하는 쿼리 
         const regionWarningQuery = `SELECT count(liked_post.PostId) as favoriteCount, P.id as postId, P.title
         FROM (SELECT id, title FROM post WHERE region = :region) AS P
@@ -37,13 +34,20 @@ export async function rtwSearchService(searchDTO: searchDTO, userId: string){
         GROUP BY P.id ORDER BY favoriteCount DESC LIMIT 20`;
 
         searchRet = await db.sequelize.query(regionWarningQuery,{ replacements:{ region: searchDTO.region, warning: searchDTO.warning },type: QueryTypes.SELECT });
-        console.log(searchRet)
-        console.log("지역+주의사항")
     }
     else if ((searchDTO.region.length == 0) && (searchDTO.theme) && (searchDTO.warning)) {
         //테마 + 주의사항 파싱하는 쿼리 
-        
-        console.log("테마+주의사항")
+        const themeWarningQuery = `SELECT count(liked_post.PostId) as favoriteCount, P.id as postId, P.title
+        FROM (SELECT id, title FROM post) AS P
+        LEFT OUTER JOIN liked_post ON(P.id = liked_post.PostId)
+        WHERE P.id IN (
+        SELECT P.id
+        FROM post_has_theme, post_has_warning
+        WHERE post_has_theme.postId = P.id AND post_has_theme.themeName = :theme AND post_has_warning.warningName = :warning and post_has_warning.postId = P.id
+        )
+        GROUP BY P.id ORDER BY favoriteCount DESC LIMIT 20`;
+
+        searchRet = await db.sequelize.query(themeWarningQuery,{ replacements:{ theme: searchDTO.theme, warning: searchDTO.warning },type: QueryTypes.SELECT });
     }
     else if ((searchDTO.region.length != 0) && (!searchDTO.theme) && (!searchDTO.warning)) {
         //지역만 파싱하는 쿼리
@@ -53,18 +57,30 @@ export async function rtwSearchService(searchDTO: searchDTO, userId: string){
         GROUP BY P.id ORDER BY favoriteCount DESC LIMIT 20`;
 
         searchRet = await db.sequelize.query(regionQuery,{ replacements:{ region: searchDTO.region },type: QueryTypes.SELECT });
-        console.log(searchRet)
-        console.log("지역만")
     }
     else if ((searchDTO.region.length == 0) && (searchDTO.theme) && (!searchDTO.warning)) {
         //테마만 파싱하는 쿼리
-        
-        console.log("테마만")
+        const themeQuery = `SELECT count(liked_post.PostId) as favoriteCount, P.id as postId, P.title
+        FROM (SELECT id, title FROM post) AS P
+        LEFT OUTER JOIN liked_post ON(P.id = liked_post.PostId)
+        WHERE P.id IN (
+        SELECT P.id
+        FROM post_has_theme
+        WHERE post_has_theme.themeName = :theme AND post_has_theme.postId = P.id)
+        GROUP BY P.id ORDER BY favoriteCount DESC LIMIT 20`;
+        searchRet = await db.sequelize.query(themeQuery,{ replacements:{ theme: searchDTO.theme },type: QueryTypes.SELECT });
     }
     else if ((searchDTO.region.length == 0) && (!searchDTO.theme) && (searchDTO.warning)) {
         //주의사항만 파싱하는 쿼리
-        
-        console.log("주의사항만")
+        const warningQuery = `SELECT count(liked_post.PostId) as favoriteCount, P.id as postId, P.title
+        FROM (SELECT id, title FROM post) AS P
+        LEFT OUTER JOIN liked_post ON(P.id = liked_post.PostId)
+        WHERE P.id IN (
+        SELECT P.id
+        FROM post_has_warning
+        WHERE post_has_warning.warningName = :warning AND post_has_warning.postId = P.id)
+        GROUP BY P.id ORDER BY favoriteCount DESC LIMIT 20`;
+        searchRet = await db.sequelize.query(warningQuery,{ replacements:{ warning: searchDTO.warning },type: QueryTypes.SELECT });
     }
     else {
         //검색어가 3개일 때 쿼리 
@@ -79,8 +95,6 @@ export async function rtwSearchService(searchDTO: searchDTO, userId: string){
         GROUP BY P.id ORDER BY favoriteCount DESC LIMIT 20`;
 
         searchRet = await db.sequelize.query(rtwSearchQuery,{ replacements:{ region: searchDTO.region, theme: searchDTO.theme, warning: searchDTO.warning },type: QueryTypes.SELECT });
-        console.log(searchRet)
-        console.log("지역+테마+주의사항")
     }
     
     let brief: briefInformationDTO[] = []
@@ -96,7 +110,7 @@ export async function rtwSearchService(searchDTO: searchDTO, userId: string){
             status: 200,
             data:{
                 success : true,
-                msg : "하이 ",
+                msg : "검색뷰 통신에 성공한 혜령, 호택 너무 수고했엉 최고봉봉!!!",
                 data : searchInfo
             }
         }
