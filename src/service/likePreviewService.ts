@@ -90,7 +90,7 @@ export async function likeThemeService(theme: string, userId: string){
 
 export async function likeTrendService(userId: string){
 
-    const query = `select P.id as postId, count(liked_post.PostId) as favoriteCount
+    const query = `select P.id as postId, P.title as title, count(liked_post.PostId) as favoriteCount
                     FROM (SELECT id, title FROM post) AS P
                     LEFT OUTER JOIN liked_post ON(P.id = liked_post.PostId)
                     GROUP BY P.id ORDER BY favoriteCount DESC LIMIT 20`;
