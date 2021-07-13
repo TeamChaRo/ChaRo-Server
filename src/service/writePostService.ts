@@ -72,76 +72,50 @@ export default async function writePostService( postEntity: writePostDTO ){
         }
     }
 
-    const t = await db.sequelize.transaction();
     try{
         let postId: number;
-        await db.Post.create(post, {transaction:t})
-        .then(data =>{     
-            postId = data["id"];
-        })
+        await db.Post.create(post).then(data => postId = data["id"]);
 
         const tags: tagDTO = {
             postId: postId,
             region: postEntity.region,
-            theme: "",
+            theme: postEntity.theme[0],
         };
 
-        const coursePromise = new Promise( async (resolve, reject) => {
-            //Course
-            course.postId = postId;
-            await db.Course.create(course, {transaction:t});
-            resolve("success");
-        });
-        
+        //Course
+        course.postId = postId;
+        db.Course.create(course);
 
-        const imagePromise = new Promise( async (resolve, reject) => {
-            /*
-            //Image
-            image.postId = postId;
-            await db.PostHasImage.create(image, {transaction:t});
-            */
-            resolve("success");
-        });
-        
+        //Image
+        //image.postId = postId;
+        //db.PostHasImage.create(image)
 
-        const themePromise = new Promise( async (resolve, reject) => {
-            //PostHasTheme
-            for(let index in postEntity.theme){
-                if(index == "0") tags.theme = postEntity.theme[index];
-                const theme:themeDTO = {
+        //PostHasTheme
+        postEntity.theme.map( (value, index) => {
+            const theme:themeDTO = {
+                postId: postId,
+                themeName: value
+            };
+            db.PostHasTheme.create(theme);
+        });
+
+        let tagInsertFlag = true;
+        postEntity.warning.map( (value, index) => {
+            if(value){
+                if(index == 0){
+                    tags.warning = warningMap[index];
+                    db.PostHasTags.create(tags);
+                    tagInsertFlag = false;
+                } 
+                const warning: warningDTO = {
                     postId: postId,
-                    themeName: postEntity.theme[index]
-                };
-                await db.PostHasTheme.create(theme, {transaction: t});
-            }
-            resolve("success");
-        });
-        
-        const warningPromise = new Promise( async (resolve, reject) => {
-            //PostHasWarning
-            for(let index in postEntity.warning){
-                if(postEntity.warning[index]){
-                    if(index == "0") tags.warning = warningMap[index];
-                    const warning: warningDTO = {
-                        postId: postId,
-                        warningName: warningMap[index]
-                    }
-                    await db.PostHasWarning.create(warning, {transaction: t});
+                    warningName: warningMap[index]
                 }
+                db.PostHasWarning.create(warning);
             }
-            resolve("success");
         });
 
-        const tagPromise = new Promise( async (resolve, reject) => {
-            //PostHasTags
-            await db.PostHasTags.create(tags, {transaction: t});
-            resolve("success");
-        });
-        
-        await Promise.all([coursePromise, imagePromise, themePromise, warningPromise, tagPromise]) 
-                .then( async () => { await t.commit(); })
-                .catch(err => { throw err; })
-
+       if( !tagInsertFlag ) db.PostHasTags.create(tags);
         return {
             status: 200,
             data: {
@@ -152,9 +126,6 @@ export default async function writePostService( postEntity: writePostDTO ){
 
     }catch(err){
         console.log(err);
-
-        await t.rollback();
-
         return {
             status: 400,
             data:{
