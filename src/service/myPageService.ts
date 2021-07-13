@@ -211,9 +211,9 @@ export async function newService(userId: string){
             resolve("success");
         });
 
-        const writtenQuery = `SELECT P.id, P.title, DATE_FORMAT(P.updatedAt, '%Y-%m-%d') as date, I.image1,
+        const writtenQuery = `SELECT P.id, P.title, DATE_FORMAT(P.createdAt, '%Y-%m-%d') as date, I.image1,
                             T.region, T.theme, T.warning, count(liked_post.PostId) as favoriteCount, count(saved_post.PostId) as saveCount
-                            FROM (SELECT id, title, updatedAt FROM post WHERE userId=:userId) as P
+                            FROM (SELECT id, title, createdAt FROM post WHERE userId=:userId) as P
                             LEFT OUTER JOIN liked_post ON(P.id = liked_post.PostId)
                             LEFT OUTER JOIN saved_post ON(P.id = saved_post.PostId)
                             INNER JOIN post_has_image as I 
@@ -221,7 +221,7 @@ export async function newService(userId: string){
                             WHERE T.postId=P.id AND I.postId=P.id
                             GROUP BY P.id ORDER BY date DESC LIMIT 7`;
 
-        const savedQuery =`SELECT P.id, P.title, DATE_FORMAT(P.updatedAt, '%Y-%m-%d') as date, I.image1,
+        const savedQuery =`SELECT P.id, P.title, DATE_FORMAT(P.createdAt, '%Y-%m-%d') as date, I.image1,
                             T.region, T.theme, T.warning, count(liked_post.PostId) as favoriteCount, count(S.postId) as saveCount
                             FROM (SELECT PostId AS postId FROM saved_post WHERE userId="111") as S
                             INNER JOIN post as P
