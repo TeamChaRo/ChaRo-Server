@@ -101,12 +101,11 @@ export default async function writePostService( postEntity: writePostDTO ){
             if(index == 0){
                 if(value){
                     tags.warning = warningMap[index];
-                    await db.PostHasTags.create(tags)
+                    await db.PostHasTags.create(tags);
+                }else{
+                    await db.PostHasTags.create(tags);
                 }
-            }else{
-               await db.PostHasTags.create(tags);
             }
-
             if(value){
                 const warning: warningDTO = {
                     postId: postId,
