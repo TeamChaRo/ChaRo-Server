@@ -16,7 +16,7 @@ const warningMap = {
 
 export default async function writePostService( postEntity: writePostDTO ){
     
-    /*
+    
     const image: imageDTO = {
         image1: postEntity.courseImage[0]
     }
@@ -35,7 +35,7 @@ export default async function writePostService( postEntity: writePostDTO ){
             }
         }
     }
-    */
+    
     // post table
     const post: postDTO = {
         title: postEntity.title,
@@ -48,73 +48,72 @@ export default async function writePostService( postEntity: writePostDTO ){
     }
     
     // course table
-    let courseSize = postEntity.course.length;
+    const courseSize = postEntity.course.address.length;
     const course: courseDTO = {
-       src: postEntity.course[0].address,
-       srcLatitude: postEntity.course[0].latitude,
-       srcLongitude: postEntity.course[0].longtitude,
-       
-       dest: postEntity.course[courseSize-1].address,
-       destLatitude: postEntity.course[courseSize-1].latitude,
-       destLongitude: postEntity.course[courseSize-1].longtitude
+        src: postEntity.course.address[0],
+        srcLatitude: postEntity.course.latitude[0],
+        srcLongitude: postEntity.course.longtitude[0],
+
+        dest: postEntity.course.address[courseSize-1],
+        destLatitude: postEntity.course.latitude[courseSize-1],
+        destLongitude: postEntity.course.longtitude[courseSize-1]
     }
-    
     if(courseSize > 2){
-        course.wayOne = postEntity.course[1].address,
-        course.wayOneLatitude = postEntity.course[1].latitude,
-        course.wayOneLongitude = postEntity.course[1].longtitude
+        course.wayOne = postEntity.course.address[1];
+        course.wayOneLatitude = postEntity.course.latitude[1];
+        course.wayOneLongitude = postEntity.course.longtitude[1];
 
         if(courseSize >3){
-            course.wayTwo = postEntity.course[2].address,
-            course.wayTwoLatitude = postEntity.course[2].latitude,
-            course.wayTwoLongitude = postEntity.course[2].longtitude
+            course.wayTwo = postEntity.course.address[2];
+            course.wayTwoLatitude = postEntity.course.latitude[2];
+            course.wayTwoLongitude = postEntity.course.longtitude[2];
         }
     }
 
     try{
-    //     let postId: number;
-    //     await db.Post.create(post).then(data => postId = data["id"]);
+        let postId: number;
+        await db.Post.create(post).then(data => postId = data["id"]);
 
-    //     const tags: tagDTO = {
-    //         postId: postId,
-    //         region: postEntity.region,
-    //         theme: postEntity.theme[0],
-    //     };
+        const tags: tagDTO = {
+            postId: postId,
+            region: postEntity.region,
+            theme: postEntity.theme[0],
+        };
 
-    //     //Course
-    //     course.postId = postId;
-    //     db.Course.create(course);
+        //Course
+        course.postId = postId;
+        db.Course.create(course);
 
-    //     //Image
-    //     //image.postId = postId;
-    //     //db.PostHasImage.create(image)
+        //Image
+        image.postId = postId;
+        db.PostHasImage.create(image)
 
-    //     //PostHasTheme
-    //     postEntity.theme.map( (value, index) => {
-    //         const theme:themeDTO = {
-    //             postId: postId,
-    //             themeName: value
-    //         };
-    //         db.PostHasTheme.create(theme);
-    //     });
+        //PostHasTheme
+        postEntity.theme.map( (value, index) => {
+            const theme:themeDTO = {
+                postId: postId,
+                themeName: value
+            };
+            db.PostHasTheme.create(theme);
+        });
 
-    //     let tagInsertFlag = true;
-    //     postEntity.warning.map( (value, index) => {
-    //         if(value){
-    //             if(index == 0){
-    //                 tags.warning = warningMap[index];
-    //                 db.PostHasTags.create(tags);
-    //                 tagInsertFlag = false;
-    //             } 
-    //             const warning: warningDTO = {
-    //                 postId: postId,
-    //                 warningName: warningMap[index]
-    //             }
-    //             db.PostHasWarning.create(warning);
-    //         }
-    //     });
+        let tagInsertFlag = true;
+        postEntity.warning.map( (value, index) => {
+            if(value){
+                if(index == 0){
+                    tags.warning = warningMap[index];
+                    db.PostHasTags.create(tags);
+                    tagInsertFlag = false;
+                } 
+                const warning: warningDTO = {
+                    postId: postId,
+                    warningName: warningMap[index]
+                }
+                db.PostHasWarning.create(warning);
+            }
+        });
 
-    //    if( !tagInsertFlag ) db.PostHasTags.create(tags);
+       if( !tagInsertFlag ) db.PostHasTags.create(tags);
         return {
             status: 200,
             data: {

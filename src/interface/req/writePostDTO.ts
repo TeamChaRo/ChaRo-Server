@@ -1,10 +1,8 @@
 interface locationDTO{
-    address: string,
-    latitude: string, // 위도
-    longtitude: string // 경도
+    address: string[],
+    latitude: string[], // 위도
+    longtitude: string[] // 경도
 }
-
-type locationCollectionDTO = locationDTO[];
 
 export default interface requestDTO{
     title: string,
@@ -22,5 +20,5 @@ export default interface requestDTO{
     parkingDesc: string,
 
     courseDesc: string,
-    course: locationCollectionDTO
+    course: locationDTO
 }
