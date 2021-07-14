@@ -10,11 +10,11 @@ export async function likePostService(userId: string, postId:number){
 
         if(result.length){
             const deleteLike = "DELETE FROM liked_post WHERE UserId= :userId and PostId= :postId";
-            await db.sequelize.query(deleteLike,{ type: QueryTypes.DELETE, replacements:{userId:userId, postId:postId}, nest : true});            
+            db.sequelize.query(deleteLike,{ type: QueryTypes.DELETE, replacements:{userId:userId, postId:postId}, nest : true});            
 
         }else{
             const addLike = "INSERT INTO liked_post(UserId, PostId) VALUES(:userId, :postId)"
-            await db.sequelize.query(addLike,{ type: QueryTypes.INSERT, replacements:{userId:userId, postId:postId}, nest : true});            
+            db.sequelize.query(addLike,{ type: QueryTypes.INSERT, replacements:{userId:userId, postId:postId}, nest : true});            
         }
         
         return {

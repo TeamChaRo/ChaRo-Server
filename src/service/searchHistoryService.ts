@@ -9,14 +9,13 @@ function insertFunction(entity: searchHistoryDTO){
         db.SearchHistory.findOne({ where: { userId:entity.userId, address:entity.address }, raw:true })
             .then( async (ret) => {
                 if(!ret){
-                    console.log("insert", entity.title);
                     await db.SearchHistory.create(entity);
-                    resolve(entity.title);
+                    resolve("create search history");
                 }else{
                     await db.SearchHistory.update(
                         { userId: ret.userId }, 
                         { where : { userId:ret.userId, address:ret.address}} );
-                    resolve(entity.title);
+                    resolve("update search history");
                 }
                 
             });
@@ -73,11 +72,8 @@ export async function loadHistoryService(userId: string){
         let history: resHistoryDTO[] = [];
 
         result.forEach((value, index) => {
-            console.log(value['date']);
-
             const date = (value['date'] as string).split("-");
             
-            //console.log(value['updatedAt']);
             const entity: resHistoryDTO = {
                 title: value.title,
                 address: value.address,
@@ -88,7 +84,6 @@ export async function loadHistoryService(userId: string){
                 day: date[2]
             }
             history.push(entity);
-            //console.log("for Each!", entity);
         })
 
         return {
