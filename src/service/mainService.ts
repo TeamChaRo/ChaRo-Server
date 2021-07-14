@@ -26,9 +26,15 @@ export default async function mainService(userId: string, theme: string, region:
             localDrive: local
         }
 
-        
+        //SELECT C.customThemeTitle, L.localTitle FROM custom_theme AS C JOIN local AS L WHERE  C.customTheme="여름" AND L.localCity="부산";
         // banner
         const bannerPromise = db.Banner.findAll({limit:4, raw: true, nest : true});
+
+        const initQuery = `SELECT C.customThemeTitle, L.localTitle 
+                            FROM custom_theme AS C JOIN local AS L 
+                            WHERE  C.customTheme=:theme AND L.localCity=:region`;
+
+        const initPromise = db.sequelize.query(initQuery,{ type: QueryTypes.SELECT, replacements:{theme:theme, region:region}, raw:true, nest : true});
 
         const trendQuery = `SELECT P.id, P.title,  count(countLike.PostId) as favoriteCount, count(isLike.PostId) as isFavorite, 
                             T.region, I.image1, T.region, T.theme, T.warning
@@ -122,7 +128,7 @@ export default async function mainService(userId: string, theme: string, region:
         })
         
 
-        await Promise.all([bannerPromise, todayPromise, trendPromise, themePromise, localPromise])
+        await Promise.all([bannerPromise, todayPromise, trendPromise, themePromise, localPromise, initPromise])
             .then( async (response) => {
 
                 const bannerResult:any= response[0]; // banner
@@ -144,6 +150,10 @@ export default async function mainService(userId: string, theme: string, region:
 
                 const localResult:any = response[4]; // local
                 await makeBriefCollection(localResult, local);
+
+                const initResult:any = response[5];
+                main.customThemeTitle = initResult[0]['customThemeTitle'];
+                main.localTitle = initResult[0]['localTitle'];
 
             })
             .catch(err => { throw err; })
