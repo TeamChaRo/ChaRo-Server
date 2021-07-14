@@ -60,7 +60,6 @@ export default async function writePostService( postEntity: writePostDTO ){
     }
     
     if(courseSize > 2){
-        console.log("gg");
         course.wayOne = postEntity.course[1].address,
         course.wayOneLatitude = postEntity.course[1].latitude,
         course.wayOneLongitude = postEntity.course[1].longtitude

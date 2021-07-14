@@ -1,48 +1,61 @@
-## 🚙 Project
-**차에서의, 차로위에서의 즐거움을 추구하는 경험 기반 드라이브 코스 공유 플랫폼**
-> **차로 ChaRo**
->
-> Core Value : 차로의 핵심 가치는 '즐거움과 편리함'입니다. 
->
-> SOPT 28th APPJAM </b>
->
-> 프로젝트 기간: 2021.06.26 ~ 2021.07.17
->
+<img style="border: 0px solid black !important; border-radius:20px; " src="https://user-images.githubusercontent.com/63224278/124624683-0db13c80-deb8-11eb-9af2-0fb6038066d0.png" width="1500px" height = "200px" /> 
+</br>
 
 
-<img style="border: 0px solid black !important; border-radius:20px; " src="https://user-images.githubusercontent.com/63224278/123808035-58b4d800-d92b-11eb-9742-dd67600b20c8.png" width="200px" height = "200px" /> 
+<h1 align="center"> Welcome to ChaRo-Server 🚙 </h1>
+<p align="center">
+  <img src="https://img.shields.io/badge/typescript-4.2.4-blue" />
+  <img src="https://img.shields.io/badge/ts--node-9.1.1-yellowgreen" />
+  <img src="https://img.shields.io/badge/%20mysql2-2.2.5-blue" />
+  <a href="https://www.instagram.com/charo_2021_official/">
+      <img alt="Instagram: Charo_Official" src="https://img.shields.io/badge/charo-instagram-ff69b4" target="_blank" />
+  </a>
+</p>
 
+> **차로 ChaRo** <br/> 차에서의, 차로위에서의 즐거움을 추구하는 경험 기반 드라이브 코스 공유 플랫폼 <br />  Core Value : 차로의 핵심 가치는 '즐거움과 편리함'입니다. <br /><br /> SOPT 28th APPJAM  <br/> 프로젝트 기간: 2021.06.26 ~ 2021.07.17 <br/>
 
+</br>
 
-## 💡서비스 IA
-<img width=100% src=https://user-images.githubusercontent.com/63224278/123808257-8b5ed080-d92b-11eb-8ac7-e2ef5286909a.png>
+## ChaRo-Server Contributors
 
+<a href="https://github.com/TeamChaRo/ChaRo-Server/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=TeamChaRo/ChaRo-Server" />
+</a>
 
+<br>
+<br>
+
+## ✨Service IA
+<img width=50% src=https://user-images.githubusercontent.com/63224278/123808257-8b5ed080-d92b-11eb-8ac7-e2ef5286909a.png>
 
 <br>
 <br>
 
 
-## 🛠 개발 환경 (Development Environment)
+## 🚙 기능별 개발여부 + 담당자
+> [ChaRo-Server 개발 일지](https://www.notion.so/_-bb545ae363334b57bee9d861ea3ba432)
 
-* Development Environment  
-![TypeScript](https://img.shields.io/badge/typescript-4.2.4-blue) ![Node.js](https://img.shields.io/badge/ts--node-9.1.1-yellowgreen)
-![Mongoose](https://img.shields.io/badge/Mongoose-5.12.2-brightgreen)
+
+| 기능 | 개발 여부 | 담당자 |
+|:----------|:----------:|:----:|
+| 모델 설계 | ⭕️ | 오예원,황지은 |
+| DB 연결 | ⭕️ | 오예원 |
+| 이미지 업로드 | ⭕️ | 오예원 |
+| 로그인 API | ⭕️ | 황지은 |
+
 
 <br>
 <br>
+ 
 
-
-## 📃 API 문서 (API DOC LINK)
-> [ChaRo Server API 문서📜](https://www.notion.so/API-Wiki-4844e313dcf248cca8c427f06aa60c64)
+## 📃 API DOC LINK
+> [ChaRo-Server API Doc](https://www.notion.so/API-Wiki-ff615fc923104555b65b9b3c635e36d4)
 
 <br>
 <br>
 
 
 ## ⚙️ Dependency Module
-<details>
-<summary> 🚙Charo의🚙 프로젝트 의존성 모듈 설정 </summary>
 <div markdown="1"> 
 
 ```
@@ -52,9 +65,12 @@
     "express": "^4.17.1",
     "mongoose": "^5.12.10",
     "morgan": "^1.10.0",
+    "mysql2": "^2.2.5",
     "nodemon": "^2.0.7",
-    "request": "^2.88.2"
-  }
+    "request": "^2.88.2",
+    "sequelize": "^6.6.4",
+    "sequelize-cli": "^6.2.0"
+  },
 ```
 - [Async & Await](https://www.npmjs.com/package/async)
 - [request(HTTP)](https://www.npmjs.com/package/request)
@@ -62,7 +78,8 @@
 - [Express.js](http://expressjs.com/ko/) - Node.js 웹 애플리케이션 프레임워크
 - [NPM](https://rometools.github.io/rome/) - 자바 스크립트 패키지 관리자
 - [vscode](https://code.visualstudio.com/) - 편집기
-- [MongoDB](https://www.mongodb.com/cloud/atlas/lp/try2?utm_source=google&utm_campaign=gs_apac_south_korea_search_core_brand_atlas_desktop&utm_term=mongodb&utm_medium=cpc_paid_search&utm_ad=e&utm_ad_campaign_id=12212624365&gclid=Cj0KCQjw16KFBhCgARIsALB0g8LH7NomtzJeh5jD6CrYz0JSwbdhi58JXQeTj1VAjVrFWwM21zSikWMaAkQAEALw_wcB) - DataBase
+- [mySQL](https://www.mysql.com/) - DataBase
+- [Sequelize](https://sequelize.org/) - Sequelize ORM
 - [AWS EC2](https://aws.amazon.com/ko/ec2/?sc_channel=PS&sc_campaign=acquisition_KR&sc_publisher=google&sc_medium=english_ec2_b&sc_content=ec2_e&sc_detail=aws%20ec2&sc_category=ec2&sc_segment=177228231544&sc_matchtype=e&sc_country=KR&s_kwcid=AL!4422!3!177228231544!e!!g!!aws%20ec2&ef_id=WkRozwAAAnO-lPWy:20180412120123:s) - 클라우드 환경 컴퓨팅 시스템
 
 </div>
@@ -72,18 +89,217 @@
 <br>
 
 
-## 💃 Models
-<img width="360" alt="models" src="">
-
+## 🧬 ERD & Models
+<img width="360" alt="models" src="https://user-images.githubusercontent.com/63224278/124627915-e871fd80-deba-11eb-84ee-90af153cbaf1.png">
 
 <br>
 <br>
 
 
+## 💻 Coding Convention   
+<details>
+ <summary> 🗂 폴더구조 </summary>
+ <div markdown="1">       
+
+
+---
+```markdown
+
+🗂 node_modules
+   
+🗂 src
+
+    - api 🗂
+
+    - config 🗂
+
+    - Loaders 🗂
+    
+    - middleware 🗂
+
+    - models 🗂
+
+    - service 🗂
+   
+    - controller 🗂
+   
+
+indes.ts
+   
+.env
+   
+nodemon.json
+   
+package.json
+   
+tsconfig.json
+
+```
+<br>
+ </div>
+ </details>
+ 
+
+<details>
+<summary> 🖋 네이밍 </summary>
+<div markdown="1">       
+
+
+---
+
+**Class & Contructor**
+
+- Class, Contructors는 **Pascal Case (=UpperCamelCase)**를 사용합니다.
+
+  <kbd>좋은 예</kbd>
+
+    ```typescript
+    CamelCase
+    ```
+
+  <kbd>나쁜 예</kbd>
+
+    ```typescript
+    camelCase
+    ```
+<br/>
+**함수 & 변수 & 상수**
+
+- 함수와 변수에는 **lowerCamelCase**를 사용합니다.
+
+- 함수의 경우 **동사+명사**형태로 구성합니다.
+  - ex) getUserInformation()
+
+- 글자의 길이
+  - 글자의 길이는 **20자 이내**로 제한합니다.
+  - 4단어 이상이 들어가거나, 부득이하게 20자 이상이 되는 경우에는 **팀원과의 상의**를 거쳐야 합니다.
+    
+- flag로 사용되는 변수
+  - Boolean의 경우 **조동사+flag** 종류로 구성합니다.
+  - ex) isNum, hasNum
+
+- 약칭의 사용
+  - 약어는 되도록 사용하지 않습니다.
+
+  <kbd>좋은 예</kbd>
+
+    ```typescript
+    let index;
+    let count;
+    let array;
+    let seoulToBucheon;
+    ```
+
+  <kbd>나쁜 예</kbd>
+    
+    ```typescript
+    let idx;
+    let cnt;
+    let arr;
+    let seoul2Bucheon;
+    ```
+<br>
+
+</div>
+</details>
+ 
+ 
+ 
+ <details>
+ <summary> 🏷 주석 </summary>
+ <div markdown="1">       
+ 
+ 
+ ---
+
+ - 한줄은 `//`로 적고, 그 이상은 `/** */`로 적습니다.
+ ```typescript
+ // 한줄 주석일 때
+ /**
+  * 여러줄
+  * 주석일 때
+  */
+ ```  
+ - 함수에 대한 주석
+   - backend에서 공통적으로 사용하는 함수의 경우, 모듈화를 통해 하나의 파일로 관리합니다.
+   - 하나의 파일의 시작 부분에 주석으로 상세 내용을 작성합니다.
+     - **함수의 전체 기능**에 대한 설명
+     - **함수의 파라미터**에 대한 설명 (type: ..., 역할)
+     - router 또는 api일 때에는 성공 여부도 적어줍니다.
+     - 예시 코드
+
+     ```typescript
+     /**
+      *  @route Post api/auth
+      *  @desc Authenticate user & get token(로그인)
+      *  @access Public
+      */
+     router.get(
+      
+     );
+     ```
+   
+ <br>
+
+ </div>
+ </details>
+
+
+<details>
+<summary> 📎 기타 </summary>
+<div markdown="1">       
+
+
+---
+
+- 탭 사이즈는 2로 사용합니다.
+- 한 줄의 최대 길이는 80자로 제한합니다.
+- 최대 tab depth 제한
+  - tab의 최대 depth는 4로 제한합니다.
+  - 이 이상으로 depth가 길어지면 함수를 통해 나눌 수 있도록 합니다.
+  - 그 이상으로 개선할 수 없다고 판단되는 경우, 팀원들과의 코드리뷰를 통해 개선합니다.
+  ```typescript
+     function func() {
+       //tab1
+       if() {
+         //tab2
+         array.reduce((pre, cur) => {
+           //tab3
+           if(cur == status) {
+             //tab4
+           }
+         }
+       }
+     }
+     ```
+- 괄호 사용
+  - (if, while, for)문 괄호 뒤에 한칸을 띄우고 사용합니다.
+  ```typescript
+     if (left == true) {
+	   // logic
+     }
+     ```
+  
+- 띄어쓰기
+  ```typescript
+  let a = 5;  ( = 양쪽 사이로 띄어쓰기 하기)
+  if (a == 3) {
+	  // logic
+  }
+  ```
+</div>
+</details>
+ 
+
+👉🏻 [Coding Convention 한 눈에 보기](https://github.com/TeamChaRo/ChaRo-Server/wiki/CodingConvention)  
+👉🏻 다음 [Style Guide](https://github.com/tipjs/javascript-style-guide)를 참고헀습니다.  
+  
+  
+</br>
 
 ## ✉️ Commit Messge Rules
 <details>
-<summary> 🚙Charo의🚙 Git Commit Message Rules </summary>
+<summary> 🚙 Charo-Server Git Commit Message Rules 🚙 </summary>
 <div markdown="1">       
 
 
@@ -109,27 +325,25 @@
 
 ### ℹ️ 커밋 메세지 형식
   - `[커밋메세지] 설명` 형식으로 커밋 메시지를 작성합니다.
-  - 커밋 메시지는 영어 사용을 권장합니다.
 
 좋은 예 > 
 
 ```
-  [Feat] complete ChaRoAPI feat
+  [Feat] 메인뷰 조회 API 구현 완료
 ```
 
 나쁜 예 >
 ```
-  매칭 API 구현 성공
+  메인뷰 API 구현 성공
 ```
 
 </div>
 </details>
 <br>
 
-## 💻 Github mangement
-
+## <img width=3% img src="https://user-images.githubusercontent.com/63224278/124635517-7ef5ed00-dec2-11eb-9a42-6d6d5cc72dce.png" /> Github mangement
 <details>
-<summary> 🚙Charo의🚙  WorkFlow : Gitflow Workflow </summary>
+<summary> 🚙 Charo-Server Gitflow 🚙 </summary>
 <div markdown="1">       
 
 
@@ -239,26 +453,9 @@ git push or git push origin develop
   <br>
    <br>
 
-
- 
-## 👭 기능별 개발여부 + 담당자
-> [ChaRo Server 개발 일지📜  ](https://www.notion.so/8b15ca756bc44ea29a07a0c7eabbbdcd)
-
-
-| 기능 | 개발 여부 | 담당자 |
-|:----------|:----------:|:----:|
-|   | <img width=10px src=https://user-images.githubusercontent.com/63224278/123808035-58b4d800-d92b-11eb-9742-dd67600b20c8.png> | 오예원 |
-|   | <img width=10px src=https://user-images.githubusercontent.com/63224278/123808035-58b4d800-d92b-11eb-9742-dd67600b20c8.png> | 오예원 |
-|   | <img width=10px src=https://user-images.githubusercontent.com/63224278/123808035-58b4d800-d92b-11eb-9742-dd67600b20c8.png> | 황지은 |
-
-
-<br>
-<br>
- 
  
 
-## <img width=20px src=https://user-images.githubusercontent.com/63224278/119237497-194edb00-bb78-11eb-83b6-25086e6f6203.png> ChaRo Server Dev
-
+## 👩🏻‍💻 ChaRo-Server Dev
 
 | 오예원 | 황지은 |
 |:---:|:---------:|

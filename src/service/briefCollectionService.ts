@@ -49,7 +49,7 @@ export async function makeLocalBriefCollection(result:object[], briefCollection:
 export async function makeTrendBriefCollection(result:object[], briefCollection: briefInformationDTO[], userId:string){
     for(let idx in result){
         const postId = result[idx]['postId'];
-        //console.log("121313", postId);
+
         const tempBrief: briefInformationDTO = {
             postId:postId,
             title: result[idx]['title'],
