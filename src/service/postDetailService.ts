@@ -145,7 +145,7 @@ export default async function postDetailService(userId: string, postId: string){
             });
 
             await Promise.all([themePromise, warningPromise]) 
-                .then(() => { postDetailData.push(tempDetailData) })
+                .then( async => { postDetailData.push(tempDetailData) })
                 .catch(err => { throw err; })
 
         return {
