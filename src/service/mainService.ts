@@ -5,7 +5,9 @@ import mainDTO from '../interface/res/mainDTO';
 import bannerDTO from "../interface/res/bannerDTO";
 import briefInformationDTO from "../interface/res/briefInformationDTO";
 
-import { makeThemeBriefCollection, makeTrendBriefCollection, makeLocalBriefCollection } from "./briefCollectionService";
+import { makeThemeBriefCollection, makeTrendBriefCollection, makeLocalBriefCollection, makeBriefCollection } from "./briefCollectionService";
+
+
 
 export default async function mainService(userId: string, theme: string, region: string){
     try{
@@ -35,7 +37,33 @@ export default async function mainService(userId: string, theme: string, region:
                     GROUP BY P.id ORDER BY favoriteCount DESC LIMIT 4`;
 
         const trendPromise = db.sequelize.query(trendQuery,{ type: QueryTypes.SELECT, raw:true, nest : true});
+        
+        const themeQuery = `SELECT P.id, P.title, count(countLike.PostId) as favoriteCount, count(isLike.PostId) as isFavorite,
+                            I.image1, T.region, T.theme, T.warning
+                            FROM post as P
+                            INNER JOIN post_has_image AS I
+                            INNER JOIN post_has_tags AS T
+                            LEFT OUTER JOIN liked_post as countLike ON(P.id = countLike.PostId)
+                            LEFT OUTER JOIN liked_post as isLike ON(isLike.PostId = P.id  and isLike.UserId =:userId)
+                            WHERE P.id in (SELECT postId FROM post_has_theme WHERE themeName=:theme)
+                            AND P.id = I.postId AND I.postId = T.postId
+                            GROUP BY P.id ORDER BY favoriteCount DESC LIMIT 4`;
+        
+        const themePromise = db.sequelize.query(themeQuery,{ type: QueryTypes.SELECT, replacements:{userId:userId, theme:theme}, raw:true, nest : true});
 
+        const localQuery = `SELECT P.id, P.title,  count(countLike.PostId) as favoriteCount, count(isLike.PostId) as isFavorite, 
+                            T.region, I.image1, T.region, T.theme, T.warning
+                            FROM (SELECT id, title FROM post WHERE region=:region) AS P
+                            LEFT OUTER JOIN liked_post as countLike ON(P.id = countLike.PostId)
+                            LEFT OUTER JOIN liked_post as isLike ON(isLike.PostId = P.id  and isLike.UserId =:userId)
+                            INNER JOIN post_has_image as I
+                            INNER JOIN post_has_tags as T
+                            WHERE I.postId = P.id and I.postId = T.postId
+                            GROUP BY P.id ORDER BY favoriteCount DESC LIMIT 4`;
+
+        const localPromise = db.sequelize.query(localQuery,{ type: QueryTypes.SELECT, replacements:{userId:userId, region:region}, raw:true, nest : true});
+
+        /*
         // theme 기준
         const themePromise = new Promise( async (resolve, reject) => {
             const customTitle = await db.CustomTheme.findOne({where: {customTheme:theme}, attributes:['customThemeTitle'], raw: true, nest : true} );
@@ -51,7 +79,9 @@ export default async function mainService(userId: string, theme: string, region:
 
             resolve("success");
         });
-        
+        */
+
+        /*
         // local city
         const localPromise = new Promise( async (resolve, reject) => {
             
@@ -69,6 +99,7 @@ export default async function mainService(userId: string, theme: string, region:
     
             resolve("success");
         });
+        */
 
               
         
@@ -129,11 +160,10 @@ export default async function mainService(userId: string, theme: string, region:
         })
         
 
-        
         await Promise.all([bannerPromise, todayPromise, trendPromise, themePromise, localPromise])
             .then( async (response) => {
 
-                const bannerResult:any= response[0];
+                const bannerResult:any= response[0]; // banner
 
                 for(let idx in bannerResult){
                     const tempBanner: bannerDTO = {
@@ -144,8 +174,14 @@ export default async function mainService(userId: string, theme: string, region:
                     banner.push(tempBanner);
                 }
                 
-                const trendResult:any = response[2];
+                const trendResult:any = response[2]; // trend
                 await makeTrendBriefCollection(trendResult, trend, userId);
+
+                const themeResult:any = response[3]; // theme
+                await makeBriefCollection(themeResult, custom);
+
+                const localResult:any = response[4]; // local
+                await makeBriefCollection(localResult, local);
 
             })
             .catch(err => { throw err; })
