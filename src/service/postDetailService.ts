@@ -24,7 +24,6 @@ export default async function postDetailService(userId: string, postId: string){
     GROUP BY P.id`;
     
     const result = await db.sequelize.query(query,{ replacements:{ postId: postId, userId: userId },type: QueryTypes.SELECT });
-    console.log(result)
     const postDetailData: detailInformationDTO[] = []
 
     try{
@@ -144,7 +143,6 @@ export default async function postDetailService(userId: string, postId: string){
                 }
                 resolve("success");
             });
-            console.log("tempDetailData",tempDetailData)
 
             await Promise.all([themePromise, warningPromise]) 
                 .then(() => { postDetailData.push(tempDetailData) })
