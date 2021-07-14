@@ -97,14 +97,17 @@ export default async function writePostService( postEntity: writePostDTO ){
             db.PostHasTheme.create(theme);
         });
 
-        let tagInsertFlag = true;
         postEntity.warning.map( (value, index) => {
-            if(value){
-                if(index == 0){
+            if(index == 0){
+                if(value){
                     tags.warning = warningMap[index];
-                    db.PostHasTags.create(tags);
-                    tagInsertFlag = false;
-                } 
+                    db.PostHasTags.create(tags)
+                }
+            }else{
+                db.PostHasTags.create(tags);
+            }
+
+            if(value){
                 const warning: warningDTO = {
                     postId: postId,
                     warningName: warningMap[index]
@@ -113,7 +116,6 @@ export default async function writePostService( postEntity: writePostDTO ){
             }
         });
 
-       if( !tagInsertFlag ) db.PostHasTags.create(tags);
         return {
             status: 200,
             data: {
