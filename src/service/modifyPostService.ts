@@ -1,4 +1,5 @@
 import { db } from "../models";
+import { QueryTypes } from 'sequelize';
 import writePostDTO from "../interface/req/writePostDTO";
 import postDTO from "../interface/req/postDTO";
 import courseDTO from "../interface/req/courseDTO";
@@ -85,31 +86,35 @@ export default async function modifyPostService(postId: number, postEntity: writ
         //db.PostHasImage.update(image, {where : {id:postId}});
 
         //PostHasTheme
+        const deleteTheme = "DELETE FROM post_has_theme WHERE postId=:postId";
+        await db.sequelize.query(deleteTheme, { type: QueryTypes.DELETE, replacements:{postId:postId}, raw:true, nest : true});
         postEntity.theme.map( (value, index) => {
             const theme:themeDTO = {
                 postId: postId,
                 themeName: value
             };
-            db.PostHasTheme.update(theme, {where : {postId:postId}});
+            db.PostHasTheme.create(theme);
         });
 
-        let tagInsertFlag = true;
         postEntity.warning.map( (value, index) => {
-            if(value){
-                if(index == 0){
+            if(index == 0){
+                if(value){
                     tags.warning = warningMap[index];
                     db.PostHasTags.update(tags, {where : {postId:postId}});
-                    tagInsertFlag = false;
-                } 
-                const warning: warningDTO = {
-                    postId: postId,
-                    warningName: warningMap[index]
+                }else{
+                    db.PostHasTags.update(tags, {where : {postId:postId}});
                 }
-                db.PostHasWarning.update(warning, {where : {postId:postId}});
-            }
+            }else{
+                if(value){
+                    const warning: warningDTO = {
+                        postId: postId,
+                        warningName: warningMap[index]
+                    }
+                    db.PostHasWarning.create(warning);
+                }
+            } 
         });
 
-        if( !tagInsertFlag ) db.PostHasTags.update(tags, {where : {postId:postId}});
         return {
             status: 200,
             data: {
