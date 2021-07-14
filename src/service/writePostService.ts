@@ -72,49 +72,49 @@ export default async function writePostService( postEntity: writePostDTO ){
     }
 
     try{
-        let postId: number;
-        await db.Post.create(post).then(data => postId = data["id"]);
+    //     let postId: number;
+    //     await db.Post.create(post).then(data => postId = data["id"]);
 
-        const tags: tagDTO = {
-            postId: postId,
-            region: postEntity.region,
-            theme: postEntity.theme[0],
-        };
+    //     const tags: tagDTO = {
+    //         postId: postId,
+    //         region: postEntity.region,
+    //         theme: postEntity.theme[0],
+    //     };
 
-        //Course
-        course.postId = postId;
-        db.Course.create(course);
+    //     //Course
+    //     course.postId = postId;
+    //     db.Course.create(course);
 
-        //Image
-        //image.postId = postId;
-        //db.PostHasImage.create(image)
+    //     //Image
+    //     //image.postId = postId;
+    //     //db.PostHasImage.create(image)
 
-        //PostHasTheme
-        postEntity.theme.map( (value, index) => {
-            const theme:themeDTO = {
-                postId: postId,
-                themeName: value
-            };
-            db.PostHasTheme.create(theme);
-        });
+    //     //PostHasTheme
+    //     postEntity.theme.map( (value, index) => {
+    //         const theme:themeDTO = {
+    //             postId: postId,
+    //             themeName: value
+    //         };
+    //         db.PostHasTheme.create(theme);
+    //     });
 
-        let tagInsertFlag = true;
-        postEntity.warning.map( (value, index) => {
-            if(value){
-                if(index == 0){
-                    tags.warning = warningMap[index];
-                    db.PostHasTags.create(tags);
-                    tagInsertFlag = false;
-                } 
-                const warning: warningDTO = {
-                    postId: postId,
-                    warningName: warningMap[index]
-                }
-                db.PostHasWarning.create(warning);
-            }
-        });
+    //     let tagInsertFlag = true;
+    //     postEntity.warning.map( (value, index) => {
+    //         if(value){
+    //             if(index == 0){
+    //                 tags.warning = warningMap[index];
+    //                 db.PostHasTags.create(tags);
+    //                 tagInsertFlag = false;
+    //             } 
+    //             const warning: warningDTO = {
+    //                 postId: postId,
+    //                 warningName: warningMap[index]
+    //             }
+    //             db.PostHasWarning.create(warning);
+    //         }
+    //     });
 
-       if( !tagInsertFlag ) db.PostHasTags.create(tags);
+    //    if( !tagInsertFlag ) db.PostHasTags.create(tags);
         return {
             status: 200,
             data: {

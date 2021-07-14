@@ -22,7 +22,7 @@ type myPagePreviewCollection = myPagePreview[];
 export interface myPageDTO{
     userInformation: myPageUser,
     
-    writtnTotal : number,
+    writtenTotal : number,
     writtenPost: myPagePreviewCollection,
     savedTotal : number,
     savedPost: myPagePreviewCollection
