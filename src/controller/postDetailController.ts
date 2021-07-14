@@ -4,12 +4,8 @@ import postDetailService from "../service/postDetailService";
 
 export default async(req: Request, res: Response) => {
 
-    console.log("시작")
-    
     const userId = req.params.userId;
     const postId = req.params.postId;
-
-    console.log("userId,", userId)
 
     try {
         let post = await Post.findOne({ 

@@ -1,4 +1,5 @@
 import { db } from "../models";
+import { QueryTypes } from 'sequelize';
 import writePostDTO from "../interface/req/writePostDTO";
 import postDTO from "../interface/req/postDTO";
 import courseDTO from "../interface/req/courseDTO";
@@ -14,9 +15,8 @@ const warningMap = {
     3: "사람많음"
 }
 
-export default async function writePostService( postEntity: writePostDTO ){
-    
-    /*
+export default async function modifyPostService(postId: number, postEntity: writePostDTO ){
+        /*
     const image: imageDTO = {
         image1: postEntity.courseImage[0]
     }
@@ -60,6 +60,7 @@ export default async function writePostService( postEntity: writePostDTO ){
     }
     
     if(courseSize > 2){
+        console.log("gg");
         course.wayOne = postEntity.course[1].address,
         course.wayOneLatitude = postEntity.course[1].latitude,
         course.wayOneLongitude = postEntity.course[1].longtitude
@@ -71,25 +72,22 @@ export default async function writePostService( postEntity: writePostDTO ){
         }
     }
 
+    const tags: tagDTO = {
+        postId: postId,
+        region: postEntity.region,
+        theme: postEntity.theme[0]
+    };
+    
     try{
-        let postId: number;
-        await db.Post.create(post).then(data => postId = data["id"]);
 
-        const tags: tagDTO = {
-            postId: postId,
-            region: postEntity.region,
-            theme: postEntity.theme[0],
-        };
+        db.Post.update(post, {where : {id:postId}});
+        db.Course.update(course, {where : {postId:postId}});
 
-        //Course
-        course.postId = postId;
-        db.Course.create(course);
-
-        //Image
-        //image.postId = postId;
-        //db.PostHasImage.create(image)
+        //db.PostHasImage.update(image, {where : {id:postId}});
 
         //PostHasTheme
+        const deleteTheme = "DELETE FROM post_has_theme WHERE postId=:postId";
+        await db.sequelize.query(deleteTheme, { type: QueryTypes.DELETE, replacements:{postId:postId}, raw:true, nest : true});
         postEntity.theme.map( (value, index) => {
             const theme:themeDTO = {
                 postId: postId,
@@ -98,40 +96,40 @@ export default async function writePostService( postEntity: writePostDTO ){
             db.PostHasTheme.create(theme);
         });
 
-        let tagInsertFlag = true;
         postEntity.warning.map( (value, index) => {
-            if(value){
-                if(index == 0){
+            if(index == 0){
+                if(value){
                     tags.warning = warningMap[index];
-                    db.PostHasTags.create(tags);
-                    tagInsertFlag = false;
-                } 
-                const warning: warningDTO = {
-                    postId: postId,
-                    warningName: warningMap[index]
+                    db.PostHasTags.update(tags, {where : {postId:postId}});
+                }else{
+                    db.PostHasTags.update(tags, {where : {postId:postId}});
                 }
-                db.PostHasWarning.create(warning);
-            }
+            }else{
+                if(value){
+                    const warning: warningDTO = {
+                        postId: postId,
+                        warningName: warningMap[index]
+                    }
+                    db.PostHasWarning.create(warning);
+                }
+            } 
         });
 
-       if( !tagInsertFlag ) db.PostHasTags.create(tags);
         return {
             status: 200,
             data: {
                 success: true,
-                msg: "DB upload success"
+                msg: "옛날옛날에 아기돼지 6 형제가 살았습니다 내일은.. 내일은 서버왕" // "modify - DB upload success";
             }
         }
-
+        
     }catch(err){
-        console.log(err);
         return {
             status: 400,
             data:{
                 success: false,
-                msg : "DB update fail"
+                msg : "modify - DB update fail"
             }
         }
     }
-    
 }

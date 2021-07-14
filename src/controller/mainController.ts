@@ -13,7 +13,6 @@ export default async(req: Request, res: Response) => {
       }
     }
     const { id } = req.params;
-    console.log("id,", id)
 
     try {
       let user = await User.findOne({ 
@@ -30,7 +29,7 @@ export default async(req: Request, res: Response) => {
         });
       }
       else {
-        const getMainService = await mainService(id, "여름", "부산");
+        const getMainService = await mainService(id, "바다", "부산");
         res.status(getMainService.status).json(getMainService.data);
       }
     } 

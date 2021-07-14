@@ -8,14 +8,16 @@ import previewMap from "./previewMap.json";
 import { makeBriefCollection} from "./briefCollectionService";
 
 export async function newTrendService(userId: string){
-    const query = `select P.id, P.title, T.region, T.theme, T.warning, I.image1, liked_post.PostId as isFavorite
+    const query = `SELECT P.id, P.title, count(isLike.PostId) as isFavorite, 
+                    T.region, I.image1, T.region, T.theme, T.warning
                     FROM (SELECT id, title FROM post) AS P
-                    LEFT OUTER JOIN liked_post ON(P.id = liked_post.PostId and liked_post.UserId = :userId)
+                    LEFT OUTER JOIN liked_post as isLike ON(isLike.PostId = P.id  and isLike.UserId =:userId)
                     INNER JOIN post_has_image as I
-                    INNER JOIN post_has_tags as T 
-                    ON(T.postId = I.postId and T.postId = P.id) ORDER BY P.id DESC LIMIT 20`;
-    
-    const result = await db.sequelize.query(query,{ replacements:{userId:userId},type: QueryTypes.SELECT });
+                    INNER JOIN post_has_tags as T
+                    WHERE I.postId = P.id and I.postId = T.postId
+                    GROUP BY P.id ORDER BY P.id DESC LIMIT 20`;
+
+    const result = await db.sequelize.query(query,{ type: QueryTypes.SELECT, replacements:{userId:userId}, raw:true, nest:true});
 
     let brief: briefInformationDTO[] = []
 
@@ -47,15 +49,17 @@ export async function newTrendService(userId: string){
 }
 
 export async function newThemeService(theme: string, userId: string){
-
+    console.log(theme)
     const themeName = previewMap.theme[theme];
-    const query = `select P.id, P.title, T.region, T.theme, T.warning, I.image1,liked_post.PostId as isFavorite
-                    FROM (SELECT id, title FROM post) AS P
-                    INNER JOIN post_has_theme as Theme ON(Theme.themeName=:theme and Theme.postId = P.id)
-                    LEFT OUTER JOIN liked_post ON(P.id = liked_post.PostId and liked_post.UserId = :userId)
-                    INNER JOIN post_has_image as I
-                    INNER JOIN post_has_tags as T 
-                    ON(T.postId = I.postId and T.postId = P.id) ORDER BY P.id DESC LIMIT 20`;
+    const query = `SELECT P.id, P.title, count(isLike.PostId) as isFavorite,
+                    I.image1, T.region, T.theme, T.warning
+                    FROM post as P
+                    INNER JOIN post_has_image AS I
+                    INNER JOIN post_has_tags AS T
+                    LEFT OUTER JOIN liked_post as isLike ON(isLike.PostId = P.id  and isLike.UserId =:userId)
+                    WHERE P.id in (SELECT postId FROM post_has_theme WHERE themeName=:theme)
+                    AND P.id = I.postId AND I.postId = T.postId
+                    GROUP BY P.id ORDER BY P.id DESC LIMIT 20`;
                     
     const result = await db.sequelize.query(query,{ replacements:{userId:userId, theme:themeName},type: QueryTypes.SELECT });
 
@@ -67,7 +71,7 @@ export async function newThemeService(theme: string, userId: string){
     };
 
     try{
-        makeBriefCollection(result, brief);
+        await makeBriefCollection(result, brief);
         return {
             status: 200,
             data: {
@@ -91,13 +95,15 @@ export async function newThemeService(theme: string, userId: string){
 
 export async function newLocalService(local: string, userId: string){
     const regionName = previewMap.region[local];
-    const query = `select P.id, P.title, T.region, T.theme, T.warning, I.image1,liked_post.PostId as isFavorite
-                    FROM (SELECT id, title FROM post WHERE region= :region) AS P
-                    LEFT OUTER JOIN liked_post ON(P.id = liked_post.PostId and liked_post.UserId = :userId)
+    const query = `SELECT P.id, P.title, count(isLike.PostId) as isFavorite, 
+                    T.region, I.image1, T.region, T.theme, T.warning
+                    FROM (SELECT id, title FROM post WHERE region=:region) AS P
+                    LEFT OUTER JOIN liked_post as isLike ON(isLike.PostId = P.id  and isLike.UserId =:userId)
                     INNER JOIN post_has_image as I
-                    INNER JOIN post_has_tags as T 
-                    ON(T.postId = I.postId and T.postId = P.id) ORDER BY P.id DESC LIMIT 20`;
-                    
+                    INNER JOIN post_has_tags as T
+                    WHERE I.postId = P.id and I.postId = T.postId
+                    GROUP BY P.id ORDER BY P.id DESC LIMIT 20`;
+
     const result = await db.sequelize.query(query,{ replacements:{userId:userId, region:regionName},type: QueryTypes.SELECT });
     
     let brief: briefInformationDTO[] = []
@@ -108,7 +114,7 @@ export async function newLocalService(local: string, userId: string){
     };
 
     try{
-        makeBriefCollection(result, brief);
+        await makeBriefCollection(result, brief);
         return {
             status: 200,
             data: {
