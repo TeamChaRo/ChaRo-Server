@@ -16,9 +16,11 @@ app.use("/writePost", require("./api/writePost"));
 app.use("/preview", require("./api/preview"));
 app.use("/postDetail", require("./api/postDetail"))
 app.use("/sign", require("./api/sign"))
+app.use("/search", require("./api/search"))
 app.use("/searchHistory", require("./api/searchHistory"))
 app.use("/post", require("./api/post"));
 app.use("/myPage", require("./api/myPage"));
+app.use("/modifyPost", require('./api/modifyPost'));
 
 // error handler
 app.use(function (err: any, req: Request, res: Response, next: NextFunction) {
