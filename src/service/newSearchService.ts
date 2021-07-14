@@ -2,7 +2,7 @@ import { db } from "../models";
 import { QueryTypes } from 'sequelize';
 import briefInformationDTO from "../interface/res/briefInformationDTO";
 import searchDTO from "../interface/req/searchDTO";
-import { makeLocalBriefCollection } from "./briefCollectionService"
+import { makeBriefCollection } from "./briefCollectionService"
 import previewDTO from "../interface/res/previewDTO";
 
 //최신순 검색 서비스
@@ -11,103 +11,129 @@ export async function newSearchService(searchDTO: searchDTO, userId: string){
 
     if ((searchDTO.region.length != 0) && (searchDTO.theme) && (!searchDTO.warning)) {
         //지역 + 테마 파싱하는 쿼리 
-        const regionThemeQuery = `SELECT count(liked_post.PostId) as favoriteCount, P.id as postId, P.title
+        const regionThemeQuery = `SELECT count(countLike.PostId) as favoriteCount, count(isLike.PostId) as isFavorite, P.id, P.title, I.image1, T.region, T.theme, T.warning
         FROM (SELECT id, title FROM post WHERE region = :region) AS P
-        LEFT OUTER JOIN liked_post ON(P.id = liked_post.PostId)
+        LEFT OUTER JOIN liked_post as countLike ON(P.id = countLike.PostId)
+        LEFT OUTER JOIN liked_post as isLike ON(isLike.PostId = P.id and isLike.UserId =:userId)
+        INNER JOIN post_has_image as I
+        INNER JOIN post_has_tags as T
         WHERE P.id IN (
         SELECT P.id
         FROM post_has_theme
-        WHERE post_has_theme.postId = P.id AND post_has_theme.themeName = :theme)
+        WHERE post_has_theme.postId = P.id AND post_has_theme.themeName = :theme AND I.postId = P.id AND I.postId = T.postId)
         GROUP BY P.id ORDER BY P.id DESC LIMIT 20`;
 
-        searchRet = await db.sequelize.query(regionThemeQuery,{ replacements:{ region: searchDTO.region, theme: searchDTO.theme },type: QueryTypes.SELECT });
+        searchRet = await db.sequelize.query(regionThemeQuery,{ replacements:{ userId: userId, region: searchDTO.region, theme: searchDTO.theme },type: QueryTypes.SELECT });
     }
     else if ((searchDTO.region.length != 0) && (!searchDTO.theme) && (searchDTO.warning)) {
         //지역 + 주의사항 파싱하는 쿼리 
-        const regionWarningQuery = `SELECT count(liked_post.PostId) as favoriteCount, P.id as postId, P.title
+        const regionWarningQuery = `SELECT count(countLike.PostId) as favoriteCount, count(isLike.PostId) as isFavorite, P.id, P.title, I.image1, T.region, T.theme, T.warning
         FROM (SELECT id, title FROM post WHERE region = :region) AS P
-        LEFT OUTER JOIN liked_post ON(P.id = liked_post.PostId)
+        LEFT OUTER JOIN liked_post as countLike ON(P.id = countLike.PostId)
+        LEFT OUTER JOIN liked_post as isLike ON(isLike.PostId = P.id and isLike.UserId =:userId)
+        INNER JOIN post_has_image as I
+        INNER JOIN post_has_tags as T
         WHERE P.id IN (
         SELECT P.id
         FROM post_has_warning
-        WHERE post_has_warning.warningName = :warning AND post_has_warning.postId = P.id)
+        WHERE post_has_warning.warningName = :warning AND post_has_warning.postId = P.id AND I.postId = P.id AND I.postId = T.postId)
         GROUP BY P.id ORDER BY P.id DESC LIMIT 20`;
-        searchRet = await db.sequelize.query(regionWarningQuery,{ replacements:{ region: searchDTO.region, warning: searchDTO.warning },type: QueryTypes.SELECT });
+
+        searchRet = await db.sequelize.query(regionWarningQuery,{ replacements:{ userId: userId, region: searchDTO.region, warning: searchDTO.warning },type: QueryTypes.SELECT });
     }
     else if ((searchDTO.region.length == 0) && (searchDTO.theme) && (searchDTO.warning)) {
         //테마 + 주의사항 파싱하는 쿼리 
-        const themeWarningQuery = `SELECT count(liked_post.PostId) as favoriteCount, P.id as postId, P.title
+        const themeWarningQuery = `SELECT count(countLike.PostId) as favoriteCount, count(isLike.PostId) as isFavorite, P.id, P.title, I.image1, T.region, T.theme, T.warning
         FROM (SELECT id, title FROM post) AS P
-        LEFT OUTER JOIN liked_post ON(P.id = liked_post.PostId)
+        LEFT OUTER JOIN liked_post as countLike ON(P.id = countLike.PostId)
+        LEFT OUTER JOIN liked_post as isLike ON(isLike.PostId = P.id and isLike.UserId =:userId)
+        INNER JOIN post_has_image as I
+        INNER JOIN post_has_tags as T
         WHERE P.id IN (
         SELECT P.id
         FROM post_has_theme, post_has_warning
         WHERE post_has_theme.postId = P.id AND post_has_theme.themeName = :theme AND post_has_warning.warningName = :warning and post_has_warning.postId = P.id
-        )
+        AND I.postId = P.id AND I.postId = T.postId)
         GROUP BY P.id ORDER BY P.id DESC LIMIT 20`;
-        searchRet = await db.sequelize.query(themeWarningQuery,{ replacements:{ theme: searchDTO.theme, warning: searchDTO.warning },type: QueryTypes.SELECT });
+
+        searchRet = await db.sequelize.query(themeWarningQuery,{ replacements:{ userId: userId, theme: searchDTO.theme, warning: searchDTO.warning },type: QueryTypes.SELECT });
     }
     else if ((searchDTO.region.length != 0) && (!searchDTO.theme) && (!searchDTO.warning)) {
         //지역만 파싱하는 쿼리
-        const regionQuery = `SELECT count(liked_post.PostId) as favoriteCount, P.id as postId, P.title
+        const regionQuery = `SELECT count(countLike.PostId) as favoriteCount, count(isLike.PostId) as isFavorite, P.id, P.title, I.image1, T.region, T.theme, T.warning
         FROM (SELECT id, title FROM post WHERE region = :region) AS P
-        LEFT OUTER JOIN liked_post ON(P.id = liked_post.PostId)
+        LEFT OUTER JOIN liked_post as countLike ON(P.id = countLike.PostId)
+        LEFT OUTER JOIN liked_post as isLike ON(isLike.PostId = P.id and isLike.UserId =:userId)
+        INNER JOIN post_has_image as I
+        INNER JOIN post_has_tags as T
+        WHERE I.postId = P.id AND I.postId = T.postId
         GROUP BY P.id ORDER BY P.id DESC LIMIT 20`;
-        searchRet = await db.sequelize.query(regionQuery,{ replacements:{ region: searchDTO.region },type: QueryTypes.SELECT });
+
+        searchRet = await db.sequelize.query(regionQuery,{ replacements:{ userId: userId, region: searchDTO.region },type: QueryTypes.SELECT });
     }
     else if ((searchDTO.region.length == 0) && (searchDTO.theme) && (!searchDTO.warning)) {
         //테마만 파싱하는 쿼리
-        const themeQuery = `SELECT count(liked_post.PostId) as favoriteCount, P.id as postId, P.title
+        const themeQuery = `SELECT count(countLike.PostId) as favoriteCount, count(isLike.PostId) as isFavorite, P.id, P.title, I.image1, T.region, T.theme, T.warning
         FROM (SELECT id, title FROM post) AS P
-        LEFT OUTER JOIN liked_post ON(P.id = liked_post.PostId)
+        LEFT OUTER JOIN liked_post as countLike ON(P.id = countLike.PostId)
+        LEFT OUTER JOIN liked_post as isLike ON(isLike.PostId = P.id and isLike.UserId =:userId)
+        INNER JOIN post_has_image as I
+        INNER JOIN post_has_tags as T
         WHERE P.id IN (
         SELECT P.id
         FROM post_has_theme
-        WHERE post_has_theme.themeName = :theme AND post_has_theme.postId = P.id)
+        WHERE post_has_theme.themeName = :theme AND post_has_theme.postId = P.id AND I.postId = P.id AND I.postId = T.postId)
         GROUP BY P.id ORDER BY P.id DESC LIMIT 20`;
-        searchRet = await db.sequelize.query(themeQuery,{ replacements:{ theme: searchDTO.theme },type: QueryTypes.SELECT });
+
+        searchRet = await db.sequelize.query(themeQuery,{ replacements:{ userId: userId, theme: searchDTO.theme },type: QueryTypes.SELECT });
     }
     else if ((searchDTO.region.length == 0) && (!searchDTO.theme) && (searchDTO.warning)) {
         //주의사항만 파싱하는 쿼리
-        const warningQuery = `SELECT count(liked_post.PostId) as favoriteCount, P.id as postId, P.title
+        const warningQuery = `SELECT count(countLike.PostId) as favoriteCount, count(isLike.PostId) as isFavorite, P.id, P.title, I.image1, T.region, T.theme, T.warning
         FROM (SELECT id, title FROM post) AS P
-        LEFT OUTER JOIN liked_post ON(P.id = liked_post.PostId)
+        LEFT OUTER JOIN liked_post as countLike ON(P.id = countLike.PostId)
+        LEFT OUTER JOIN liked_post as isLike ON(isLike.PostId = P.id and isLike.UserId =:userId)
+        INNER JOIN post_has_image as I
+        INNER JOIN post_has_tags as T
         WHERE P.id IN (
         SELECT P.id
         FROM post_has_warning
-        WHERE post_has_warning.warningName = :warning AND post_has_warning.postId = P.id)
+        WHERE post_has_warning.warningName = :warning AND post_has_warning.postId = P.id AND I.postId = P.id AND I.postId = T.postId)
         GROUP BY P.id ORDER BY P.id DESC LIMIT 20`;
-        searchRet = await db.sequelize.query(warningQuery,{ replacements:{ warning: searchDTO.warning },type: QueryTypes.SELECT });
+
+        searchRet = await db.sequelize.query(warningQuery,{ replacements:{ userId: userId, warning: searchDTO.warning },type: QueryTypes.SELECT });
     }
     else {
         //검색어가 3개일 때 쿼리 
-
-        const rtwSearchQuery = `SELECT count(liked_post.PostId) as favoriteCount, P.id as postId, P.title
+        const rtwSearchQuery = `SELECT count(countLike.PostId) as favoriteCount, count(isLike.PostId) as isFavorite, P.id, P.title, I.image1, T.region, T.theme, T.warning
         FROM (SELECT id, title FROM post WHERE region = :region) AS P
-        LEFT OUTER JOIN liked_post ON(P.id = liked_post.PostId)
+        LEFT OUTER JOIN liked_post as countLike ON(P.id = countLike.PostId)
+        LEFT OUTER JOIN liked_post as isLike ON(isLike.PostId = P.id and isLike.UserId =:userId)
+        INNER JOIN post_has_image as I
+        INNER JOIN post_has_tags as T
         WHERE P.id IN (
         SELECT P.id
         FROM post_has_theme, post_has_warning
-        WHERE post_has_theme.postId = P.id AND post_has_theme.themeName = :theme AND post_has_warning.warningName = :warning and post_has_warning.postId = P.id
-        )
+        WHERE post_has_theme.postId = P.id AND post_has_theme.themeName = :theme AND post_has_warning.warningName = :warning and post_has_warning.postId = P.id AND I.postId = P.id AND I.postId = T.postId)
         GROUP BY P.id ORDER BY P.id DESC LIMIT 20`;
-        searchRet = await db.sequelize.query(rtwSearchQuery,{ replacements:{ region: searchDTO.region, theme: searchDTO.theme, warning: searchDTO.warning },type: QueryTypes.SELECT });
-    }
-    
-    let brief: briefInformationDTO[] = []
 
-    const searchInfo: previewDTO = {
-        totalCourse: searchRet.length,
-        drive: brief
-    };
+        searchRet = await db.sequelize.query(rtwSearchQuery,{ replacements:{ userId: userId, region: searchDTO.region, theme: searchDTO.theme, warning: searchDTO.warning },type: QueryTypes.SELECT });
+};
 
     try{
-        await makeLocalBriefCollection(searchRet, brief, userId);
+        let brief: briefInformationDTO[] = []
+
+        const searchInfo: previewDTO = {
+            totalCourse: searchRet.length,
+            drive: brief
+        };
+        
+        await makeBriefCollection(searchRet, brief);
         return {
             status: 200,
             data:{
                 success : true,
-                msg : "최신순 검색뷰 통신에 성공한 당신, 제법 천재군요 :-)",
+                msg : "검색뷰 통신에 성공한 혜령, 호택 너무 수고했엉 최고봉봉!!!",
                 data : searchInfo
             }
         }
