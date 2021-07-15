@@ -1,24 +1,24 @@
-interface locationDTO{
-    address: string[],
-    latitude: string[], // 위도
-    longtitude: string[] // 경도
+interface locationDTO {
+  address: string[];
+  latitude: string[]; // 위도
+  longtitude: string[]; // 경도
 }
 
-export default interface requestDTO{
-    title: string,
-    userId: string,
-    
-    courseImage: string[], // 파일객체인데
+export default interface requestDTO {
+  title: string;
+  userId: string;
 
-    province: string,
-    region: string,
+  courseImage: string[]; // 파일객체인데
 
-    theme: string[],
-    warning: boolean[],
+  province: string;
+  region: string;
 
-    isParking: boolean,
-    parkingDesc: string,
+  theme: string[];
+  warning: boolean[];
 
-    courseDesc: string,
-    course: locationDTO
+  isParking: boolean;
+  parkingDesc: string;
+
+  courseDesc: string;
+  course: locationDTO;
 }

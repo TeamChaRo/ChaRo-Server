@@ -1,6 +1,5 @@
-
 export default interface searchDTO {
-    region?: string;
-    theme?: string;
-    warning?: string;
+  region?: string;
+  theme?: string;
+  warning?: string;
 }

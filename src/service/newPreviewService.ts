@@ -1,14 +1,14 @@
-import { db } from "../models";
+import { db } from '../models';
 import { QueryTypes } from 'sequelize';
-import briefInformationDTO from "../interface/res/briefInformationDTO";
-import previewDTO from "../interface/res/previewDTO";
+import briefInformationDTO from '../interface/res/briefInformationDTO';
+import previewDTO from '../interface/res/previewDTO';
 
-import previewMap from "./previewMap.json";
+import previewMap from './previewMap.json';
 
-import { makeBriefCollection} from "./briefCollectionService";
+import { makeBriefCollection } from './briefCollectionService';
 
-export async function newTrendService(userId: string){
-    const query = `SELECT P.id, P.title, count(isLike.PostId) as isFavorite, 
+export async function newTrendService(userId: string) {
+  const query = `SELECT P.id, P.title, count(isLike.PostId) as isFavorite, 
                     T.region, I.image1, T.region, T.theme, T.warning
                     FROM (SELECT id, title FROM post) AS P
                     LEFT OUTER JOIN liked_post as isLike ON(isLike.PostId = P.id  and isLike.UserId =:userId)
@@ -17,40 +17,45 @@ export async function newTrendService(userId: string){
                     WHERE I.postId = P.id and I.postId = T.postId
                     GROUP BY P.id ORDER BY P.id DESC LIMIT 20`;
 
-    const result = await db.sequelize.query(query,{ type: QueryTypes.SELECT, replacements:{userId:userId}, raw:true, nest:true});
+  const result = await db.sequelize.query(query, {
+    type: QueryTypes.SELECT,
+    replacements: { userId: userId },
+    raw: true,
+    nest: true,
+  });
 
-    let brief: briefInformationDTO[] = []
+  let brief: briefInformationDTO[] = [];
 
-    const preview: previewDTO = {
-        totalCourse: result.length,
-        drive: brief
+  const preview: previewDTO = {
+    totalCourse: result.length,
+    drive: brief,
+  };
+  try {
+    await makeBriefCollection(result, brief);
+    return {
+      status: 200,
+      data: {
+        success: true,
+        msg:
+          '홍콩 풍수전문가에 의하면 올해 2월과같은달은 우리인생에서 다시오지 않는다 합니다. 왜냐하면 월요일이4일,', //"successfully load Today's preview sorted by date",
+        data: preview,
+      },
     };
-    try{
-        await makeBriefCollection(result, brief);
-        return {
-            status: 200,
-            data: {
-                success: true,
-                msg: "홍콩 풍수전문가에 의하면 올해 2월과같은달은 우리인생에서 다시오지 않는다 합니다. 왜냐하면 월요일이4일,", //"successfully load Today's preview sorted by date",
-                data: preview
-            }
-        }
-
-    }catch(err){
-        console.log(err);
-        return {
-            status: 502,
-            data:{
-                success : false,
-                msg : "DB preview loading error"
-            }
-        }
-    }
+  } catch (err) {
+    console.log(err);
+    return {
+      status: 502,
+      data: {
+        success: false,
+        msg: 'DB preview loading error',
+      },
+    };
+  }
 }
 
-export async function newThemeService(theme: string, userId: string){
-    const themeName = previewMap.theme[theme];
-    const query = `SELECT P.id, P.title, count(isLike.PostId) as isFavorite,
+export async function newThemeService(theme: string, userId: string) {
+  const themeName = previewMap.theme[theme];
+  const query = `SELECT P.id, P.title, count(isLike.PostId) as isFavorite,
                     I.image1, T.region, T.theme, T.warning
                     FROM post as P
                     INNER JOIN post_has_image AS I
@@ -59,42 +64,45 @@ export async function newThemeService(theme: string, userId: string){
                     WHERE P.id in (SELECT postId FROM post_has_theme WHERE themeName=:theme)
                     AND P.id = I.postId AND I.postId = T.postId
                     GROUP BY P.id ORDER BY P.id DESC LIMIT 20`;
-                    
-    const result = await db.sequelize.query(query,{ replacements:{userId:userId, theme:themeName},type: QueryTypes.SELECT });
 
-    let brief: briefInformationDTO[] = []
+  const result = await db.sequelize.query(query, {
+    replacements: { userId: userId, theme: themeName },
+    type: QueryTypes.SELECT,
+  });
 
-    const preview: previewDTO = {
-        totalCourse: result.length,
-        drive: brief
+  let brief: briefInformationDTO[] = [];
+
+  const preview: previewDTO = {
+    totalCourse: result.length,
+    drive: brief,
+  };
+
+  try {
+    await makeBriefCollection(result, brief);
+    return {
+      status: 200,
+      data: {
+        success: true,
+        msg:
+          '이 편지는 영국에서 최초로 시작되어 일년에 한 바퀴 돌면서 받는 사람에게 행운을 주었고 지금은 당신에게로 옮겨진 이 편지는 4일 안에 당신 곁을 떠나야 합니다.', //"successfully load Theme preview sorted by date",
+        data: preview,
+      },
     };
-
-    try{
-        await makeBriefCollection(result, brief);
-        return {
-            status: 200,
-            data: {
-                success: true,
-                msg: "이 편지는 영국에서 최초로 시작되어 일년에 한 바퀴 돌면서 받는 사람에게 행운을 주었고 지금은 당신에게로 옮겨진 이 편지는 4일 안에 당신 곁을 떠나야 합니다.",//"successfully load Theme preview sorted by date",
-                data: preview
-            }
-        }
-
-    }catch(err){
-        console.log(err);
-        return {
-            status: 502,
-            data:{
-                success : false,
-                msg : "DB preview loading error"
-            }
-        }
-    }
+  } catch (err) {
+    console.log(err);
+    return {
+      status: 502,
+      data: {
+        success: false,
+        msg: 'DB preview loading error',
+      },
+    };
+  }
 }
 
-export async function newLocalService(local: string, userId: string){
-    const regionName = previewMap.region[local];
-    const query = `SELECT P.id, P.title, count(isLike.PostId) as isFavorite, 
+export async function newLocalService(local: string, userId: string) {
+  const regionName = previewMap.region[local];
+  const query = `SELECT P.id, P.title, count(isLike.PostId) as isFavorite, 
                     T.region, I.image1, T.region, T.theme, T.warning
                     FROM (SELECT id, title FROM post WHERE region=:region) AS P
                     LEFT OUTER JOIN liked_post as isLike ON(isLike.PostId = P.id  and isLike.UserId =:userId)
@@ -103,34 +111,37 @@ export async function newLocalService(local: string, userId: string){
                     WHERE I.postId = P.id and I.postId = T.postId
                     GROUP BY P.id ORDER BY P.id DESC LIMIT 20`;
 
-    const result = await db.sequelize.query(query,{ replacements:{userId:userId, region:regionName},type: QueryTypes.SELECT });
-    
-    let brief: briefInformationDTO[] = []
+  const result = await db.sequelize.query(query, {
+    replacements: { userId: userId, region: regionName },
+    type: QueryTypes.SELECT,
+  });
 
-    const preview: previewDTO = {
-        totalCourse: result.length,
-        drive: brief
+  let brief: briefInformationDTO[] = [];
+
+  const preview: previewDTO = {
+    totalCourse: result.length,
+    drive: brief,
+  };
+
+  try {
+    await makeBriefCollection(result, brief);
+    return {
+      status: 200,
+      data: {
+        success: true,
+        msg:
+          '이 것을 받았으니 당신이 행운을 가질 차례이다.유머가 아니며 당신의 행운이메일과 인터넷을 통하여 올 것이다.', //"successfully load Region preview sorted by date",
+        data: preview,
+      },
     };
-
-    try{
-        await makeBriefCollection(result, brief);
-        return {
-            status: 200,
-            data: {
-                success: true,
-                msg: "이 것을 받았으니 당신이 행운을 가질 차례이다.유머가 아니며 당신의 행운이메일과 인터넷을 통하여 올 것이다.",//"successfully load Region preview sorted by date",
-                data: preview
-            }
-        }
-
-    }catch(err){
-        console.log(err);
-        return {
-            status: 502,
-            data:{
-                success : false,
-                msg : "DB preview loading error"
-            }
-        }
-    }
+  } catch (err) {
+    console.log(err);
+    return {
+      status: 502,
+      data: {
+        success: false,
+        msg: 'DB preview loading error',
+      },
+    };
+  }
 }

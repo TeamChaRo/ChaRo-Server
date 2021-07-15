@@ -1,42 +1,46 @@
-import { db } from "../models";
+import { db } from '../models';
 import { QueryTypes } from 'sequelize';
 
 import mainDTO from '../interface/res/mainDTO';
-import bannerDTO from "../interface/res/bannerDTO";
-import briefInformationDTO from "../interface/res/briefInformationDTO";
+import bannerDTO from '../interface/res/bannerDTO';
+import briefInformationDTO from '../interface/res/briefInformationDTO';
 
-import { makeBriefCollection } from "./briefCollectionService";
+import { makeBriefCollection } from './briefCollectionService';
 
-export default async function mainService(userId: string, theme: string, region: string){
-    try{
+export default async function mainService(userId: string, theme: string, region: string) {
+  try {
+    let banner: bannerDTO[] = [];
+    let today: briefInformationDTO[] = [];
+    let trend: briefInformationDTO[] = [];
+    let custom: briefInformationDTO[] = [];
+    let local: briefInformationDTO[] = [];
 
-        let banner: bannerDTO[] = [];
-        let today: briefInformationDTO[] = [];
-        let trend: briefInformationDTO[] = [];
-        let custom: briefInformationDTO[] = [];
-        let local: briefInformationDTO[] = [];
+    const main: mainDTO = {
+      banner: banner,
+      todayCharoDrive: today,
+      trendDrive: trend,
+      customThemeTitle: '',
+      customThemeDrive: custom,
+      localTitle: '',
+      localDrive: local,
+    };
 
-        const main: mainDTO = {
-            banner: banner,
-            todayCharoDrive: today,
-            trendDrive: trend,
-            customThemeTitle: "",
-            customThemeDrive: custom,
-            localTitle: "",
-            localDrive: local
-        }
+    //SELECT C.customThemeTitle, L.localTitle FROM custom_theme AS C JOIN local AS L WHERE  C.customTheme="여름" AND L.localCity="부산";
+    // banner
+    const bannerPromise = db.Banner.findAll({ limit: 4, raw: true, nest: true });
 
-        //SELECT C.customThemeTitle, L.localTitle FROM custom_theme AS C JOIN local AS L WHERE  C.customTheme="여름" AND L.localCity="부산";
-        // banner
-        const bannerPromise = db.Banner.findAll({limit:4, raw: true, nest : true});
-
-        const initQuery = `SELECT C.customThemeTitle, L.localTitle 
+    const initQuery = `SELECT C.customThemeTitle, L.localTitle 
                             FROM custom_theme AS C JOIN local AS L 
                             WHERE  C.customTheme=:theme AND L.localCity=:region`;
 
-        const initPromise = db.sequelize.query(initQuery,{ type: QueryTypes.SELECT, replacements:{theme:theme, region:region}, raw:true, nest : true});
+    const initPromise = db.sequelize.query(initQuery, {
+      type: QueryTypes.SELECT,
+      replacements: { theme: theme, region: region },
+      raw: true,
+      nest: true,
+    });
 
-        const trendQuery = `SELECT P.id, P.title,  count(countLike.PostId) as favoriteCount, count(isLike.PostId) as isFavorite, 
+    const trendQuery = `SELECT P.id, P.title,  count(countLike.PostId) as favoriteCount, count(isLike.PostId) as isFavorite, 
                             T.region, I.image1, T.region, T.theme, T.warning
                             FROM (SELECT id, title FROM post) AS P
                             LEFT OUTER JOIN liked_post as countLike ON(P.id = countLike.PostId)
@@ -46,9 +50,14 @@ export default async function mainService(userId: string, theme: string, region:
                             WHERE I.postId = P.id and I.postId = T.postId
                             GROUP BY P.id ORDER BY favoriteCount DESC LIMIT 4`;
 
-        const trendPromise = db.sequelize.query(trendQuery,{ type: QueryTypes.SELECT, replacements:{userId:userId}, raw:true, nest : true});
-        
-        const themeQuery = `SELECT P.id, P.title, count(countLike.PostId) as favoriteCount, count(isLike.PostId) as isFavorite,
+    const trendPromise = db.sequelize.query(trendQuery, {
+      type: QueryTypes.SELECT,
+      replacements: { userId: userId },
+      raw: true,
+      nest: true,
+    });
+
+    const themeQuery = `SELECT P.id, P.title, count(countLike.PostId) as favoriteCount, count(isLike.PostId) as isFavorite,
                             I.image1, T.region, T.theme, T.warning
                             FROM post as P
                             INNER JOIN post_has_image AS I
@@ -58,10 +67,15 @@ export default async function mainService(userId: string, theme: string, region:
                             WHERE P.id in (SELECT postId FROM post_has_theme WHERE themeName=:theme)
                             AND P.id = I.postId AND I.postId = T.postId
                             GROUP BY P.id ORDER BY favoriteCount DESC LIMIT 4`;
-        
-        const themePromise = db.sequelize.query(themeQuery,{ type: QueryTypes.SELECT, replacements:{userId:userId, theme:theme}, raw:true, nest : true});
 
-        const localQuery = `SELECT P.id, P.title,  count(countLike.PostId) as favoriteCount, count(isLike.PostId) as isFavorite, 
+    const themePromise = db.sequelize.query(themeQuery, {
+      type: QueryTypes.SELECT,
+      replacements: { userId: userId, theme: theme },
+      raw: true,
+      nest: true,
+    });
+
+    const localQuery = `SELECT P.id, P.title,  count(countLike.PostId) as favoriteCount, count(isLike.PostId) as isFavorite, 
                             T.region, I.image1, T.region, T.theme, T.warning
                             FROM (SELECT id, title FROM post WHERE region=:region) AS P
                             LEFT OUTER JOIN liked_post as countLike ON(P.id = countLike.PostId)
@@ -71,111 +85,129 @@ export default async function mainService(userId: string, theme: string, region:
                             WHERE I.postId = P.id and I.postId = T.postId
                             GROUP BY P.id ORDER BY favoriteCount DESC LIMIT 4`;
 
-        const localPromise = db.sequelize.query(localQuery,{ type: QueryTypes.SELECT, replacements:{userId:userId, region:region}, raw:true, nest : true});
+    const localPromise = db.sequelize.query(localQuery, {
+      type: QueryTypes.SELECT,
+      replacements: { userId: userId, region: region },
+      raw: true,
+      nest: true,
+    });
 
-        //today-> 추천알고리즘 들어가는데.
-        const todayPromise = new Promise( async (resolve, reject) => {
-            const query = `select P.id as postId, P.title as title, count(liked_post.PostId) as favoriteCount
+    //today-> 추천알고리즘 들어가는데.
+    const todayPromise = new Promise(async (resolve, reject) => {
+      const query = `select P.id as postId, P.title as title, count(liked_post.PostId) as favoriteCount
                     FROM (SELECT id, title FROM post) AS P
                     LEFT OUTER JOIN liked_post ON(P.id = liked_post.PostId)
                     GROUP BY P.id ORDER BY favoriteCount DESC LIMIT 4`;
-                
-            const result = await db.sequelize.query(query,{ type: QueryTypes.SELECT, nest : true});
 
-            for(let idx in result){
-                const postId = result[idx]['postId'];
-    
-                const tempBrief: briefInformationDTO = {
-                    postId:postId,
-                    title: result[idx]['title'],
-                    image: "",
-                    isFavorite: false,
-                    tags: [],
-                };
-                
-                const promise1 = new Promise( async (resolve, reject) => {
-                    const query = `SELECT * 
+      const result = await db.sequelize.query(query, { type: QueryTypes.SELECT, nest: true });
+
+      for (let idx in result) {
+        const postId = result[idx]['postId'];
+
+        const tempBrief: briefInformationDTO = {
+          postId: postId,
+          title: result[idx]['title'],
+          image: '',
+          isFavorite: false,
+          tags: [],
+        };
+
+        const promise1 = new Promise(async (resolve, reject) => {
+          const query = `SELECT * 
                                     FROM post_has_image INNER JOIN post_has_tags 
                                     WHERE post_has_image.postId=:postId and
                                     post_has_image.postId = post_has_tags.postId `;
-                    const result = await db.sequelize.query(query,{ replacements:{postId:postId},type: QueryTypes.SELECT, nest : true });
-    
-                    tempBrief.image = result[0]["image1"];
-                    tempBrief.tags.push(result[0]["region"]);
-                    tempBrief.tags.push(result[0]["theme"]);
-    
-                    const warningTag = result[0]["warning"];
-                    if(warningTag) tempBrief.tags.push(warningTag);
-    
-                    resolve("success");
-                });
-    
-                const promise2 = new Promise( async (resolve, reject) => {
-                    
-                    const query = "select * from liked_post where PostId = :postId and UserId = :userId";
-                    const ret = await db.sequelize.query(query,{ replacements:{postId:postId, userId:userId},type: QueryTypes.SELECT });
-                    if(ret.length > 0) tempBrief.isFavorite = true;
-                    
-                    resolve("success");
-                });
-    
-                await Promise.all([promise1, promise2]) 
-                    .then(() => { today.push(tempBrief); })
-                    .catch(err => { throw err; })
-            }
-            resolve("success");
-            
-        })
-        
+          const result = await db.sequelize.query(query, {
+            replacements: { postId: postId },
+            type: QueryTypes.SELECT,
+            nest: true,
+          });
 
-        await Promise.all([bannerPromise, todayPromise, trendPromise, themePromise, localPromise, initPromise])
-            .then( async (response) => {
+          tempBrief.image = result[0]['image1'];
+          tempBrief.tags.push(result[0]['region']);
+          tempBrief.tags.push(result[0]['theme']);
 
-                const bannerResult:any= response[0]; // banner
+          const warningTag = result[0]['warning'];
+          if (warningTag) tempBrief.tags.push(warningTag);
 
-                for(let idx in bannerResult){
-                    const tempBanner: bannerDTO = {
-                        bannerTitle: bannerResult[idx]["bannerTitle"],
-                        bannerImage: bannerResult[idx]["bannerImage"],
-                        bannerTag: bannerResult[idx]["bannerTag"]
-                    }
-                    banner.push(tempBanner);
-                }
-                
-                const trendResult:any = response[2]; // trend
-                await makeBriefCollection(trendResult, trend);
+          resolve('success');
+        });
 
-                const themeResult:any = response[3]; // theme
-                await makeBriefCollection(themeResult, custom);
+        const promise2 = new Promise(async (resolve, reject) => {
+          const query = 'select * from liked_post where PostId = :postId and UserId = :userId';
+          const ret = await db.sequelize.query(query, {
+            replacements: { postId: postId, userId: userId },
+            type: QueryTypes.SELECT,
+          });
+          if (ret.length > 0) tempBrief.isFavorite = true;
 
-                const localResult:any = response[4]; // local
-                await makeBriefCollection(localResult, local);
+          resolve('success');
+        });
 
-                const initResult:any = response[5];
-                main.customThemeTitle = initResult[0]['customThemeTitle'];
-                main.localTitle = initResult[0]['localTitle'];
+        await Promise.all([promise1, promise2])
+          .then(() => {
+            today.push(tempBrief);
+          })
+          .catch((err) => {
+            throw err;
+          });
+      }
+      resolve('success');
+    });
 
-            })
-            .catch(err => { throw err; })
+    await Promise.all([
+      bannerPromise,
+      todayPromise,
+      trendPromise,
+      themePromise,
+      localPromise,
+      initPromise,
+    ])
+      .then(async (response) => {
+        const bannerResult: any = response[0]; // banner
 
-        return {
-            status: 200,
-            data:{
-                success: true,
-                msg : "successfully load main view data",
-                data : main
-            }
+        for (let idx in bannerResult) {
+          const tempBanner: bannerDTO = {
+            bannerTitle: bannerResult[idx]['bannerTitle'],
+            bannerImage: bannerResult[idx]['bannerImage'],
+            bannerTag: bannerResult[idx]['bannerTag'],
+          };
+          banner.push(tempBanner);
         }
 
-    }catch(err){
-        console.log(err);
-        return {
-            status: 502,
-            data:{
-                success: false,
-                msg : "DB main view loading error"
-            }
-        }
-    }
-    
+        const trendResult: any = response[2]; // trend
+        await makeBriefCollection(trendResult, trend);
+
+        const themeResult: any = response[3]; // theme
+        await makeBriefCollection(themeResult, custom);
+
+        const localResult: any = response[4]; // local
+        await makeBriefCollection(localResult, local);
+
+        const initResult: any = response[5];
+        main.customThemeTitle = initResult[0]['customThemeTitle'];
+        main.localTitle = initResult[0]['localTitle'];
+      })
+      .catch((err) => {
+        throw err;
+      });
+
+    return {
+      status: 200,
+      data: {
+        success: true,
+        msg: 'successfully load main view data',
+        data: main,
+      },
+    };
+  } catch (err) {
+    console.log(err);
+    return {
+      status: 502,
+      data: {
+        success: false,
+        msg: 'DB main view loading error',
+      },
+    };
+  }
 }

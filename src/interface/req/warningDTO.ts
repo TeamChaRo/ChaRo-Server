@@ -1,4 +1,4 @@
-export default interface warningDTO{
-    postId?: number;
-    warningName?: string;
-};
+export default interface warningDTO {
+  postId?: number;
+  warningName?: string;
+}

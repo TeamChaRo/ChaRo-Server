@@ -1,30 +1,30 @@
-export interface detailInformationDTO{
-    title: string,
-    author: string,
-    isAuthor: boolean,
-    profileImage: string,
-    postingYear: string,
-    postingMonth: string,
-    postingDay: string,
-    likesCount: number,
-    isFavorite: boolean,
-    isStored: boolean,
-    themes: string[],
-    
-    province: string,
-    city: string,
+export interface detailInformationDTO {
+  title: string;
+  author: string;
+  isAuthor: boolean;
+  profileImage: string;
+  postingYear: string;
+  postingMonth: string;
+  postingDay: string;
+  likesCount: number;
+  isFavorite: boolean;
+  isStored: boolean;
+  themes: string[];
 
-    isParking: boolean,
-    parkingDesc: string,
+  province: string;
+  city: string;
 
-    courseDesc: string,
+  isParking: boolean;
+  parkingDesc: string;
 
-    source: string,
-    wayPoint: string[],
-    longtitude: string[],
-    latitude: string[],
-    destination: string,
+  courseDesc: string;
 
-    images: string[],
-    warnings: boolean[]
+  source: string;
+  wayPoint: string[];
+  longtitude: string[];
+  latitude: string[];
+  destination: string;
+
+  images: string[];
+  warnings: boolean[];
 }

@@ -1,7 +1,7 @@
-import express from "express";
+import express from 'express';
 const router = express.Router();
 
-import  { likeMyPageController, newMyPageController } from "../controller";
+import { likeMyPageController, newMyPageController } from '../controller';
 
 /**
  *  @route GET /myPage/like/:id
@@ -9,10 +9,7 @@ import  { likeMyPageController, newMyPageController } from "../controller";
  *  @access Public
  */
 
-router.get(
-    "/like/:id",
-    likeMyPageController
-)
+router.get('/like/:id', likeMyPageController);
 
 /**
  *  @route GET /myPage/new/:id
@@ -20,10 +17,6 @@ router.get(
  *  @access Public
  */
 
-router.get(
-    "/new/:id",
-    newMyPageController
-)
-
+router.get('/new/:id', newMyPageController);
 
 module.exports = router;

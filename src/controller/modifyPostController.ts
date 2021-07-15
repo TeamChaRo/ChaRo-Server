@@ -1,74 +1,74 @@
-import { Request, Response } from "express";
-import modifyPostService from "../service/modifyPostService";
-import writePostDTO from "../interface/req/writePostDTO";
+import { Request, Response } from 'express';
+import modifyPostService from '../service/modifyPostService';
+import writePostDTO from '../interface/req/writePostDTO';
 
-import { db } from "../models";
+import { db } from '../models';
 import { QueryTypes } from 'sequelize';
 
-export default  async(req: Request, res: Response) => {
+export default async (req: Request, res: Response) => {
+  const postId = req.body.postId;
+  const deleted = req.body.deleted;
 
-    const postId = req.body.postId;
-    const deleted = req.body.deleted;
-    
-    // images path
-    let imagesPath: string[] = [];
- 
-    if(req.files){
-        for(let file of (req.files as Express.MulterS3.File[] ) ) 
-            imagesPath.push((file as Express.MulterS3.File).location);
+  // images path
+  let imagesPath: string[] = [];
+
+  if (req.files) {
+    for (let file of req.files as Express.MulterS3.File[])
+      imagesPath.push((file as Express.MulterS3.File).location);
+  }
+
+  let notDeleted: string[] = [];
+
+  const getImageQuery = `SELECT * FROM post_has_image WHERE postId=3`;
+  const result = await db.sequelize.query(getImageQuery, {
+    type: QueryTypes.SELECT,
+    raw: true,
+    nest: true,
+  });
+
+  const imageResult = result[0];
+  const standard = 'image';
+  for (let i = 1; i < 7; i++) {
+    const tempKey = standard + i.toString();
+    if (imageResult[tempKey]) {
+      notDeleted.push(imageResult[tempKey]);
     }
+  }
 
-    let notDeleted: string[] = [];
+  for (let value of deleted) {
+    const index = notDeleted.indexOf(value);
+    notDeleted.splice(index, 1);
+  }
 
-    const getImageQuery = `SELECT * FROM post_has_image WHERE postId=3`;
-    const result = await db.sequelize.query(getImageQuery,{ type: QueryTypes.SELECT, raw:true, nest:true });
+  imagesPath.unshift.apply(imagesPath, notDeleted);
 
-    const imageResult = result[0];
-    const standard  = 'image';
-    for(let i = 1 ; i < 7 ; i ++){
-        const tempKey = standard+i.toString();
-        if(imageResult[tempKey]){
-            notDeleted.push(imageResult[tempKey]);
-        }
-    }
+  let warning: boolean[] = [];
 
-    for(let value of deleted){
-        const index = notDeleted.indexOf(value);
-        notDeleted.splice(index, 1);
-    
-    }
+  const rawWarning = req.body.warning;
+  for (let idx in rawWarning) {
+    if (rawWarning[idx] == 'true') warning.push(true);
+    else warning.push(false);
+  }
 
-    imagesPath.unshift.apply(imagesPath, notDeleted);
+  let postEntity: writePostDTO = {
+    title: req.body.title,
+    userId: req.body.userId,
+    courseImage: imagesPath,
 
-    let warning: boolean[] = [];
+    province: req.body.province,
+    region: req.body.region,
 
-    const rawWarning = req.body.warning;
-    for(let idx in rawWarning){
-        if(rawWarning[idx] == "true") warning.push(true);
-        else warning.push(false);
-    }
+    theme: req.body.theme,
+    warning: warning,
 
-    let postEntity: writePostDTO = {
-        title: req.body.title,
-        userId: req.body.userId,
-        courseImage: imagesPath,
-        
-        province: req.body.province,
-        region: req.body.region,
+    isParking: req.body.isParking,
+    parkingDesc: req.body.parkingDesc,
 
-        theme: req.body.theme,
-        warning: warning,
+    courseDesc: req.body.courseDesc,
 
-        isParking: req.body.isParking,
-        parkingDesc: req.body.parkingDesc,
+    course: req.body.course,
+  };
 
-        courseDesc: req.body.courseDesc,
-
-        course: req.body.course
-    }
-    
-    const ret = await modifyPostService(postId, deleted, postEntity);
-    res.status(ret.status).json(ret.data);
-    
-
-}
+  const ret = await modifyPostService(postId, deleted, postEntity);
+  res.status(ret.status).json(ret.data);
+};
