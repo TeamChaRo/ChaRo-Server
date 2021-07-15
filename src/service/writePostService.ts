@@ -82,28 +82,28 @@ export default async function writePostService( postEntity: writePostDTO ){
 
         //Course
         course.postId = postId;
-        await db.Course.create(course);
+        db.Course.create(course);
 
         //Image
         image.postId = postId;
-        await db.PostHasImage.create(image)
+        db.PostHasImage.create(image)
 
         //PostHasTheme
-        postEntity.theme.map( async (value, index) => {
+        postEntity.theme.map( (value, index) => {
             const theme:themeDTO = {
                 postId: postId,
                 themeName: value
             };
-            await db.PostHasTheme.create(theme);
+            db.PostHasTheme.create(theme);
         });
 
-        postEntity.warning.map( async (value, index) => {
+        postEntity.warning.map((value, index) => {
             if(index == 0){
                 if(value){
                     tags.warning = warningMap[index];
-                    await db.PostHasTags.create(tags);
+                    db.PostHasTags.create(tags);
                 }else{
-                    await db.PostHasTags.create(tags);
+                    db.PostHasTags.create(tags);
                 }
             }
             if(value){
@@ -111,7 +111,7 @@ export default async function writePostService( postEntity: writePostDTO ){
                     postId: postId,
                     warningName: warningMap[index]
                 }
-                await db.PostHasWarning.create(warning);
+                db.PostHasWarning.create(warning);
             }
         });
 
