@@ -1,9 +1,16 @@
 <img style="border: 0px solid black !important; border-radius:20px; " src="https://user-images.githubusercontent.com/63224278/125834375-fa09a085-e6a1-4d19-8a8d-609f79d0725c.png" width="1500px"/> 
 </br>
 
+<h1 align="left"> 차로 ChaRo </h1>
 
-<h1 align="center"> Welcome to ChaRo-Server 🚙 </h1>
-<p align="center">
+> 차에서의, 차로위에서의 즐거움을 추구하는 경험 기반 드라이브 코스 공유 플랫폼 <br/>  Core Value : 차로의 핵심 가치는 '즐거움과 편리함'입니다. 
+>  <br /><br /> SOPT 28th APPJAM  <br/> 프로젝트 기간: 2021.06.26 ~ 2021.07.17 <br/>
+
+</br>
+<img width=80px src=https://user-images.githubusercontent.com/63224278/125839213-0fd9923a-af62-4a04-9578-c797e3ed5c31.png>
+
+
+<p align="left">
   <img src="https://img.shields.io/badge/typescript-4.2.4-blue" />
   <img src="https://img.shields.io/badge/ts--node-9.1.1-yellowgreen" />
   <img src="https://img.shields.io/badge/%20mysql2-2.2.5-blue" />
@@ -11,8 +18,6 @@
       <img alt="Instagram: Charo_Official" src="https://img.shields.io/badge/charo-instagram-ff69b4" target="_blank" />
   </a>
 </p>
-
-> **차로 ChaRo** <br/> 차에서의, 차로위에서의 즐거움을 추구하는 경험 기반 드라이브 코스 공유 플랫폼 <br />  Core Value : 차로의 핵심 가치는 '즐거움과 편리함'입니다. <br /><br /> SOPT 28th APPJAM  <br/> 프로젝트 기간: 2021.06.26 ~ 2021.07.17 <br/>
 
 </br>
 
@@ -40,7 +45,7 @@
 
 
 ## 🌈 Server Architecture
-<img style="border: 0px solid black !important; border-radius:20px; " src="https://user-images.githubusercontent.com/63224278/125830951-f39281ce-1842-4ab0-9a17-0176a7028d18.png" height = "300px"/> 
+<img style="border: 0px solid black !important; border-radius:20px; " src="https://user-images.githubusercontent.com/63224278/125841740-bdc97b50-73f5-4ffb-8ca2-616058794d81.png" height = "500px"/> 
 
 - [Async & Await](https://www.npmjs.com/package/async)
 - [request(HTTP)](https://www.npmjs.com/package/request)
@@ -61,18 +66,30 @@
 <div markdown="1"> 
 
 ```
-"dependencies": {
+  "dependencies": {
+    "@angular/common": "^12.1.1",
+    "@angular/core": "^12.1.1",
     "@types/express": "^4.17.11",
+    "@types/multer": "^1.4.6",
+    "@types/multer-s3": "^2.7.9",
+    "aws-sdk": "^2.938.0",
+    "bcryptjs": "^2.4.3",
     "dotenv": "^9.0.2",
     "express": "^4.17.1",
+    "express-validator": "^6.10.0",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.12.10",
     "morgan": "^1.10.0",
+    "multer": "^1.4.2",
+    "multer-s3": "^2.9.0",
     "mysql2": "^2.2.5",
     "nodemon": "^2.0.7",
+    "pakage.json": "^1.0.0",
     "request": "^2.88.2",
+    "rxjs": "^7.2.0",
     "sequelize": "^6.6.4",
     "sequelize-cli": "^6.2.0"
-  },
+  }
 ```
 </div>
 </details>
@@ -82,7 +99,54 @@
 
 
 ## 🧬 ERD & Models
-<img width="360" alt="models" src="https://user-images.githubusercontent.com/63224278/125830346-e3502899-7efa-48b2-b88b-f28927323c6c.png">
+<img width="650" alt="models" src="https://user-images.githubusercontent.com/63224278/125830346-e3502899-7efa-48b2-b88b-f28927323c6c.png">
+
+<br>
+<br>
+
+## 🧩 DTO
+
+클라이언트 - 서버 - 데이터베이스 간 데이터를 전달하기 위해 DTO를 작성했습니다. <br>
+API의 request와 response에서 데이터베이스를 이용해 데이터를 삽입하거나 조회하는 모든 경우에 DTO를 설계함으로써 <br> data의 mapping을 효율적으로 처리했습니다. <br>
+<br>
+**postDTO**
+
+```
+ export default interface postDTO{
+    title?: string;
+    userId?: string;
+    province?: string;
+    region?: string;
+    isParking?: boolean;
+    parkingDesc?: string;
+    courseDesc?: string;
+}
+```
+**mainDTO**	
+	
+```
+import briefInformationDTO from "./briefInformationDTO";
+import bannerDTO from "./bannerDTO";
+
+type briefCollectionDTO = briefInformationDTO[];
+type bannerCollectionDTO = bannerDTO[];
+
+export default interface mainDTO {
+    banner: bannerCollectionDTO,
+    todayCharoDrive: briefCollectionDTO,
+    trendDrive: briefCollectionDTO,
+    customThemeTitle: string,
+    customThemeDrive: briefCollectionDTO,
+    localTitle: string,
+    localDrive : briefCollectionDTO
+}
+```
+
+<details>
+	 <summary> 🖼 DTO Interface </summary>
+	<div markdown="1"> 
+	<img width="200" height="450" alt="models" src="https://user-images.githubusercontent.com/63224278/125843088-d00dd566-8679-41ea-a7f9-4c70e41a218d.png">
+</details>
 
 <br>
 <br>
@@ -451,27 +515,27 @@ git push or git push origin develop
 
 | 기능 | 개발 여부 | 담당자 |
 |:----------|:----------:|:----:|
-| 모델 설계 | <img width=20px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 오예원,황지은 |
-| DB 연결 | <img width=20px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 오예원 |
-| 이미지 업로드 | <img width=20px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 오예원 |
-| 로그인 API | <img width=20px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 황지은 |
-| 회원가입 API | <img width=20px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 황지은 |
-| 닉네임 중복검사 API | <img width=20px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 황지은 |
-| 아이디 중복검사 API | <img width=20px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 황지은 |
-| 회원가입 API | <img width=20px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 황지은 |
-| 게시물 작성하기 API | <img width=20px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 오예원 |
-| 메인뷰 조회 API | <img width=20px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 황지은, 오예원 |
-| 게시물 상세정보 조회 API | <img width=20px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 황지은 |
-| 더보기 게시물 내 최신순 필터 API | <img width=20px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 오예원 |
-| 더보기 게시물 조회 및 좋아요 API | <img width=20px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 오예원 |
-| 검색하기 게시물 조회 및 좋아요 API | <img width=20px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 황지은 |
-| 검색하기 게시물 내 최신순 필터 API | <img width=20px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 황지은 |
-| 최근 검색 기록 저장 API | <img width=20px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 오예원 |
-| 최근 검색 기록 조회 API | <img width=20px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 오예원 |
-| 게시물 저장하기 API | <img width=20px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 오예원 |
-| 게시물 좋아요 API | <img width=20px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 오예원 |
-| 마이페이지 조회 (인기순, 최신순) API | <img width=20px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 오예원 |
-| 게시물 수정하기 API | <img width=20px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png>s | 오예원 |
+| 모델 설계 | <img width=25px src=https://user-images.githubusercontent.com/63224278/125839213-0fd9923a-af62-4a04-9578-c797e3ed5c31.png> | 오예원,황지은 |
+| DB 연결 | <img width=25px src=https://user-images.githubusercontent.com/63224278/125839213-0fd9923a-af62-4a04-9578-c797e3ed5c31.png> | 오예원 |
+| 이미지 업로드 | <img width=25px src=https://user-images.githubusercontent.com/63224278/125839213-0fd9923a-af62-4a04-9578-c797e3ed5c31.png> | 오예원 |
+| 로그인 API | <img width=25px src=https://user-images.githubusercontent.com/63224278/125839213-0fd9923a-af62-4a04-9578-c797e3ed5c31.png> | 황지은 |
+| 회원가입 API | <img width=25px src=https://user-images.githubusercontent.com/63224278/125839213-0fd9923a-af62-4a04-9578-c797e3ed5c31.png> | 황지은 |
+| 닉네임 중복검사 API | <img width=25px src=https://user-images.githubusercontent.com/63224278/125839213-0fd9923a-af62-4a04-9578-c797e3ed5c31.png> | 황지은 |
+| 아이디 중복검사 API | <img width=25px src=https://user-images.githubusercontent.com/63224278/125839213-0fd9923a-af62-4a04-9578-c797e3ed5c31.png> | 황지은 |
+| 회원가입 API | <img width=25px src=https://user-images.githubusercontent.com/63224278/125839213-0fd9923a-af62-4a04-9578-c797e3ed5c31.png> | 황지은 |
+| 게시물 작성하기 API | <img width=25px src=https://user-images.githubusercontent.com/63224278/125839213-0fd9923a-af62-4a04-9578-c797e3ed5c31.png> | 오예원 |
+| 메인뷰 조회 API | <img width=25px src=https://user-images.githubusercontent.com/63224278/125839213-0fd9923a-af62-4a04-9578-c797e3ed5c31.png> | 황지은, 오예원 |
+| 게시물 상세정보 조회 API | <img width=25px src=https://user-images.githubusercontent.com/63224278/125839213-0fd9923a-af62-4a04-9578-c797e3ed5c31.png> | 황지은 |
+| 더보기 게시물 내 최신순 필터 API | <img width=25px src=https://user-images.githubusercontent.com/63224278/125839213-0fd9923a-af62-4a04-9578-c797e3ed5c31.png> | 오예원 |
+| 더보기 게시물 조회 및 좋아요 API | <img width=25px src=https://user-images.githubusercontent.com/63224278/125839213-0fd9923a-af62-4a04-9578-c797e3ed5c31.png> | 오예원 |
+| 검색하기 게시물 조회 및 좋아요 API | <img width=25px src=https://user-images.githubusercontent.com/63224278/125839213-0fd9923a-af62-4a04-9578-c797e3ed5c31.png> | 황지은 |
+| 검색하기 게시물 내 최신순 필터 API | <img width=25px src=https://user-images.githubusercontent.com/63224278/125839213-0fd9923a-af62-4a04-9578-c797e3ed5c31.png> | 황지은 |
+| 최근 검색 기록 저장 API | <img width=25px src=https://user-images.githubusercontent.com/63224278/125839213-0fd9923a-af62-4a04-9578-c797e3ed5c31.png> | 오예원 |
+| 최근 검색 기록 조회 API | <img width=25px src=https://user-images.githubusercontent.com/63224278/125839213-0fd9923a-af62-4a04-9578-c797e3ed5c31.png> | 오예원 |
+| 게시물 저장하기 API | <img width=25px src=https://user-images.githubusercontent.com/63224278/125839213-0fd9923a-af62-4a04-9578-c797e3ed5c31.png> | 오예원 |
+| 게시물 좋아요 API | <img width=25px src=https://user-images.githubusercontent.com/63224278/125839213-0fd9923a-af62-4a04-9578-c797e3ed5c31.png> | 오예원 |
+| 마이페이지 조회 (인기순, 최신순) API | <img width=25px src=https://user-images.githubusercontent.com/63224278/125839213-0fd9923a-af62-4a04-9578-c797e3ed5c31.png> | 오예원 |
+| 게시물 수정하기 API | <img width=25px src=https://user-images.githubusercontent.com/63224278/125839213-0fd9923a-af62-4a04-9578-c797e3ed5c31.png> | 오예원 |
 
 
 <br>
@@ -487,7 +551,7 @@ git push or git push origin develop
 
 <br>
 <br>
+<br>
 
 
-
-<img style="border: 0px solid black !important; border-radius:20px; " src="https://user-images.githubusercontent.com/63224278/124624683-0db13c80-deb8-11eb-9af2-0fb6038066d0.png" width="1500px" height = "200px" /> 
+<img style="border: 0px solid black !important; border-radius:20px; " src="https://user-images.githubusercontent.com/63224278/124624683-0db13c80-deb8-11eb-9af2-0fb6038066d0.png" width="1500px" height = "300px" /> 
