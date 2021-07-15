@@ -55,6 +55,24 @@
 <br>
 
 
+## 🌈 Server Architecture
+<img style="border: 0px solid black !important; border-radius:20px; " src="https://user-images.githubusercontent.com/63224278/125830951-f39281ce-1842-4ab0-9a17-0176a7028d18.png"/> 
+
+- [Async & Await](https://www.npmjs.com/package/async)
+- [request(HTTP)](https://www.npmjs.com/package/request)
+- [Node.js](https://nodejs.org/ko/) - Chrome V8 자바스크립트 엔진으로 빌드된 자바스크립트 런타임
+- [Express.js](http://expressjs.com/ko/) - Node.js 웹 애플리케이션 프레임워크
+- [NPM](https://rometools.github.io/rome/) - 자바 스크립트 패키지 관리자
+- [vscode](https://code.visualstudio.com/) - 편집기
+- [mySQL](https://www.mysql.com/) - DataBase
+- [Sequelize](https://sequelize.org/) - Sequelize ORM
+- [AWS EC2](https://aws.amazon.com/ko/ec2/?sc_channel=PS&sc_campaign=acquisition_KR&sc_publisher=google&sc_medium=english_ec2_b&sc_content=ec2_e&sc_detail=aws%20ec2&sc_category=ec2&sc_segment=177228231544&sc_matchtype=e&sc_country=KR&s_kwcid=AL!4422!3!177228231544!e!!g!!aws%20ec2&ef_id=WkRozwAAAnO-lPWy:20180412120123:s) - 클라우드 환경 컴퓨팅 시스템
+
+<br>
+<br>
+
+
+
 ## ⚙️ Dependency Module
 <div markdown="1"> 
 
@@ -72,16 +90,6 @@
     "sequelize-cli": "^6.2.0"
   },
 ```
-- [Async & Await](https://www.npmjs.com/package/async)
-- [request(HTTP)](https://www.npmjs.com/package/request)
-- [Node.js](https://nodejs.org/ko/) - Chrome V8 자바스크립트 엔진으로 빌드된 자바스크립트 런타임
-- [Express.js](http://expressjs.com/ko/) - Node.js 웹 애플리케이션 프레임워크
-- [NPM](https://rometools.github.io/rome/) - 자바 스크립트 패키지 관리자
-- [vscode](https://code.visualstudio.com/) - 편집기
-- [mySQL](https://www.mysql.com/) - DataBase
-- [Sequelize](https://sequelize.org/) - Sequelize ORM
-- [AWS EC2](https://aws.amazon.com/ko/ec2/?sc_channel=PS&sc_campaign=acquisition_KR&sc_publisher=google&sc_medium=english_ec2_b&sc_content=ec2_e&sc_detail=aws%20ec2&sc_category=ec2&sc_segment=177228231544&sc_matchtype=e&sc_country=KR&s_kwcid=AL!4422!3!177228231544!e!!g!!aws%20ec2&ef_id=WkRozwAAAnO-lPWy:20180412120123:s) - 클라우드 환경 컴퓨팅 시스템
-
 </div>
 </details>
 
