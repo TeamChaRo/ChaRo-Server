@@ -12,6 +12,14 @@ export default async(req: Request, res: Response) => {
                 imagesPath.push((file as Express.MulterS3.File).location);
         }
 
+        let warning: boolean[] = [];
+
+        const rawWarning = req.body.warning;
+        for(let idx in rawWarning){
+            if(rawWarning[idx] == "true") warning.push(true);
+            else warning.push(false);
+        }
+
         let postEntity: writePostDTO = {
             title: req.body.title,
             userId: req.body.userId,
@@ -21,7 +29,7 @@ export default async(req: Request, res: Response) => {
             region: req.body.region,
 
             theme: req.body.theme,
-            warning: req.body.warning,
+            warning: warning,
 
             isParking: req.body.isParking,
             parkingDesc: req.body.parkingDesc,
@@ -33,6 +41,7 @@ export default async(req: Request, res: Response) => {
         
         const ret = await writePostService(postEntity);
         return res.status(ret.status).json(ret.data);
+        
 
     }catch(err){
         console.log("err!!!", err);

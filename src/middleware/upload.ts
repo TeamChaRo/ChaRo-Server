@@ -1,16 +1,8 @@
-const AWS = require('aws-sdk');
-var multer = require("multer");
-var multerS3 = require("multer-s3");
-import config from '../config/config'; 
+import s3 from "../Loaders/s3";
+import multer from "multer";
+import multerS3 from "multer-s3";
 import path from "path";
-
-AWS.config.update({
-    accessKeyId: config.accessKeyId,
-    secretAccessKey: config.secretAccessKey,
-    region : 'ap-northeast-2'
-});
-
-const s3 = new AWS.S3();
+import config from '../config/config'; 
 
 let upload = {
     postImages : multer({

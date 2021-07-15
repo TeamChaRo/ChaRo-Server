@@ -1,5 +1,6 @@
 import { db } from "../models";
 import { QueryTypes } from 'sequelize';
+import s3 from "../Loaders/s3";
 import writePostDTO from "../interface/req/writePostDTO";
 import postDTO from "../interface/req/postDTO";
 import courseDTO from "../interface/req/courseDTO";
@@ -15,8 +16,21 @@ const warningMap = {
     3: "사람많음"
 }
 
+function deleteImage(key:string){
+    s3.deleteObject({
+        Bucket : 'charo-server',
+        Key: key
+    });
+}
+
 export default async function modifyPostService(postId: number, postEntity: writePostDTO ){
-        /*
+
+    /* key 따오는 법 
+    let temp = "https://charo-server.s3.ap-northeast-2.amazonaws.com/post/1626233491660";
+    const key = temp.split("https://charo-server.s3.ap-northeast-2.amazonaws.com/")[1];
+    console.log(key)
+    */
+
     const image: imageDTO = {
         image1: postEntity.courseImage[0]
     }
@@ -35,7 +49,7 @@ export default async function modifyPostService(postId: number, postEntity: writ
             }
         }
     }
-    */
+    
     // post table
     const post: postDTO = {
         title: postEntity.title,
@@ -48,27 +62,25 @@ export default async function modifyPostService(postId: number, postEntity: writ
     }
     
     // course table
-    let courseSize = postEntity.course.length;
+    const courseSize = postEntity.course.address.length;
     const course: courseDTO = {
-       src: postEntity.course[0].address,
-       srcLatitude: postEntity.course[0].latitude,
-       srcLongitude: postEntity.course[0].longtitude,
-       
-       dest: postEntity.course[courseSize-1].address,
-       destLatitude: postEntity.course[courseSize-1].latitude,
-       destLongitude: postEntity.course[courseSize-1].longtitude
+        src: postEntity.course.address[0],
+        srcLatitude: postEntity.course.latitude[0],
+        srcLongitude: postEntity.course.longtitude[0],
+
+        dest: postEntity.course.address[courseSize-1],
+        destLatitude: postEntity.course.latitude[courseSize-1],
+        destLongitude: postEntity.course.longtitude[courseSize-1]
     }
-    
     if(courseSize > 2){
-        console.log("gg");
-        course.wayOne = postEntity.course[1].address,
-        course.wayOneLatitude = postEntity.course[1].latitude,
-        course.wayOneLongitude = postEntity.course[1].longtitude
+        course.wayOne = postEntity.course.address[1];
+        course.wayOneLatitude = postEntity.course.latitude[1];
+        course.wayOneLongitude = postEntity.course.longtitude[1];
 
         if(courseSize >3){
-            course.wayTwo = postEntity.course[2].address,
-            course.wayTwoLatitude = postEntity.course[2].latitude,
-            course.wayTwoLongitude = postEntity.course[2].longtitude
+            course.wayTwo = postEntity.course.address[2];
+            course.wayTwoLatitude = postEntity.course.latitude[2];
+            course.wayTwoLongitude = postEntity.course.longtitude[2];
         }
     }
 
@@ -83,7 +95,7 @@ export default async function modifyPostService(postId: number, postEntity: writ
         db.Post.update(post, {where : {id:postId}});
         db.Course.update(course, {where : {postId:postId}});
 
-        //db.PostHasImage.update(image, {where : {id:postId}});
+        db.PostHasImage.update(image, {where : {postId:postId}});
 
         //PostHasTheme
         const deleteTheme = "DELETE FROM post_has_theme WHERE postId=:postId";
@@ -96,6 +108,9 @@ export default async function modifyPostService(postId: number, postEntity: writ
             db.PostHasTheme.create(theme);
         });
 
+        //PostHasWarning
+        const deleteWarning = "DELETE FROM post_has_warning WHERE postId=:postId";
+        await db.sequelize.query(deleteWarning, { type: QueryTypes.DELETE, replacements:{postId:postId}, raw:true, nest : true});
         postEntity.warning.map( (value, index) => {
             if(index == 0){
                 if(value){
@@ -104,15 +119,14 @@ export default async function modifyPostService(postId: number, postEntity: writ
                 }else{
                     db.PostHasTags.update(tags, {where : {postId:postId}});
                 }
-            }else{
-                if(value){
-                    const warning: warningDTO = {
-                        postId: postId,
-                        warningName: warningMap[index]
-                    }
-                    db.PostHasWarning.create(warning);
+            }
+            if(value){
+                const warning: warningDTO = {
+                    postId: postId,
+                    warningName: warningMap[index]
                 }
-            } 
+                db.PostHasWarning.create(warning);
+            }
         });
 
         return {
