@@ -30,22 +30,6 @@
 
 <br>
 <br>
-
-
-## 🚙 기능별 개발여부 + 담당자
-> [ChaRo-Server 개발 일지](https://www.notion.so/_-bb545ae363334b57bee9d861ea3ba432)
-
-
-| 기능 | 개발 여부 | 담당자 |
-|:----------|:----------:|:----:|
-| 모델 설계 | ⭕️ | 오예원,황지은 |
-| DB 연결 | ⭕️ | 오예원 |
-| 이미지 업로드 | ⭕️ | 오예원 |
-| 로그인 API | ⭕️ | 황지은 |
-
-
-<br>
-<br>
  
 
 ## 📃 API DOC LINK
@@ -461,6 +445,37 @@ git push or git push origin develop
   <br>
    <br>
 
+## 🚙 기능별 개발여부 + 담당자
+> [ChaRo-Server 개발 일지](https://www.notion.so/_-bb545ae363334b57bee9d861ea3ba432)
+
+
+| 기능 | 개발 여부 | 담당자 |
+|:----------|:----------:|:----:|
+| 모델 설계 | <img width=10px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 오예원,황지은 |
+| DB 연결 | <img width=10px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 오예원 |
+| 이미지 업로드 | <img width=10px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 오예원 |
+| 로그인 API | <img width=10px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 황지은 |
+| 회원가입 API | <img width=10px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 황지은 |
+| 닉네임 중복검사 API | <img width=10px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 황지은 |
+| 아이디 중복검사 API | <img width=10px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 황지은 |
+| 회원가입 API | <img width=10px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 황지은 |
+| 게시물 작성하기 API | <img width=10px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 오예원 |
+| 메인뷰 조회 API | <img width=10px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 황지은, 오예원 |
+| 게시물 상세정보 조회 API | <img width=10px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 황지은 |
+| 더보기 게시물 내 최신순 필터 API | <img width=10px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 오예원 |
+| 더보기 게시물 조회 및 좋아요 API | <img width=10px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 오예원 |
+| 검색하기 게시물 조회 및 좋아요 API | <img width=10px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 황지은 |
+| 검색하기 게시물 내 최신순 필터 API | <img width=10px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 황지은 |
+| 최근 검색 기록 저장 API | <img width=10px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 오예원 |
+| 최근 검색 기록 조회 API | <img width=10px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 오예원 |
+| 게시물 저장하기 API | <img width=10px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 오예원 |
+| 게시물 좋아요 API | <img width=10px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 오예원 |
+| 마이페이지 조회 (인기순, 최신순) API | <img width=10px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 오예원 |
+| 게시물 수정하기 API | <img width=10px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png>s | 오예원 |
+
+
+<br>
+<br>
  
 
 ## 👩🏻‍💻 ChaRo-Server Dev
