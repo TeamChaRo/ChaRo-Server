@@ -16,20 +16,18 @@ const warningMap = {
     3: "사람많음"
 }
 
-function deleteImage(key:string){
-    s3.deleteObject({
-        Bucket : 'charo-server',
-        Key: key
-    });
+function deleteImage(deleted:string[]){
+    for(let value of deleted){
+        const key = value.split("https://charo-server.s3.ap-northeast-2.amazonaws.com/")[1];
+        s3.deleteObject({
+            Bucket : 'charo-server',
+            Key: key
+        });
+    }
 }
 
-export default async function modifyPostService(postId: number, postEntity: writePostDTO ){
-
-    /* key 따오는 법 
-    let temp = "https://charo-server.s3.ap-northeast-2.amazonaws.com/post/1626233491660";
-    const key = temp.split("https://charo-server.s3.ap-northeast-2.amazonaws.com/")[1];
-    console.log(key)
-    */
+export default async function modifyPostService(postId: number, deleted:string[], postEntity: writePostDTO ){
+    deleteImage(deleted);
 
     const image: imageDTO = {
         image1: postEntity.courseImage[0]
