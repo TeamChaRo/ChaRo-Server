@@ -49,7 +49,6 @@ export async function newTrendService(userId: string){
 }
 
 export async function newThemeService(theme: string, userId: string){
-    console.log(theme)
     const themeName = previewMap.theme[theme];
     const query = `SELECT P.id, P.title, count(isLike.PostId) as isFavorite,
                     I.image1, T.region, T.theme, T.warning
