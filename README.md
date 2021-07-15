@@ -1,4 +1,4 @@
-<img style="border: 0px solid black !important; border-radius:20px; " src="https://user-images.githubusercontent.com/63224278/125830017-40449c05-87e0-43b7-b80d-b8333443f57c.png" width="1500px"/> 
+<img style="border: 0px solid black !important; border-radius:20px; " src="https://user-images.githubusercontent.com/63224278/125834375-fa09a085-e6a1-4d19-8a8d-609f79d0725c.png" width="1500px"/> 
 </br>
 
 
@@ -40,7 +40,7 @@
 
 
 ## 🌈 Server Architecture
-<img style="border: 0px solid black !important; border-radius:20px; " src="https://user-images.githubusercontent.com/63224278/125830951-f39281ce-1842-4ab0-9a17-0176a7028d18.png"/> 
+<img style="border: 0px solid black !important; border-radius:20px; " src="https://user-images.githubusercontent.com/63224278/125830951-f39281ce-1842-4ab0-9a17-0176a7028d18.png" height = "300px"/> 
 
 - [Async & Await](https://www.npmjs.com/package/async)
 - [request(HTTP)](https://www.npmjs.com/package/request)
