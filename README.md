@@ -90,7 +90,7 @@
 
 
 ## 🧬 ERD & Models
-<img width="360" alt="models" src="https://user-images.githubusercontent.com/63224278/124627915-e871fd80-deba-11eb-84ee-90af153cbaf1.png">
+<img width="360" alt="models" src="https://user-images.githubusercontent.com/63224278/125830346-e3502899-7efa-48b2-b88b-f28927323c6c.png">
 
 <br>
 <br>
