@@ -1,4 +1,4 @@
-<img style="border: 0px solid black !important; border-radius:20px; " src="https://user-images.githubusercontent.com/63224278/125830017-40449c05-87e0-43b7-b80d-b8333443f57c.png" width="1500px" height = "200px" /> 
+<img style="border: 0px solid black !important; border-radius:20px; " src="https://user-images.githubusercontent.com/63224278/125830017-40449c05-87e0-43b7-b80d-b8333443f57c.png" width="1500px"/> 
 </br>
 
 
@@ -451,27 +451,27 @@ git push or git push origin develop
 
 | 기능 | 개발 여부 | 담당자 |
 |:----------|:----------:|:----:|
-| 모델 설계 | <img width=10px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 오예원,황지은 |
-| DB 연결 | <img width=10px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 오예원 |
-| 이미지 업로드 | <img width=10px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 오예원 |
-| 로그인 API | <img width=10px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 황지은 |
-| 회원가입 API | <img width=10px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 황지은 |
-| 닉네임 중복검사 API | <img width=10px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 황지은 |
-| 아이디 중복검사 API | <img width=10px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 황지은 |
-| 회원가입 API | <img width=10px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 황지은 |
-| 게시물 작성하기 API | <img width=10px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 오예원 |
-| 메인뷰 조회 API | <img width=10px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 황지은, 오예원 |
-| 게시물 상세정보 조회 API | <img width=10px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 황지은 |
-| 더보기 게시물 내 최신순 필터 API | <img width=10px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 오예원 |
-| 더보기 게시물 조회 및 좋아요 API | <img width=10px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 오예원 |
-| 검색하기 게시물 조회 및 좋아요 API | <img width=10px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 황지은 |
-| 검색하기 게시물 내 최신순 필터 API | <img width=10px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 황지은 |
-| 최근 검색 기록 저장 API | <img width=10px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 오예원 |
-| 최근 검색 기록 조회 API | <img width=10px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 오예원 |
-| 게시물 저장하기 API | <img width=10px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 오예원 |
-| 게시물 좋아요 API | <img width=10px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 오예원 |
-| 마이페이지 조회 (인기순, 최신순) API | <img width=10px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 오예원 |
-| 게시물 수정하기 API | <img width=10px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png>s | 오예원 |
+| 모델 설계 | <img width=20px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 오예원,황지은 |
+| DB 연결 | <img width=20px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 오예원 |
+| 이미지 업로드 | <img width=20px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 오예원 |
+| 로그인 API | <img width=20px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 황지은 |
+| 회원가입 API | <img width=20px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 황지은 |
+| 닉네임 중복검사 API | <img width=20px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 황지은 |
+| 아이디 중복검사 API | <img width=20px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 황지은 |
+| 회원가입 API | <img width=20px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 황지은 |
+| 게시물 작성하기 API | <img width=20px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 오예원 |
+| 메인뷰 조회 API | <img width=20px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 황지은, 오예원 |
+| 게시물 상세정보 조회 API | <img width=20px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 황지은 |
+| 더보기 게시물 내 최신순 필터 API | <img width=20px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 오예원 |
+| 더보기 게시물 조회 및 좋아요 API | <img width=20px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 오예원 |
+| 검색하기 게시물 조회 및 좋아요 API | <img width=20px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 황지은 |
+| 검색하기 게시물 내 최신순 필터 API | <img width=20px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 황지은 |
+| 최근 검색 기록 저장 API | <img width=20px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 오예원 |
+| 최근 검색 기록 조회 API | <img width=20px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 오예원 |
+| 게시물 저장하기 API | <img width=20px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 오예원 |
+| 게시물 좋아요 API | <img width=20px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 오예원 |
+| 마이페이지 조회 (인기순, 최신순) API | <img width=20px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png> | 오예원 |
+| 게시물 수정하기 API | <img width=20px src=https://user-images.githubusercontent.com/63224278/125832335-4eed9f89-105c-4775-9195-11a1415fe2ed.png>s | 오예원 |
 
 
 <br>
