@@ -59,7 +59,7 @@ export async function likeService(userId: string){
             savedPost: savedPost
         }
 
-        const writtenQuery = `SELECT P.id, P.title, DATE_FORMAT(P.updatedAt, '%Y-%m-%d') as date, I.image1,
+        const writtenQuery = `SELECT P.id, P.title, DATE_FORMAT(P.createdAt, '%Y-%m-%d') as date, I.image1,
                             T.region, T.theme, T.warning, count(liked_post.PostId) as favoriteCount, count(saved_post.PostId) as saveCount
                             FROM (SELECT id, title, updatedAt FROM post WHERE userId=:userId) as P
                             LEFT OUTER JOIN liked_post ON(P.id = liked_post.PostId)
@@ -70,7 +70,7 @@ export async function likeService(userId: string){
                             GROUP BY P.id ORDER BY favoriteCount DESC LIMIT 7`;
 
 
-        const savedQuery =`SELECT P.id, P.title, DATE_FORMAT(P.updatedAt, '%Y-%m-%d') as date, I.image1,
+        const savedQuery =`SELECT P.id, P.title, DATE_FORMAT(P.createdAt, '%Y-%m-%d') as date, I.image1,
                             T.region, T.theme, T.warning, count(liked_post.PostId) as favoriteCount, count(S.postId) as saveCount
                             FROM (SELECT PostId AS postId FROM saved_post WHERE userId=:userId) as S
                             INNER JOIN post as P
@@ -83,10 +83,7 @@ export async function likeService(userId: string){
         const writtenPostPromise = insertMyPage(writtenQuery, userId, writtenPost);
         const savedPostPromise = insertMyPage(savedQuery, userId, savedPost)
 
-        const userQuery = `SELECT nickname, profileImage FROM user WHERE id=:userId`;
-        const userPromise = db.sequelize.query(userQuery,{ replacements:{userId:userId},type: QueryTypes.SELECT, raw:true, nest:true });
-
-        const followingQuery = `SELECT count(A.follower) AS following
+        const followingQuery = `SELECT count(A.follower) AS following, user.nickname AS nickname, user.profileImage AS profileImage
                                 FROM user 
                                 INNER JOIN follow AS A 
                                 WHERE user.id= :userId AND user.id = A.followed`;
@@ -98,21 +95,19 @@ export async function likeService(userId: string){
                                 WHERE user.id= :userId AND user.id = B.follower`;
         const followerPromise = db.sequelize.query(followerQuery,{ replacements:{userId:userId},type: QueryTypes.SELECT, raw:true, nest:true });
  
-        await Promise.all([savedPostPromise, writtenPostPromise, userPromise, followPromise, followerPromise])
+        await Promise.all([savedPostPromise, writtenPostPromise, followPromise, followerPromise])
             .then( (response) => {
                 const savedCount = response[0] as number;
                 const writtenCount = response[1] as number;
                 myPage.writtenTotal = writtenCount;
                 myPage.savedTotal = savedCount;
-               
-                const userInfo = response[2][0];
-                user.nickname = userInfo.nickname;
-                user.profileImage = userInfo.profileImage;
-
-                const followingCount = response[3][0]['following'];
-                user.following = followingCount;
                 
-                const followerCount = response[4][0]['follower'];
+                const followResult = response[2][0];
+                user.following = followResult['following'];
+                user.nickname = followResult['nickname'];
+                user.profileImage = followResult['profileImage'];
+
+                const followerCount = response[3][0]['follower'];
                 user.follower = followerCount;
                 
             });
