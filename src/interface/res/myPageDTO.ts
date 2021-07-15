@@ -1,8 +1,8 @@
 export interface myPageUser{
     nickname: string,
     profileImage: string,
-    following: string[],
-    follower: string[]
+    following: number,
+    follower: number
 }
 
 export interface myPagePreview{
