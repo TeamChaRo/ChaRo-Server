@@ -99,7 +99,7 @@
 
 
 ## 🧬 ERD & Models
-<img width="650" alt="models" src="https://user-images.githubusercontent.com/63224278/125830346-e3502899-7efa-48b2-b88b-f28927323c6c.png">
+<img width="650" alt="models" src="https://user-images.githubusercontent.com/63224278/125853753-730e6ab5-cb43-49df-9261-36de071638c6.png">
 
 <br>
 <br>
