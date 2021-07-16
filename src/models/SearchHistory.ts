@@ -28,6 +28,7 @@ SearchHistory.init(
     },
     title: {
       type: DataTypes.STRING(20),
+      primaryKey: true,
       allowNull: false,
     },
     address: {
