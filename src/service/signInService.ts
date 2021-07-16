@@ -50,6 +50,7 @@ export default async function signIn(id: string, password: string) {
           userId: user.id,
           nickname: user.nickname,
           token: await token(),
+          profileImage: user.profileImage,
         },
       },
     };
