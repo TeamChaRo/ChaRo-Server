@@ -86,7 +86,7 @@ export default async function postDetailService(userId: string, postId: string) 
       result[0]['wayTwoLatitude'] = '';
     }
 
-    if (result[0]['isParking'] == null) {
+    if (result[0]['isParking'] == false) {
       result[0]['isParking'] = false;
       result[0]['parkingDesc'] = '';
     } else {
