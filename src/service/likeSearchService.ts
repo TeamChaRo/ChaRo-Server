@@ -18,7 +18,7 @@ export async function likeSearchService(searchDTO: searchDTO, userId: string) {
         INNER JOIN post_has_image as I
         INNER JOIN post_has_tags as T
         WHERE P.id IN (
-        SELECT P.id
+        SELECT postId
         FROM post_has_theme
         WHERE post_has_theme.postId = P.id AND post_has_theme.themeName = :theme AND I.postId = P.id AND I.postId = T.postId)
         GROUP BY P.id ORDER BY favoriteCount DESC LIMIT 20`;
@@ -30,16 +30,16 @@ export async function likeSearchService(searchDTO: searchDTO, userId: string) {
   } else if (searchDTO.region.length != 0 && !searchDTO.theme && searchDTO.warning) {
     //지역 + 주의사항 파싱하는 쿼리
     const regionWarningQuery = `SELECT count(countLike.PostId) as favoriteCount, count(isLike.PostId) as isFavorite, P.id, P.title, I.image1, T.region, T.theme, T.warning
-        FROM (SELECT id, title FROM post WHERE region = :region) AS P
-        LEFT OUTER JOIN liked_post as countLike ON(P.id = countLike.PostId)
-        LEFT OUTER JOIN liked_post as isLike ON(isLike.PostId = P.id and isLike.UserId =:userId)
-        INNER JOIN post_has_image as I
-        INNER JOIN post_has_tags as T
-        WHERE P.id NOT IN (
-        SELECT P.id
-        FROM post_has_warning
-        WHERE post_has_warning.warningName = :warning AND post_has_warning.postId = P.id) AND I.postId = P.id AND I.postId = T.postId
-        GROUP BY P.id ORDER BY favoriteCount DESC LIMIT 20`;
+                                FROM (SELECT id, title FROM post WHERE region =:region) AS P
+                                LEFT OUTER JOIN liked_post as countLike ON(P.id = countLike.PostId)
+                                LEFT OUTER JOIN liked_post as isLike ON(isLike.PostId = P.id and isLike.UserId =:userId)
+                                INNER JOIN post_has_image as I
+                                INNER JOIN post_has_tags as T
+                                WHERE P.id NOT IN (
+                                SELECT postId
+                                FROM post_has_warning
+                                WHERE post_has_warning.warningName =:warning AND post_has_warning.postId = P.id) AND I.postId = P.id AND I.postId = T.postId
+                                GROUP BY P.id ORDER BY favoriteCount DESC LIMIT 20`;
 
     searchRet = await db.sequelize.query(regionWarningQuery, {
       replacements: { userId: userId, region: searchDTO.region, warning: searchDTO.warning },
@@ -55,7 +55,7 @@ export async function likeSearchService(searchDTO: searchDTO, userId: string) {
         INNER JOIN post_has_tags as T
         INNER JOIN post_has_theme as TH ON(TH.postId = P.id and TH.themeName = :theme)
         WHERE P.id NOT IN (
-        SELECT P.id
+        SELECT postId
         FROM post_has_warning
         WHERE post_has_warning.warningName = :warning and post_has_warning.postId = P.id) AND I.postId = P.id AND I.postId = T.postId
         GROUP BY P.id ORDER BY favoriteCount DESC LIMIT 20`;
@@ -88,7 +88,7 @@ export async function likeSearchService(searchDTO: searchDTO, userId: string) {
         INNER JOIN post_has_image as I
         INNER JOIN post_has_tags as T
         WHERE P.id IN (
-        SELECT P.id
+        SELECT postId
         FROM post_has_theme
         WHERE post_has_theme.themeName = :theme AND post_has_theme.postId = P.id AND I.postId = P.id AND I.postId = T.postId)
         GROUP BY P.id ORDER BY favoriteCount DESC LIMIT 20`;
@@ -105,7 +105,7 @@ export async function likeSearchService(searchDTO: searchDTO, userId: string) {
         INNER JOIN post_has_image as I
         INNER JOIN post_has_tags as T
         WHERE P.id NOT IN (
-        SELECT P.id
+        SELECT postId
         FROM post_has_warning
         WHERE post_has_warning.warningName = :warning AND post_has_warning.postId = P.id) AND I.postId = P.id AND I.postId = T.postId
         GROUP BY P.id ORDER BY favoriteCount DESC LIMIT 20`;
@@ -123,7 +123,7 @@ export async function likeSearchService(searchDTO: searchDTO, userId: string) {
         INNER JOIN post_has_tags as T
         INNER JOIN post_has_theme as TH ON(TH.postId = P.id and TH.themeName = :theme)
         WHERE P.id NOT IN (
-        SELECT P.id
+        SELECT postId
         FROM post_has_warning
         WHERE post_has_warning.warningName = :warning and post_has_warning.postId = P.id) AND I.postId = P.id AND I.postId = T.postId
         GROUP BY P.id ORDER BY favoriteCount DESC LIMIT 20`;
