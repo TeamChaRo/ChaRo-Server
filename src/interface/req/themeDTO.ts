@@ -1,5 +1,4 @@
 export default interface PHTAttributes {
-    postId?: number;
-    themeName?: string;
-};
-
+  postId?: number;
+  themeName?: string;
+}

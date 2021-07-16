@@ -1,11 +1,8 @@
-import express from "express";
+import express from 'express';
 const router = express.Router();
 
-import  { modifyPostController } from "../controller";
+import { modifyPostController } from '../controller';
 
-router.post(
-    "/",
-    modifyPostController
-)
+router.post('/', modifyPostController);
 
 module.exports = router;

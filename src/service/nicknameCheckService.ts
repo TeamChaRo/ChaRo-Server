@@ -1,4 +1,4 @@
-import User from "../models/User";
+import User from '../models/User';
 
 export default async function checkNickname(nickname: string) {
   try {
@@ -10,7 +10,7 @@ export default async function checkNickname(nickname: string) {
 
     if (user) {
       return {
-        data: "alreadyExistNickname",
+        data: 'alreadyExistNickname',
       };
     }
 
@@ -18,7 +18,7 @@ export default async function checkNickname(nickname: string) {
       status: 200,
       data: {
         success: true,
-        msg: "사용가능한 닉네임입니다.",
+        msg: '사용가능한 닉네임입니다.',
       },
     };
   } catch (err) {
@@ -26,7 +26,7 @@ export default async function checkNickname(nickname: string) {
       status: 500,
       data: {
         success: false,
-        msg: "Server Error",
+        msg: 'Server Error',
       },
     };
   }

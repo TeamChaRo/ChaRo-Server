@@ -1,13 +1,12 @@
-import User from "../models/User";
-import { db } from "../models";
-import bcrypt from "bcryptjs";
-import config from "../config/config";
-import { Hash } from "crypto";
-import userDTO from "src/interface/req/userDTO";
+import User from '../models/User';
+import { db } from '../models';
+import bcrypt from 'bcryptjs';
+import config from '../config/config';
+import { Hash } from 'crypto';
+import userDTO from 'src/interface/req/userDTO';
 
 export default async function signUp(userEntity: userDTO) {
   try {
-    
     let user = await User.findOne({
       where: {
         id: userEntity.id,
@@ -16,7 +15,7 @@ export default async function signUp(userEntity: userDTO) {
 
     if (user) {
       return {
-        data: "alreadyExistUser",
+        data: 'alreadyExistUser',
       };
     }
 
@@ -31,7 +30,7 @@ export default async function signUp(userEntity: userDTO) {
       status: 200,
       data: {
         success: true,
-        msg: "회원가입 성공!",
+        msg: '회원가입 성공!',
       },
     };
   } catch (err) {
@@ -39,7 +38,7 @@ export default async function signUp(userEntity: userDTO) {
       status: 500,
       data: {
         success: false,
-        msg: "Server Error",
+        msg: 'Server Error',
       },
     };
   }

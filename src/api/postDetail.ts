@@ -1,6 +1,6 @@
-import express from "express";
+import express from 'express';
 const router = express.Router();
-import { postDetailController }  from "../controller";
+import { postDetailController } from '../controller';
 
 /**
  *  @route Get /:postId
@@ -8,9 +8,6 @@ import { postDetailController }  from "../controller";
  *  @access Public
  */
 
-router.get(
-    "/:userId/:postId",
-    postDetailController
-)
+router.get('/:userId/:postId', postDetailController);
 
 module.exports = router;
