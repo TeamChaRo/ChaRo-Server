@@ -11,9 +11,8 @@ export default {
   /* login */
   jwtSecret: process.env.JWT_SECRET,
   jwtAlgorithm: process.env.JWT_ALGO,
-  /**
-   * MySql
-   */
+
+  /* MySql */
   username: process.env.DB_USERNAME || 'root',
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
@@ -22,10 +21,13 @@ export default {
   socketPath: '/var/run/mysqld/mysqld.sock',
   dialect: 'mysql',
 
-  /**
-   * S3
-   */
+  /* S3 */
   accessKeyId: process.env.ACCESS_KEY_ID,
   secretAccessKey: process.env.SECRET_ACCESS_KEY,
   region: process.env.REGION,
+
+  /* Google */
+  googleClientId: process.env.GOOGLE_CLIENT_ID,
+  googleSecret: process.env.GOOGLE_SECRET,
+  googleRedirect: process.env.GOOGLE_REDIRECT,
 };

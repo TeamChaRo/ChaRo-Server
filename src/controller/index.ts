@@ -6,6 +6,7 @@ import { saveHistoryController, loadHistoryController } from './historyControlle
 import { likePostController, savePostController } from './postController';
 import { likeMyPageController, newMyPageController } from './myPageController';
 import modifyPostController from './modifyPostController';
+import { authorizeUrl, googleLoginController } from '../controller/googleController';
 
 export {
   writePostController,
@@ -20,4 +21,6 @@ export {
   likeMyPageController,
   newMyPageController,
   modifyPostController,
+  authorizeUrl,
+  googleLoginController,
 };
